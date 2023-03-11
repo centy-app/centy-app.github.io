@@ -7,6 +7,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var portString = Environment.GetEnvironmentVariable("PORT");
+_ = int.TryParse(portString, out var port);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(port); // to listen for incoming http connection on port 80
+    // options.ListenAnyIP(443, configure => configure.UseHttps()); // to listen for incoming https connection on port 443
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
