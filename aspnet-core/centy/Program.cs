@@ -7,20 +7,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var httpPortString = Environment.GetEnvironmentVariable("HTTPPORT");
-_ = int.TryParse(httpPortString, out var httpPort);
-
 var portString = Environment.GetEnvironmentVariable("PORT");
 _ = int.TryParse(portString, out var port);
+
+var httpPortString = Environment.GetEnvironmentVariable("HTTPSPORT");
+_ = int.TryParse(httpPortString, out var httpsPort);
 
 var aspNetEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(httpPort); // to listen for incoming http connection on port 80
+    options.ListenAnyIP(port); // to listen for incoming http connection on port 80
+
     if (aspNetEnv == "Development")
     {
-        options.ListenAnyIP(port, configure => configure.UseHttps()); // to listen for incoming https connection on port 443
+        // Not working in local Docker so far due to missing certificate
+        options.ListenAnyIP(httpsPort, configure => configure.UseHttps()); // to listen for incoming https connection on port 443
     }
 });
 

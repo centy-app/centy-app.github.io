@@ -17,7 +17,7 @@ namespace centy.Controllers
         public string Get()
         {
             _logger.LogTrace("Test triggered.");
-            return "Hello world";
+            return "Hello world 3.0";
         }
     }
 }
