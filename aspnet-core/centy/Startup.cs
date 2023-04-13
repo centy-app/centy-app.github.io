@@ -1,8 +1,10 @@
-﻿using FastEndpoints;
+﻿using Microsoft.AspNetCore.Authorization;
+using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using centy.Domain.Auth;
 using centy.Contracts.Responses.Validation;
+using centy.Infrastructure;
 
 namespace centy
 {
@@ -42,6 +44,8 @@ namespace centy
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthResultHandler>();
+
             var connectionString = Environment.GetEnvironmentVariable("MONGODB");
             services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
                 {
