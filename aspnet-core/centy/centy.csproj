@@ -10,11 +10,16 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="FastEndpoints" Version="5.8.1" />
+    <PackageReference Include="FastEndpoints.Attributes" Version="5.8.1" />
+    <PackageReference Include="FastEndpoints.Security" Version="5.8.1" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="5.8.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Contracts\Data\" />
+    <Folder Include="Contracts\Responses\Auth\" />
     <Folder Include="Database\" />
   </ItemGroup>
 

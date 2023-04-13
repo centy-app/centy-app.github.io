@@ -9,6 +9,7 @@
         "HTTPSPORT": "44306",
         "PORT": "52239",
         "MONGODB": "mongodb://localhost:27017",
+        "JWTKEY": "DEV"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:44306"
@@ -19,7 +20,8 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MONGODB": "mongodb://localhost:27017"
+        "MONGODB": "mongodb://localhost:27017",
+        "JWTKEY": "DEV"
       }
     },
     "Docker": {
@@ -32,7 +34,8 @@
         "ASPNETCORE_ENVIRONMENT": "Docker",
         "HTTPSPORT": "443",
         "PORT": "80",
-        "MONGODB": "mongodb://localhost:27017"
+        "MONGODB": "mongodb://localhost:27017",
+        "JWTKEY": "DEV"
       }
     }
   },

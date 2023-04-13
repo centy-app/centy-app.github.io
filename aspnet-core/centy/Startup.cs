@@ -1,4 +1,8 @@
-﻿using centy.Domain.Auth;
+﻿using FastEndpoints;
+using FastEndpoints.Security;
+using FastEndpoints.Swagger;
+using centy.Domain.Auth;
+using centy.Contracts.Responses.Validation;
 
 namespace centy
 {
@@ -39,33 +43,46 @@ namespace centy
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Environment.GetEnvironmentVariable("MONGODB");
-            services.AddIdentity<ApplicationUser, ApplicationRole>().AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(connectionString, "centy");
+            services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
+                {
+                    o.Password.RequireDigit = false;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequiredLength = 5;
+                })
+                .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(connectionString, "centy");
 
-            // Add services to the container.
-            services.AddControllers();
+            services.AddFastEndpoints(o => o.IncludeAbstractValidators = true);
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            var tokenSigningKey = Environment.GetEnvironmentVariable("JWTKEY") ?? "";
+            services.AddJWTBearerAuth(tokenSigningKey);
+
+            services.AddSwaggerDoc();
         }
 
         public void Configure(WebApplication app, IWebHostEnvironment env)
         {
-            // Configure the HTTP request pipeline.
-
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-
             app.UseAuthentication();
 
             app.UseAuthorization();
 
-            app.MapControllers();
+            app.UseFastEndpoints(x =>
+            {
+                x.Errors.ResponseBuilder = (failures, ctx, statusCode) =>
+                {
+                    return new ValidationFailureResponse
+                    {
+                        Errors = failures.Select(y => y.ErrorMessage).ToList()
+                    };
+                };
+            });
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseOpenApi();
+                app.UseSwaggerUi3(s => s.ConfigureDefaults());
+            }
 
             app.Run();
         }
