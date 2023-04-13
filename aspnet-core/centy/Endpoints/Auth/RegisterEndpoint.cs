@@ -3,24 +3,26 @@ using Microsoft.AspNetCore.Identity;
 using FastEndpoints;
 using centy.Contracts.Requests.Auth;
 using centy.Domain.Auth;
+using Microsoft.Extensions.Logging;
 
 namespace centy.Endpoints.Auth
 {
-    [HttpPost("users"), AllowAnonymous]
-    public class RegisterUserEndpoint : Endpoint<RegisterUserRequest>
+    [HttpPost("auth/register"), AllowAnonymous]
+    public class RegisterEndpoint : Endpoint<RegisterRequest>
     {
+        private readonly ILogger<RegisterEndpoint> logger;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
-        public RegisterUserEndpoint(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public RegisterEndpoint(ILogger<RegisterEndpoint> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
+            this.logger = logger;
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
 
-        public override async Task HandleAsync(RegisterUserRequest req, CancellationToken ct)
+        public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
         {
-
             var user = new ApplicationUser()
             {
                 UserName = req.Email,
@@ -31,6 +33,8 @@ namespace centy.Endpoints.Auth
 
             if (result.Succeeded)
             {
+                logger.LogInformation("{email} successfully registered.", req.Email);
+
                 await signInManager.SignInAsync(user, isPersistent: false);
                 await SendOkAsync(ct);
             }

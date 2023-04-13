@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <Folder Include="Contracts\Data\" />
-    <Folder Include="Contracts\Responses\Auth\" />
     <Folder Include="Database\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>

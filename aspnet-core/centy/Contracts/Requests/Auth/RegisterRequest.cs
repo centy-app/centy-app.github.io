@@ -2,7 +2,7 @@
 
 namespace centy.Contracts.Requests.Auth
 {
-    public class RegisterUserRequest
+    public class RegisterRequest
     {
         [EmailAddress]
         public string Email { get; init; } = default!;

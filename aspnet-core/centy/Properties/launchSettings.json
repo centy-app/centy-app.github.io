@@ -9,7 +9,7 @@
         "HTTPSPORT": "44306",
         "PORT": "52239",
         "MONGODB": "mongodb://localhost:27017",
-        "JWTKEY": "DEV"
+        "JWTKEY": "98cf0eed-4b0c-405f-9913-dce91b99a506"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:44306"
@@ -21,7 +21,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MONGODB": "mongodb://localhost:27017",
-        "JWTKEY": "DEV"
+        "JWTKEY": "98cf0eed-4b0c-405f-9913-dce91b99a506"
       }
     },
     "Docker": {
@@ -35,7 +35,7 @@
         "HTTPSPORT": "443",
         "PORT": "80",
         "MONGODB": "mongodb://localhost:27017",
-        "JWTKEY": "DEV"
+        "JWTKEY": "98cf0eed-4b0c-405f-9913-dce91b99a506"
       }
     }
   },

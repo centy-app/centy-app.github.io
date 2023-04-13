@@ -2,9 +2,13 @@
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
-using centy.Domain.Auth;
-using centy.Contracts.Responses.Validation;
+using centy.Contracts.Responses.Infrastructure;
 using centy.Infrastructure;
+using centy.Domain.Auth;
+using centy.Services.Auth;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace centy
 {
@@ -59,8 +63,27 @@ namespace centy
 
             services.AddFastEndpoints(o => o.IncludeAbstractValidators = true);
 
-            var tokenSigningKey = Environment.GetEnvironmentVariable("JWTKEY") ?? "";
-            services.AddJWTBearerAuth(tokenSigningKey);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options => options.SlidingExpiration = true)
+            .AddJwtBearer(option =>
+            {
+                option.SaveToken = true;
+                option.TokenValidationParameters = new TokenValidationParameters
+                {
+                    SaveSigninToken = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "centy",
+                    ValidAudience = "centy",
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
+                };
+            });
 
             services.AddSwaggerDoc();
         }
@@ -68,7 +91,6 @@ namespace centy
         public void Configure(WebApplication app, IWebHostEnvironment env)
         {
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseFastEndpoints(x =>
@@ -82,7 +104,7 @@ namespace centy
                 };
             });
 
-            if (app.Environment.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseOpenApi();
                 app.UseSwaggerUi3(s => s.ConfigureDefaults());

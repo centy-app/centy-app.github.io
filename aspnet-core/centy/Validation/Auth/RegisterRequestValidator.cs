@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace centy.Validation.Auth
 {
-    public class RegisterUserRequestValidator : AbstractValidator<RegisterUserRequest>
+    public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {
-        public RegisterUserRequestValidator()
+        public RegisterRequestValidator()
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(100);
             RuleFor(x => x.Password).NotEmpty().MinimumLength(5);
