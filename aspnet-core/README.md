@@ -12,3 +12,7 @@ docker build --file centy/Dockerfile -t registry.heroku.com/centy-api/web .
 docker push registry.heroku.com/centy-api/web
 heroku container:release web --app centy-api
 ```
+
+## URL
+
+Once deployed API avaliable at https://centy-api.herokuapp.com/
