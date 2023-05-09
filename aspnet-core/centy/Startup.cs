@@ -1,23 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using FastEndpoints;
-using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using centy.Contracts.Responses.Infrastructure;
 using centy.Infrastructure;
 using centy.Domain.Auth;
 using centy.Services.Auth;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 
 namespace centy
 {
     public class Startup
     {
-        public IConfiguration Configuration
-        {
-            get;
-        }
+        private const string PortException = "Port configuration is invalid";
+        public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
@@ -26,11 +22,8 @@ namespace centy
 
         public void ConfigureWebHost(ConfigureWebHostBuilder webHost)
         {
-            var portString = Environment.GetEnvironmentVariable("PORT");
-            _ = int.TryParse(portString, out var port);
-
-            var httpPortString = Environment.GetEnvironmentVariable("HTTPSPORT");
-            _ = int.TryParse(httpPortString, out var httpsPort);
+            var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
+            var httpsPort = int.Parse(Environment.GetEnvironmentVariable("HTTPSPORT") ?? throw new Exception(PortException));
 
             var aspNetEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -41,7 +34,8 @@ namespace centy
                 if (aspNetEnv == "Development")
                 {
                     // Not working in local Docker so far due to missing certificate
-                    options.ListenAnyIP(httpsPort, configure => configure.UseHttps()); // to listen for incoming https connection on port 443
+                    options.ListenAnyIP(httpsPort,
+                        configure => configure.UseHttps()); // to listen for incoming https connection on port 443
                 }
             });
         }
@@ -64,26 +58,26 @@ namespace centy
             services.AddFastEndpoints(o => o.IncludeAbstractValidators = true);
 
             services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options => options.SlidingExpiration = true)
-            .AddJwtBearer(option =>
-            {
-                option.SaveToken = true;
-                option.TokenValidationParameters = new TokenValidationParameters
                 {
-                    SaveSigninToken = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = "centy",
-                    ValidAudience = "centy",
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
-                };
-            });
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddCookie(options => options.SlidingExpiration = true)
+                .AddJwtBearer(option =>
+                {
+                    option.SaveToken = true;
+                    option.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        SaveSigninToken = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "centy",
+                        ValidAudience = "centy",
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
+                    };
+                });
 
             services.AddSwaggerDoc();
         }

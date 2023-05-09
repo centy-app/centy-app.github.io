@@ -11,24 +11,27 @@ namespace centy.Endpoints.Auth
     [HttpPost("auth/login"), AllowAnonymous]
     public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
     {
-        private readonly ILogger<LoginEndpoint> logger;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger<LoginEndpoint> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public LoginEndpoint(ILogger<LoginEndpoint> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public LoginEndpoint(
+            ILogger<LoginEndpoint> logger,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
-            this.logger = logger;
-            this.userManager = userManager;
-            this.signInManager = signInManager;
+            _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
         {
-            var result = await signInManager.PasswordSignInAsync(req.Email, req.Password, true, false);
+            var result = await _signInManager.PasswordSignInAsync(req.Email, req.Password, true, false);
 
             if (result.Succeeded)
             {
-                var user = await userManager.FindByEmailAsync(req.Email);
+                var user = await _userManager.FindByEmailAsync(req.Email);
 
                 var jwtToken = JwtService.CreateToken(user);
                 var response = new LoginResponse
@@ -37,7 +40,7 @@ namespace centy.Endpoints.Auth
                     Token = jwtToken
                 };
 
-                logger.LogInformation("{email} successfully logged in.", req.Email);
+                _logger.LogInformation("{Email} successfully logged in", req.Email);
 
                 await SendAsync(response, 200, ct);
             }

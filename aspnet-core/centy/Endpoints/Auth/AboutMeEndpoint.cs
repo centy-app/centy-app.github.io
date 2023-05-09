@@ -8,16 +8,16 @@ namespace centy.Endpoints.Auth
     [HttpGet("auth/aboutme")]
     public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AboutMeEndpoint(UserManager<ApplicationUser> userManager)
         {
-            this.userManager = userManager;
+            _userManager = userManager;
         }
 
         public override async Task HandleAsync(CancellationToken ct)
         {
-            var user = await userManager.FindByNameAsync(HttpContext?.User?.Identity?.Name);
+            var user = await _userManager.FindByNameAsync(HttpContext?.User?.Identity?.Name);
             var response = new AboutMeResponse()
             {
                 Id = user.Id,

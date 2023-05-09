@@ -5,7 +5,7 @@ namespace centy.Infrastructure
 {
     public class CustomAuthResultHandler : IAuthorizationMiddlewareResultHandler
     {
-        private readonly AuthorizationMiddlewareResultHandler defaultHandler = new();
+        private readonly AuthorizationMiddlewareResultHandler _defaultHandler = new();
 
         public async Task HandleAsync(
             RequestDelegate next,
@@ -13,7 +13,7 @@ namespace centy.Infrastructure
             AuthorizationPolicy policy,
             PolicyAuthorizationResult authorizeResult)
         {
-            if (authorizeResult.Challenged == true && authorizeResult.Succeeded == false)
+            if (authorizeResult is { Challenged: true, Succeeded: false })
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 context.Response.ContentType = "text/plain";
@@ -23,7 +23,7 @@ namespace centy.Infrastructure
             }
 
             // Fall back to the default implementation.
-            await defaultHandler.HandleAsync(next, context, policy, authorizeResult);
+            await _defaultHandler.HandleAsync(next, context, policy, authorizeResult);
         }
     }
 }

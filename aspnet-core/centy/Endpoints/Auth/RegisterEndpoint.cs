@@ -3,22 +3,24 @@ using Microsoft.AspNetCore.Identity;
 using FastEndpoints;
 using centy.Contracts.Requests.Auth;
 using centy.Domain.Auth;
-using Microsoft.Extensions.Logging;
 
 namespace centy.Endpoints.Auth
 {
     [HttpPost("auth/register"), AllowAnonymous]
     public class RegisterEndpoint : Endpoint<RegisterRequest>
     {
-        private readonly ILogger<RegisterEndpoint> logger;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger<RegisterEndpoint> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public RegisterEndpoint(ILogger<RegisterEndpoint> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public RegisterEndpoint(
+            ILogger<RegisterEndpoint> logger,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
-            this.logger = logger;
-            this.userManager = userManager;
-            this.signInManager = signInManager;
+            _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
@@ -26,16 +28,16 @@ namespace centy.Endpoints.Auth
             var user = new ApplicationUser()
             {
                 UserName = req.Email,
-                Email = req.Email,
+                Email = req.Email
             };
 
-            var result = await userManager.CreateAsync(user, req.Password);
+            var result = await _userManager.CreateAsync(user, req.Password);
 
             if (result.Succeeded)
             {
-                logger.LogInformation("{email} successfully registered.", req.Email);
+                _logger.LogInformation("{Email} successfully registered", req.Email);
 
-                await signInManager.SignInAsync(user, isPersistent: false);
+                await _signInManager.SignInAsync(user, isPersistent: false);
                 await SendOkAsync(ct);
             }
             else

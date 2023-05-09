@@ -6,7 +6,6 @@ namespace centy.Contracts.Requests.Auth
     {
         [EmailAddress]
         public string Email { get; init; } = default!;
-
         public string Password { get; init; } = default!;
     }
 }

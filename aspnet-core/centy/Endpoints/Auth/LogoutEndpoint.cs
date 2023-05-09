@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using FastEndpoints;
 using centy.Domain.Auth;
-using Microsoft.AspNetCore.Authorization;
 
 namespace centy.Endpoints.Auth
 {
     [HttpPost("auth/logout")]
     public class LogoutEndpoint : EndpointWithoutRequest
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public LogoutEndpoint(SignInManager<ApplicationUser> signInManager)
         {
-            this.signInManager = signInManager;
+            _signInManager = signInManager;
         }
 
         public override async Task HandleAsync(CancellationToken ct)
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
 
             await SendOkAsync(ct);
         }
