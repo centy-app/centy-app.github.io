@@ -22,14 +22,13 @@ namespace centy
 
         public void ConfigureWebHost(ConfigureWebHostBuilder webHost)
         {
-            var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
-            var httpsPort =
-                int.Parse(Environment.GetEnvironmentVariable("HTTPSPORT") ?? throw new Exception(PortException));
-
             var aspNetEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             webHost.ConfigureKestrel(options =>
             {
+                var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
+                var httpsPort = int.Parse(Environment.GetEnvironmentVariable("HTTPSPORT") ?? throw new Exception(PortException));
+
                 options.ListenAnyIP(port); // to listen for incoming http connection on port 80
 
                 if (aspNetEnv == "Development")
