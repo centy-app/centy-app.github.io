@@ -14,15 +14,18 @@ namespace centy.Endpoints.Auth
         private readonly ILogger<LoginEndpoint> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly JwtService _jwtService;
 
         public LoginEndpoint(
             ILogger<LoginEndpoint> logger,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            JwtService jwtService)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            _jwtService = jwtService;
         }
 
         public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
@@ -33,7 +36,7 @@ namespace centy.Endpoints.Auth
             {
                 var user = await _userManager.FindByEmailAsync(req.Email);
 
-                var jwtToken = JwtService.CreateToken(user);
+                var jwtToken = _jwtService.CreateToken(user);
                 var response = new LoginResponse
                 {
                     Email = user.Email,
@@ -43,12 +46,10 @@ namespace centy.Endpoints.Auth
                 _logger.LogInformation("{Email} successfully logged in", req.Email);
 
                 await SendAsync(response, 200, ct);
-            }
-            else
-            {
-                AddError("Username or Password is incorrect.");
+                return;
             }
 
+            AddError("Username or Password is incorrect.");
             ThrowIfAnyErrors();
         }
     }

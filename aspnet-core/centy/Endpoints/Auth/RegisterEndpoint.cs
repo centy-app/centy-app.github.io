@@ -39,15 +39,21 @@ namespace centy.Endpoints.Auth
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 await SendOkAsync(ct);
+                return;
             }
-            else
+
+            if (result.Errors.Any())
             {
                 foreach (var error in result.Errors)
                 {
-                    AddError(error.Description ?? "An unknown error occurred.");
+                    AddError(error.Description);
                 }
             }
-
+            else
+            {
+                AddError("An unknown error occurred.");
+            }
+            
             ThrowIfAnyErrors();
         }
     }

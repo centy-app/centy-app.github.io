@@ -23,7 +23,8 @@ namespace centy
         public void ConfigureWebHost(ConfigureWebHostBuilder webHost)
         {
             var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
-            var httpsPort = int.Parse(Environment.GetEnvironmentVariable("HTTPSPORT") ?? throw new Exception(PortException));
+            var httpsPort =
+                int.Parse(Environment.GetEnvironmentVariable("HTTPSPORT") ?? throw new Exception(PortException));
 
             var aspNetEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -43,6 +44,7 @@ namespace centy
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthResultHandler>();
+            services.AddSingleton<JwtService, JwtService>();
 
             var connectionString = Environment.GetEnvironmentVariable("MONGODB");
             services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
@@ -75,7 +77,8 @@ namespace centy
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "centy",
                         ValidAudience = "centy",
-                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
                     };
                 });
 

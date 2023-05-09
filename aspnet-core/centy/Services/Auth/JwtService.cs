@@ -7,12 +7,18 @@ using centy.Domain.Auth;
 
 namespace centy.Services.Auth
 {
-    public static class JwtService
+    public class JwtService
     {
-        public static readonly string TokenSigningKey =
-            Environment.GetEnvironmentVariable("JWTKEY") ?? "98cf0eed-4b0c-405f-9913-dce91b99a506";
+        private readonly ILogger<JwtService> _logger;
 
-        public static string CreateToken(ApplicationUser user)
+        public JwtService(ILogger<JwtService> logger)
+        {
+            _logger = logger;
+        }
+
+        public static readonly string TokenSigningKey = Environment.GetEnvironmentVariable("JWTKEY") ?? "98cf0eed-4b0c-405f-9913-dce91b99a506";
+
+        public string CreateToken(ApplicationUser user)
         {
             var expiration = DateTime.UtcNow.AddDays(7);
             var token = CreateJwtToken(
@@ -25,39 +31,39 @@ namespace centy.Services.Auth
             return tokenHandler.WriteToken(token);
         }
 
-        private static JwtSecurityToken CreateJwtToken(
+        private JwtSecurityToken CreateJwtToken(
             IEnumerable<Claim> claims,
             SigningCredentials credentials,
             DateTime expiration) => new(
-                "centy",
-                "centy",
-                claims,
-                expires: expiration,
-                signingCredentials: credentials
+            "centy",
+            "centy",
+            claims,
+            expires: expiration,
+            signingCredentials: credentials
         );
 
-        private static IEnumerable<Claim> CreateClaims(ApplicationUser user)
+        private IEnumerable<Claim> CreateClaims(ApplicationUser user)
         {
             try
             {
                 var claims = new List<Claim>
                 {
-                    new (JwtRegisteredClaimNames.Sub, "centy"),
-                    new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new (JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
-                    new (ClaimTypes.Name, user.UserName),
-                    new (ClaimTypes.Email, user.Email)
+                    new(JwtRegisteredClaimNames.Sub, "centy"),
+                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
+                    new(ClaimTypes.Name, user.UserName),
+                    new(ClaimTypes.Email, user.Email)
                 };
                 return claims;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError("An error occur while generating the user claim {Exception}", e.Message);
                 throw;
             }
         }
 
-        private static SigningCredentials CreateSigningCredentials()
+        private SigningCredentials CreateSigningCredentials()
         {
             return new SigningCredentials(
                 new SymmetricSecurityKey(
