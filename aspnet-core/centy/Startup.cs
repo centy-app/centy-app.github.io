@@ -22,8 +22,6 @@ namespace centy
 
         public void ConfigureWebHost(ConfigureWebHostBuilder webHost)
         {
-            var aspNetEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
             webHost.ConfigureKestrel(options =>
             {
                 var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
@@ -31,11 +29,10 @@ namespace centy
 
                 options.ListenAnyIP(port); // to listen for incoming http connection on port 80
 
-                if (aspNetEnv == "Development")
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
                 {
                     // Not working in local Docker so far due to missing certificate
-                    options.ListenAnyIP(httpsPort,
-                        configure => configure.UseHttps()); // to listen for incoming https connection on port 443
+                    options.ListenAnyIP(httpsPort, configure => configure.UseHttps());
                 }
             });
         }
@@ -76,8 +73,7 @@ namespace centy
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "centy",
                         ValidAudience = "centy",
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
+                        IssuerSigningKey =  new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
                     };
                 });
 
