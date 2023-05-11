@@ -4,9 +4,11 @@ using Microsoft.IdentityModel.Tokens;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using centy.Contracts.Responses.Infrastructure;
+using centy.Database.Repositories;
 using centy.Infrastructure;
 using centy.Domain.Auth;
 using centy.Services.Auth;
+using centy.Services.Currencies;
 
 namespace centy
 {
@@ -37,11 +39,16 @@ namespace centy
             });
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureDependencyInjection(IServiceCollection services)
         {
             services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthResultHandler>();
-            services.AddSingleton<JwtService, JwtService>();
+            services.AddSingleton<IJwtService, JwtService>();
+            services.AddSingleton<IExchangeRateService, ExchangeRateService>();
+            services.AddTransient<IExchangeRatesRepository, ExchangeRatesRepository>();
+        }
 
+        public void ConfigureServices(IServiceCollection services)
+        {
             var connectionString = Environment.GetEnvironmentVariable("MONGODB");
             services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
                 {
@@ -73,7 +80,7 @@ namespace centy
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "centy",
                         ValidAudience = "centy",
-                        IssuerSigningKey =  new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
                     };
                 });
 

@@ -14,13 +14,13 @@ namespace centy.Endpoints.Auth
         private readonly ILogger<LoginEndpoint> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly JwtService _jwtService;
+        private readonly IJwtService _jwtService;
 
         public LoginEndpoint(
             ILogger<LoginEndpoint> logger,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            JwtService jwtService)
+            IJwtService jwtService)
         {
             _logger = logger;
             _userManager = userManager;

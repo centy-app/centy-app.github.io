@@ -7,7 +7,7 @@ using centy.Domain.Auth;
 
 namespace centy.Services.Auth
 {
-    public class JwtService
+    public class JwtService : IJwtService
     {
         private readonly ILogger<JwtService> _logger;
 
@@ -56,9 +56,9 @@ namespace centy.Services.Auth
                 };
                 return claims;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError("An error occur while generating the user claim {Exception}", e.Message);
+                _logger.LogError(ex, "An error occur while generating the user claim: {Exception}", ex.Message);
                 throw;
             }
         }
