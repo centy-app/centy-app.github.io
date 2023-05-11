@@ -4,57 +4,56 @@ using FastEndpoints;
 using centy.Contracts.Requests.Auth;
 using centy.Domain.Auth;
 
-namespace centy.Endpoints.Auth
+namespace centy.Endpoints.Auth;
+
+[HttpPost("auth/register"), AllowAnonymous]
+public class RegisterEndpoint : Endpoint<RegisterRequest>
 {
-    [HttpPost("auth/register"), AllowAnonymous]
-    public class RegisterEndpoint : Endpoint<RegisterRequest>
+    private readonly ILogger<RegisterEndpoint> _logger;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+
+    public RegisterEndpoint(
+        ILogger<RegisterEndpoint> logger,
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager)
     {
-        private readonly ILogger<RegisterEndpoint> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        _logger = logger;
+        _userManager = userManager;
+        _signInManager = signInManager;
+    }
 
-        public RegisterEndpoint(
-            ILogger<RegisterEndpoint> logger,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+    public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
+    {
+        var user = new ApplicationUser()
         {
-            _logger = logger;
-            _userManager = userManager;
-            _signInManager = signInManager;
+            UserName = req.Email,
+            Email = req.Email
+        };
+
+        var result = await _userManager.CreateAsync(user, req.Password);
+
+        if (result.Succeeded)
+        {
+            _logger.LogInformation("{Email} successfully registered", req.Email);
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            await SendOkAsync(ct);
+            return;
         }
 
-        public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
+        if (result.Errors.Any())
         {
-            var user = new ApplicationUser()
+            foreach (var error in result.Errors)
             {
-                UserName = req.Email,
-                Email = req.Email
-            };
-
-            var result = await _userManager.CreateAsync(user, req.Password);
-
-            if (result.Succeeded)
-            {
-                _logger.LogInformation("{Email} successfully registered", req.Email);
-
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                await SendOkAsync(ct);
-                return;
+                AddError(error.Description);
             }
-
-            if (result.Errors.Any())
-            {
-                foreach (var error in result.Errors)
-                {
-                    AddError(error.Description);
-                }
-            }
-            else
-            {
-                AddError("An unknown error occurred.");
-            }
-            
-            ThrowIfAnyErrors();
         }
+        else
+        {
+            AddError("An unknown error occurred.");
+        }
+
+        ThrowIfAnyErrors();
     }
 }

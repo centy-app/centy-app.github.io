@@ -4,5 +4,5 @@ namespace centy.Services.Currencies;
 
 public interface IExchangeRateService
 {
-    Task<ExchangeRates> GetLatest();
+    Task<ExchangeRates> GetLatestAsync();
 }

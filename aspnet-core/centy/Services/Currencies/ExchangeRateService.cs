@@ -18,7 +18,7 @@ public class ExchangeRateService : IExchangeRateService
         _logger = logger;
     }
 
-    public async Task<ExchangeRates> GetLatest()
+    public async Task<ExchangeRates> GetLatestAsync()
     {
         var cachedRates = await _repository.GetLatestAsync();
         if (cachedRates != null && DateOnly.FromDateTime(cachedRates.Date) == DateOnly.FromDateTime(DateTime.UtcNow))
