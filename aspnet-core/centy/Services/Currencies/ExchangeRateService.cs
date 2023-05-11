@@ -8,7 +8,7 @@ namespace centy.Services.Currencies;
 public class ExchangeRateService : IExchangeRateService
 {
     private const string BaseCurrency = "USD";
-    private const string LatestRateApiUrl = "https://api.exchangerate.host/latest";
+    private const string LatestRatesApiUrl = "https://api.exchangerate.host/latest";
     private readonly IExchangeRatesRepository _repository;
     private readonly ILogger<ExchangeRateService> _logger;
 
@@ -36,18 +36,18 @@ public class ExchangeRateService : IExchangeRateService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occur while retrieving exchange rates: {Exception}", ex.Message);
-            return cachedRates ?? throw new Exception("Exchange rates unavailable.");
+            return cachedRates ?? throw new Exception("Exchange rates cache is missing.");
         }
     }
 
     private async Task<ExchangeRates> GetLatestFromRemote()
     {
         using HttpClient client = new();
-        var response = await client.GetAsync($"{LatestRateApiUrl}?base={BaseCurrency}");
+        var response = await client.GetAsync($"{LatestRatesApiUrl}?base={BaseCurrency}");
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception("Cant retrieve latest rates from remote.");
+            throw new Exception($"Can't retrieve latest rates from remote. Status code: {response.StatusCode}");
         }
 
         var jsonString = await response.Content.ReadAsStringAsync();
