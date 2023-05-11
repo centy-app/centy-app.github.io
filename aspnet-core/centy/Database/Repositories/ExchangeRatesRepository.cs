@@ -4,8 +4,8 @@ using centy.Domain.Currencies;
 namespace centy.Database.Repositories;
 
 /// <summary>
-/// ExchangeRatesRepository is a bit unique database table, it always contain only one line of data,
-/// used as a persistant cache for currencies exchange rates
+/// ExchangeRatesRepository is a unique database table as it always contains only one record of data,
+/// used as a persistent cache for currency exchange rates
 /// </summary>
 public class ExchangeRatesRepository : BaseRepository, IExchangeRatesRepository
 {
