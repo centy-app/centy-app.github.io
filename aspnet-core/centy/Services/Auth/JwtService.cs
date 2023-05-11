@@ -5,72 +5,73 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using centy.Domain.Auth;
 
-namespace centy.Services.Auth
+namespace centy.Services.Auth;
+
+public class JwtService : IJwtService
 {
-    public class JwtService
+    private readonly ILogger<JwtService> _logger;
+
+    public JwtService(ILogger<JwtService> logger)
     {
-        private readonly ILogger<JwtService> _logger;
+        _logger = logger;
+    }
 
-        public JwtService(ILogger<JwtService> logger)
-        {
-            _logger = logger;
-        }
+    public static readonly string TokenSigningKey =
+        Environment.GetEnvironmentVariable("JWTKEY") ?? "98cf0eed-4b0c-405f-9913-dce91b99a506";
 
-        public static readonly string TokenSigningKey = Environment.GetEnvironmentVariable("JWTKEY") ?? "98cf0eed-4b0c-405f-9913-dce91b99a506";
-
-        public string CreateToken(ApplicationUser user)
-        {
-            var expiration = DateTime.UtcNow.AddDays(7);
-            var token = CreateJwtToken(
-                CreateClaims(user),
-                CreateSigningCredentials(),
-                expiration
-            );
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(token);
-        }
-
-        private JwtSecurityToken CreateJwtToken(
-            IEnumerable<Claim> claims,
-            SigningCredentials credentials,
-            DateTime expiration) => new(
-            "centy",
-            "centy",
-            claims,
-            expires: expiration,
-            signingCredentials: credentials
+    public string CreateToken(ApplicationUser user)
+    {
+        var expiration = DateTime.UtcNow.AddDays(7);
+        var token = CreateJwtToken(
+            CreateClaims(user),
+            CreateSigningCredentials(),
+            expiration
         );
 
-        private IEnumerable<Claim> CreateClaims(ApplicationUser user)
-        {
-            try
-            {
-                var claims = new List<Claim>
-                {
-                    new(JwtRegisteredClaimNames.Sub, "centy"),
-                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
-                    new(ClaimTypes.Name, user.UserName),
-                    new(ClaimTypes.Email, user.Email)
-                };
-                return claims;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("An error occur while generating the user claim {Exception}", e.Message);
-                throw;
-            }
-        }
+        var tokenHandler = new JwtSecurityTokenHandler();
+        return tokenHandler.WriteToken(token);
+    }
 
-        private SigningCredentials CreateSigningCredentials()
+    private JwtSecurityToken CreateJwtToken(
+        IEnumerable<Claim> claims,
+        SigningCredentials credentials,
+        DateTime expiration) => new(
+        "centy",
+        "centy",
+        claims,
+        expires: expiration,
+        signingCredentials: credentials
+    );
+
+    private IEnumerable<Claim> CreateClaims(ApplicationUser user)
+    {
+        try
         {
-            return new SigningCredentials(
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(TokenSigningKey)
-                ),
-                SecurityAlgorithms.HmacSha256
-            );
+            var claims = new List<Claim>
+            {
+                new(JwtRegisteredClaimNames.Sub, "centy"),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
+                new(ClaimTypes.Name, user.UserName),
+                new(ClaimTypes.Email, user.Email)
+            };
+
+            return claims;
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occur while generating the user claim: {Exception}", ex.Message);
+            throw;
+        }
+    }
+
+    private SigningCredentials CreateSigningCredentials()
+    {
+        return new SigningCredentials(
+            new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(TokenSigningKey)
+            ),
+            SecurityAlgorithms.HmacSha256
+        );
     }
 }

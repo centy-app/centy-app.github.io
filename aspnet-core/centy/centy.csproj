@@ -15,12 +15,7 @@
     <PackageReference Include="FastEndpoints.Security" Version="5.8.1" />
     <PackageReference Include="FastEndpoints.Swagger" Version="5.8.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Contracts\Data\" />
-    <Folder Include="Database\" />
-    <Folder Include="Repositories\" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.2" />
   </ItemGroup>
 
 </Project>

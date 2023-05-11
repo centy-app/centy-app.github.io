@@ -3,28 +3,27 @@ using FastEndpoints;
 using centy.Contracts.Responses.Auth;
 using centy.Domain.Auth;
 
-namespace centy.Endpoints.Auth
+namespace centy.Endpoints.Auth;
+
+[HttpGet("auth/aboutme")]
+public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
 {
-    [HttpGet("auth/aboutme")]
-    public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public AboutMeEndpoint(UserManager<ApplicationUser> userManager)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        _userManager = userManager;
+    }
 
-        public AboutMeEndpoint(UserManager<ApplicationUser> userManager)
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        var user = await _userManager.FindByNameAsync(HttpContext?.User?.Identity?.Name);
+        var response = new AboutMeResponse()
         {
-            _userManager = userManager;
-        }
+            Id = user.Id,
+            Email = user.Email
+        };
 
-        public override async Task HandleAsync(CancellationToken ct)
-        {
-            var user = await _userManager.FindByNameAsync(HttpContext?.User?.Identity?.Name);
-            var response = new AboutMeResponse()
-            {
-                Id = user.Id,
-                Email = user.Email
-            };
-
-            await SendOkAsync(response, ct);
-        }
+        await SendOkAsync(response, ct);
     }
 }
