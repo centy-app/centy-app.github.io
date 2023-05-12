@@ -2,6 +2,6 @@
 
 public class AboutMeResponse
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     public string Email { get; init; } = default!;
 }
