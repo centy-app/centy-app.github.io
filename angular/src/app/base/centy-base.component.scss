@@ -23,10 +23,11 @@
 
     .sidenav-container {
         flex-grow: 1;
-        background-color: white;
 
         .menu {
             padding: 10pt;
+            border-right: 0px;
+            background-color: #00000029;
         }
 
         .content {
