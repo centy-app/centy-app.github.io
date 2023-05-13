@@ -2,5 +2,5 @@
 
 public class ValidationFailureResponse
 {
-    public List<string> Errors { get; init; } = default!;
+    public List<string>? Errors { get; init; }
 }
