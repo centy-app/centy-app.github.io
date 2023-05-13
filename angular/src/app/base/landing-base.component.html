@@ -1,15 +1,19 @@
 <!--This is navbar page for non logged in users-->
 
-<mat-toolbar>
-  <span class="toolbar-logo" routerLink="/">Centy</span>
-  <span class="toolbar-spacer"></span>
-  <button mat-stroked-button color="primary" routerLink="/register" style="margin-right: 5pt;">
-    Register
-  </button>
-  <button mat-stroked-button color="accent" routerLink="/login">
-    Log in
-  </button>
-</mat-toolbar>
+<div class="landing-base">
+  <mat-toolbar>
+    <span class="toolbar-logo" routerLink="/">Centy</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-stroked-button color="primary" routerLink="/register" style="margin-right: 5pt;">
+      Register
+    </button>
+    <button mat-stroked-button color="accent" routerLink="/login">
+      Log in
+    </button>
+  </mat-toolbar>
 
-<!--Default route is landing page, rest listed in navbar-->
-<router-outlet></router-outlet>
+  <div class="content">
+    <!--Default route is landing page, rest listed in navbar-->
+    <router-outlet></router-outlet>
+  </div>
+</div>

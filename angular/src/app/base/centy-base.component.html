@@ -1,27 +1,34 @@
 <!-- This is navbar(+sidebar) layout page for registered and logged in users -->
+<div class="centy-base">
+  <mat-toolbar>
+    <button (click)="snav.toggle()" mat-icon-button title="Menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="toolbar-logo" routerLink="/centy">Centy</span>
+    <span class="toolbar-spacer"></span>
+    <div class="toolbar-info">
+      <span class="title">Balance:</span>
+      <span class="money">5678 EUR</span>
+    </div>
+    <div class="toolbar-info">
+      <span class="title">Expenses:</span>
+      <span class="money">1234 EUR</span>
+    </div>
+  </mat-toolbar>
 
-<mat-toolbar>
-  <button mat-icon-button title="Menu">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span class="toolbar-logo" routerLink="/centy">Centy</span>
-  <span class="toolbar-spacer"></span>
-  <div class="toolbar-info">
-    <span class="title">Balance:</span>
-    <span class="money">5678 EUR</span>
-  </div>
-  <div class="toolbar-info">
-    <span class="title">Expenses:</span>
-    <span class="money">1234 EUR</span>
-  </div>
-</mat-toolbar>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav class="menu" #snav [mode]="mobileQuery.matches ? 'over' : 'side'">
+      <div>
+        <a routerLink="/centy" routerLinkActive="active" ariaCurrentWhenActive="page">centy</a>
+      </div>
+      <div>
+        <a routerLink="/centy/categories" routerLinkActive="active" ariaCurrentWhenActive="page">categories</a>
+      </div>
+    </mat-sidenav>
 
-<nav>
-    <ul>
-      <li><a routerLink="/centy" routerLinkActive="active" ariaCurrentWhenActive="page">centy</a></li>
-      <li><a routerLink="/centy/categories" routerLinkActive="active" ariaCurrentWhenActive="page">categories</a></li>
-    </ul>
-</nav>
-
-<!--- Default route is home controller -->
-<router-outlet></router-outlet>
+    <mat-sidenav-content class="content">
+      <!--- Default route is home controller -->
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

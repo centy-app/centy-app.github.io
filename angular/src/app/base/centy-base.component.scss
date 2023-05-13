@@ -15,3 +15,21 @@
         font-weight: 500;
     }
 }
+
+.centy-base {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    .sidenav-container {
+        flex-grow: 1;
+
+        .menu {
+            padding: 10pt;
+        }
+
+        .content {
+            padding: 10pt;
+        }
+    }
+}
