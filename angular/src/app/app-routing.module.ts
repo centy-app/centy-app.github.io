@@ -9,6 +9,7 @@ import { AuthComponent } from './base/landing-base.component';
 import { LandingComponent } from './landing/landing.component';
 import { BalanceComponent } from './centy/reports/balance/balance.component';
 import { ExpensesComponent } from './centy/reports/expenses/expenses.component';
+import { SettingsComponent } from './centy/settings/settings.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,7 @@ const routes: Routes = [
       { path: 'categories', component: CategoriesComponent },
       { path: 'balance', component: BalanceComponent },
       { path: 'expenses', component: ExpensesComponent },
+      { path: 'settings', component: SettingsComponent }
     ]
   },
 ];

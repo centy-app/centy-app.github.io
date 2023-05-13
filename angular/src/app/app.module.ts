@@ -16,6 +16,7 @@ import { TransactionComponent } from './centy/transaction/transaction.component'
 import { ReportsComponent } from './centy/reports/reports.component';
 import { BalanceComponent } from './centy/reports/balance/balance.component';
 import { ExpensesComponent } from './centy/reports/expenses/expenses.component';
+import { SettingsComponent } from './centy/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ExpensesComponent } from './centy/reports/expenses/expenses.component';
     TransactionComponent,
     ReportsComponent,
     BalanceComponent,
-    ExpensesComponent
+    ExpensesComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
