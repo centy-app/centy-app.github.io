@@ -3,8 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  templateUrl: './landing-base.component.html',
+  styleUrls: ['./landing-base.component.scss', './toolbar.scss']
 })
 export class AuthComponent implements OnInit {
   currentRoute: string = '/';

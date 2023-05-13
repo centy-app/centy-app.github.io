@@ -1,0 +1,14 @@
+.landing-base {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    #register {
+        margin-right: 7pt;
+    }
+
+    .content {
+        flex-grow: 1;
+        padding: 10pt;
+    }
+}
