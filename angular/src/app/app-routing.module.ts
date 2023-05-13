@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
-import { CentyComponent } from './centy/centy.component';
+import { CentyComponent } from './base/centy-base.component';
 import { HomeComponent } from './centy/home/home.component';
 import { CategoriesComponent } from './centy/categories/categories.component';
-import { AuthComponent } from './auth/auth.component';
+import { AuthComponent } from './base/landing-base.component';
 import { LandingComponent } from './landing/landing.component';
 
 const routes: Routes = [

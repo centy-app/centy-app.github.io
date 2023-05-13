@@ -5,11 +5,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from 'src/material.module';
 
 import { AppComponent } from './app.component';
-import { AuthComponent } from './auth/auth.component';
+import { AuthComponent } from './base/landing-base.component';
 import { LandingComponent } from './landing/landing.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
-import { CentyComponent } from './centy/centy.component';
+import { CentyComponent } from './base/centy-base.component';
 import { HomeComponent } from './centy/home/home.component';
 import { CategoriesComponent } from './centy/categories/categories.component';
 import { TransactionComponent } from './centy/transaction/transaction.component';
