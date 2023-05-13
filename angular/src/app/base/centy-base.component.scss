@@ -23,6 +23,7 @@
 
     .sidenav-container {
         flex-grow: 1;
+        background-color: white;
 
         .menu {
             padding: 10pt;
@@ -30,6 +31,12 @@
 
         .content {
             padding: 10pt;
+        }
+
+        button {
+            display: block;
+            width: 80pt;
+            margin-bottom: 5pt;
         }
     }
 }

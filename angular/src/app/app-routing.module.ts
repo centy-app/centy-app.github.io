@@ -7,6 +7,8 @@ import { HomeComponent } from './centy/home/home.component';
 import { CategoriesComponent } from './centy/categories/categories.component';
 import { AuthComponent } from './base/landing-base.component';
 import { LandingComponent } from './landing/landing.component';
+import { BalanceComponent } from './centy/reports/balance/balance.component';
+import { ExpensesComponent } from './centy/reports/expenses/expenses.component';
 
 const routes: Routes = [
   {
@@ -24,6 +26,8 @@ const routes: Routes = [
     children: [
       { path: '', component: HomeComponent },
       { path: 'categories', component: CategoriesComponent },
+      { path: 'balance', component: BalanceComponent },
+      { path: 'expenses', component: ExpensesComponent },
     ]
   },
 ];
