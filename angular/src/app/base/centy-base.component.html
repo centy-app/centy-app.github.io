@@ -1,13 +1,13 @@
 <!-- This is layout page for logged in users -->
 <div class="centy-base">
   <mat-toolbar>
-    <button (click)="snav.toggle()" mat-icon-button title="Menu">
+    <button (click)="sidenav.toggle()" mat-icon-button title="Menu">
       <mat-icon>menu</mat-icon>
     </button>
     <span class="toolbar-logo" routerLink="/centy">Centy</span>
-    
+
     <span class="toolbar-spacer"></span>
-    
+
     <div class="toolbar-info">
       <span class="title">Balance:</span>
       <span class="money">5678 EUR</span>
@@ -19,12 +19,25 @@
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav class="menu" #snav [mode]="mobileQuery.matches ? 'over' : 'side'">
-      <button mat-stroked-button color="privary" routerLink="/centy">Home</button>
-      <button mat-stroked-button color="privary" routerLink="/centy/categories">Categories</button>
-      <button mat-stroked-button color="accent" routerLink="/centy/balance">Balance</button>
-      <button mat-stroked-button color="accent" routerLink="/centy/expenses">Expenses</button>
-      <button mat-stroked-button color="privary" routerLink="/centy/settings">Settings</button>
+    <mat-sidenav #sidenav class="menu" [opened]="mobileQuery.matches ? 'false' : 'true'"
+      [mode]="mobileQuery.matches ? 'over' : 'side'">
+
+      <button (click)="onNavClick()" mat-stroked-button color="privary" routerLink="/centy">
+        Home
+      </button>
+      <button (click)="onNavClick()" mat-stroked-button color="privary" routerLink="/centy/categories">
+        Categories
+      </button>
+      <button (click)="onNavClick()" mat-stroked-button color="accent" routerLink="/centy/balance">
+        Balance
+      </button>
+      <button (click)="onNavClick()" mat-stroked-button color="accent" routerLink="/centy/expenses">
+        Expenses
+      </button>
+      <button (click)="onNavClick()" mat-stroked-button color="privary" routerLink="/centy/settings">
+        Settings
+      </button>
+
     </mat-sidenav>
 
     <mat-sidenav-content class="content">
