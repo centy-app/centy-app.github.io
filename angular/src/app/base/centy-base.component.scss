@@ -4,24 +4,24 @@
     height: 100vh;
 
     .toolbar {
-        height: auto;
-    }
+        padding: 0 5px;
 
-    .toolbar-info {
-        margin-right: 10pt;
-    
-        span {
-            display: block;
-        }
-    
-        .title {
-            font-size: 11pt;
-            font-weight: 200;
-        }
-    
-        .money {
-            font-size: 9pt;
-            font-weight: 500;
+        .toolbar-info {
+            margin-right: 10pt;
+
+            span {
+                display: block;
+            }
+
+            .title {
+                font-size: 11pt;
+                font-weight: 200;
+            }
+
+            .money {
+                font-size: 9pt;
+                font-weight: 500;
+            }
         }
     }
 
