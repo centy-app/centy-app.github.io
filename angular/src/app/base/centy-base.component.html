@@ -1,6 +1,6 @@
 <!-- This is layout page for logged in users -->
 <div class="centy-base">
-  <mat-toolbar>
+  <mat-toolbar class="toolbar">
     <button (click)="sidenav.toggle()" mat-icon-button title="Menu">
       <mat-icon>menu</mat-icon>
     </button>
@@ -22,21 +22,13 @@
     <mat-sidenav #sidenav class="menu" [opened]="mobileQuery.matches ? 'false' : 'true'"
       [mode]="mobileQuery.matches ? 'over' : 'side'">
 
-      <button (click)="onNavClick()" mat-stroked-button color="privary" routerLink="/centy">
-        Home
-      </button>
-      <button (click)="onNavClick()" mat-stroked-button color="privary" routerLink="/centy/categories">
-        Categories
-      </button>
-      <button (click)="onNavClick()" mat-stroked-button color="accent" routerLink="/centy/balance">
-        Balance
-      </button>
-      <button (click)="onNavClick()" mat-stroked-button color="accent" routerLink="/centy/expenses">
-        Expenses
-      </button>
-      <button (click)="onNavClick()" mat-stroked-button color="privary" routerLink="/centy/settings">
-        Settings
-      </button>
+      <div (click)="onNavClick()">
+        <button mat-stroked-button color="privary" routerLink="/centy">Home</button>
+        <button mat-stroked-button color="privary" routerLink="/centy/categories">Categories</button>
+        <button mat-stroked-button color="accent" routerLink="/centy/balance">Balance</button>
+        <button mat-stroked-button color="accent" routerLink="/centy/expenses">Expenses</button>
+        <button mat-stroked-button color="privary" routerLink="/centy/settings">Settings</button>
+      </div>
 
     </mat-sidenav>
 
