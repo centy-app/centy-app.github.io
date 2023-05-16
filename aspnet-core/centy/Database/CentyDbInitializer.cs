@@ -13,5 +13,12 @@ public static class CentyDbInitializer
             classMap.SetIgnoreExtraElements(true);
             classMap.MapIdField(x => x.BaseCurrency);
         });
+
+        BsonClassMap.RegisterClassMap<Currency>(classMap =>
+        {
+            classMap.AutoMap();
+            classMap.SetIgnoreExtraElements(true);
+            classMap.MapIdField(x => x.Code);
+        });
     }
 }

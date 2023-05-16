@@ -3,7 +3,6 @@ using centy.Services.Currencies;
 
 namespace centy.Endpoints.Currencies;
 
-[HttpGet("currencies/exchangeRates")]
 public class ExchangeRatesEndpoint : EndpointWithoutRequest<ExchangeRates>
 {
     private readonly IExchangeRateService _exchangeRateService;
@@ -11,6 +10,12 @@ public class ExchangeRatesEndpoint : EndpointWithoutRequest<ExchangeRates>
     public ExchangeRatesEndpoint(IExchangeRateService exchangeRateService)
     {
         _exchangeRateService = exchangeRateService;
+    }
+
+    public override void Configure()
+    {
+        Get("currencies/exchangeRates");
+        ResponseCache(3600);
     }
 
     public override async Task HandleAsync(CancellationToken ct)

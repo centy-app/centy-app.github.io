@@ -13,5 +13,7 @@ public static class DependencyInjection
         services.AddSingleton<IJwtService, JwtService>();
         services.AddSingleton<IExchangeRateService, ExchangeRateService>();
         services.AddTransient<IExchangeRatesRepository, ExchangeRatesRepository>();
+        services.AddTransient<ICurrenciesService, CurrenciesService>();
+        services.AddTransient<ICurrenciesRepository, CurrenciesRepository>();
     }
 }

@@ -7,20 +7,19 @@ namespace centy.Services.Currencies;
 
 public class ExchangeRateService : IExchangeRateService
 {
-    public const string BaseCurrency = "USD";
     private const string LatestRatesApiUrl = "https://api.exchangerate.host/latest";
-    private readonly IExchangeRatesRepository _repository;
+    private readonly IExchangeRatesRepository _exchangeRatesRepository;
     private readonly ILogger<ExchangeRateService> _logger;
 
-    public ExchangeRateService(IExchangeRatesRepository repository, ILogger<ExchangeRateService> logger)
+    public ExchangeRateService(IExchangeRatesRepository exchangeRatesRepository, ILogger<ExchangeRateService> logger)
     {
-        _repository = repository;
+        _exchangeRatesRepository = exchangeRatesRepository;
         _logger = logger;
     }
 
     public async Task<ExchangeRates> GetLatestAsync()
     {
-        var cachedRates = await _repository.GetLatestAsync();
+        var cachedRates = await _exchangeRatesRepository.GetLatestAsync();
         if (cachedRates != null && DateOnly.FromDateTime(cachedRates.Date) == DateOnly.FromDateTime(DateTime.UtcNow))
         {
             return cachedRates;
@@ -28,8 +27,8 @@ public class ExchangeRateService : IExchangeRateService
 
         try
         {
-            var rates = await GetLatestFromRemote();
-            await _repository.SetLatestAsync(rates);
+            var rates = await GetLatestFromRemoteAsync();
+            await _exchangeRatesRepository.SetLatestAsync(rates);
 
             return rates;
         }
@@ -40,10 +39,10 @@ public class ExchangeRateService : IExchangeRateService
         }
     }
 
-    private async Task<ExchangeRates> GetLatestFromRemote()
+    private async Task<ExchangeRates> GetLatestFromRemoteAsync()
     {
         using HttpClient client = new();
-        var response = await client.GetAsync($"{LatestRatesApiUrl}?base={BaseCurrency}");
+        var response = await client.GetAsync($"{LatestRatesApiUrl}?base={CurrenciesService.BaseCurrency}");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -59,6 +58,6 @@ public class ExchangeRateService : IExchangeRateService
             rates.Add(new ExchangeRate(rate.Name, (double)rate.Value));
         }
 
-        return new ExchangeRates(BaseCurrency, DateTime.UtcNow, rates);
+        return new ExchangeRates(CurrenciesService.BaseCurrency, DateTime.UtcNow, rates);
     }
 }

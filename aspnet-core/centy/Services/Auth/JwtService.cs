@@ -66,7 +66,7 @@ public class JwtService : IJwtService
                 new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
                 new(ClaimTypes.Name, user.UserName),
                 new(ClaimTypes.Email, user.Email),
-                new("BaseCurrencyCode", user.BaseCurrencyCode ?? ExchangeRateService.BaseCurrency)
+                new("BaseCurrencyCode", user.BaseCurrencyCode ?? CurrenciesService.BaseCurrency)
             };
 
             return claims;
