@@ -27,7 +27,8 @@ public class RegisterEndpoint : Endpoint<RegisterRequest>
         var user = new ApplicationUser
         {
             UserName = req.Email,
-            Email = req.Email
+            Email = req.Email,
+            BaseCurrencyCode = req.BaseCurrencyCode
         };
 
         var result = await _userManager.CreateAsync(user, req.Password);

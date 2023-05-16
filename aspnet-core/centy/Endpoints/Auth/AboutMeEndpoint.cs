@@ -20,7 +20,8 @@ public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
         var response = new AboutMeResponse
         {
             Id = user.Id,
-            Email = user.Email
+            Email = user.Email,
+            BaseCurrencyCode = user.BaseCurrencyCode
         };
 
         await SendOkAsync(response, ct);

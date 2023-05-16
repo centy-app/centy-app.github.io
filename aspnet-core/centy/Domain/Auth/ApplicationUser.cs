@@ -6,4 +6,5 @@ namespace centy.Domain.Auth;
 [CollectionName("Users")]
 public class ApplicationUser : MongoIdentityUser<Guid>
 {
+    public string? BaseCurrencyCode { get; set; }
 }

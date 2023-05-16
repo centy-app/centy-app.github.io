@@ -39,7 +39,8 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
             var response = new LoginResponse
             {
                 Email = user.Email,
-                Token = jwtToken
+                Token = jwtToken,
+                BaseCurrencyCode = user.BaseCurrencyCode
             };
 
             _logger.LogInformation("{Email} successfully logged in", req.Email);

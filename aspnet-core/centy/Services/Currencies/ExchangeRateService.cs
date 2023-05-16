@@ -7,7 +7,7 @@ namespace centy.Services.Currencies;
 
 public class ExchangeRateService : IExchangeRateService
 {
-    private const string BaseCurrency = "USD";
+    public const string BaseCurrency = "USD";
     private const string LatestRatesApiUrl = "https://api.exchangerate.host/latest";
     private readonly IExchangeRatesRepository _repository;
     private readonly ILogger<ExchangeRateService> _logger;

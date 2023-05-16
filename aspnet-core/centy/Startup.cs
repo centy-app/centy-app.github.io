@@ -22,7 +22,7 @@ public class Startup
         webHost.ConfigureKestrel(options =>
         {
             var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
-            var httpsPort = int.Parse(Environment.GetEnvironmentVariable("HTTPSPORT") ?? throw new Exception(PortException));
+            var httpsPort = int.Parse(Environment.GetEnvironmentVariable("HTTPS_PORT") ?? throw new Exception(PortException));
 
             options.ListenAnyIP(port); // to listen for incoming http connection on port 80
 
@@ -62,11 +62,11 @@ public class Startup
                 {
                     SaveSigninToken = true,
                     ValidateIssuer = true,
-                    ValidateAudience = false,
+                    ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "centy",
-                    ValidAudience = "centy",
+                    ValidIssuer = JwtService.TokenIssuer,
+                    ValidAudience = JwtService.TokenAudience,
                     IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
                 };
             });
