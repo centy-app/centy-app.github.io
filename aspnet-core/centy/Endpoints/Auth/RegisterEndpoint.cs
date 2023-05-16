@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using FastEndpoints;
 using centy.Contracts.Requests.Auth;
 using centy.Domain.Auth;
 
@@ -25,7 +24,7 @@ public class RegisterEndpoint : Endpoint<RegisterRequest>
 
     public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
     {
-        var user = new ApplicationUser()
+        var user = new ApplicationUser
         {
             UserName = req.Email,
             Email = req.Email

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using FastEndpoints;
 using centy.Contracts.Requests.Auth;
 using centy.Contracts.Responses.Auth;
 using centy.Domain.Auth;

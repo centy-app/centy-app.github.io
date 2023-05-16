@@ -1,5 +1,4 @@
-﻿using FastEndpoints;
-using centy.Domain.Currencies;
+﻿using centy.Domain.Currencies;
 using centy.Services.Currencies;
 
 namespace centy.Endpoints.Currencies;

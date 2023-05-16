@@ -6,7 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>5f9ba23d-6048-4efb-a708-38de727e9a1d</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <Authors>Maksym Shchyhol</Authors>
+    <RepositoryUrl>https://github.com/centy-app/centy-app.github.io</RepositoryUrl>
+    <LangVersion>10</LangVersion>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="FastEndpoints" />
+    <Using Include="FluentValidation" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />

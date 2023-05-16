@@ -1,5 +1,4 @@
 ﻿using centy.Contracts.Requests.Auth;
-using FluentValidation;
 
 namespace centy.Validation.Auth;
 

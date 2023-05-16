@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using FastEndpoints;
 using FastEndpoints.Swagger;
 using centy.Contracts.Responses.Infrastructure;
-using centy.Database.Repositories;
-using centy.Infrastructure;
 using centy.Domain.Auth;
 using centy.Services.Auth;
-using centy.Services.Currencies;
 
 namespace centy;
 
@@ -38,15 +33,7 @@ public class Startup
             }
         });
     }
-
-    public void ConfigureDependencyInjection(IServiceCollection services)
-    {
-        services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthResultHandler>();
-        services.AddSingleton<IJwtService, JwtService>();
-        services.AddSingleton<IExchangeRateService, ExchangeRateService>();
-        services.AddTransient<IExchangeRatesRepository, ExchangeRatesRepository>();
-    }
-
+    
     public void ConfigureServices(IServiceCollection services)
     {
         var connectionString = Environment.GetEnvironmentVariable("MONGODB");

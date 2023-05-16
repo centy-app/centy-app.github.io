@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using FastEndpoints;
 using centy.Domain.Auth;
 
 namespace centy.Endpoints.Auth;
