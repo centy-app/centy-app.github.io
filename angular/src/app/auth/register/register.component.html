@@ -1,1 +1,5 @@
-<span>register works!</span>
+<span (click)="onRegisterClick()">register works!</span>
+
+<ul>
+    <li *ngFor="let currency of (currencies$ | async)">{{ currency.code }}</li>
+</ul>

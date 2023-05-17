@@ -3,13 +3,13 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { CurrenciesState } from './currencies.models';
 import * as fromCurrencies from './index';
 
-export const initialBookState: CurrenciesState = {
+export const initialCurrenciesState: CurrenciesState = {
     currencies: [],
     isLoading: false
 };
 
 const reducer = createReducer<CurrenciesState>(
-    initialBookState,
+    initialCurrenciesState,
     on(fromCurrencies.getCurrencies, (state) => {
         return {
             ...state,
@@ -25,6 +25,6 @@ const reducer = createReducer<CurrenciesState>(
     })
 );
 
-export function currenciesReducers(state = initialBookState, actions: Action): CurrenciesState {
+export function currenciesReducers(state = initialCurrenciesState, actions: Action): CurrenciesState {
     return reducer(state, actions);
 }

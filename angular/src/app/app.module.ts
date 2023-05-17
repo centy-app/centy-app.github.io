@@ -46,7 +46,9 @@ import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    StoreModule.forRoot([currenciesReducers]),
+    StoreModule.forRoot({
+      currencies: currenciesReducers
+    }),
     EffectsModule.forRoot([CurrenciesEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
