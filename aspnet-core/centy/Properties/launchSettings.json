@@ -11,7 +11,8 @@
         "MONGODB": "mongodb://localhost:27017",
         "JWT_KEY": "98cf0eed-4b0c-405f-9913-dce91b99a506",
         "JWT_ISSUER": "centy",
-        "JWT_AUDIENCE": "centy"
+        "JWT_AUDIENCE": "centy",
+        "CORS": "localhost:4200"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:44306"
@@ -27,7 +28,8 @@
         "MONGODB": "mongodb://localhost:27017",
         "JWT_KEY": "98cf0eed-4b0c-405f-9913-dce91b99a506",
         "JWT_ISSUER": "centy",
-        "JWT_AUDIENCE": "centy"
+        "JWT_AUDIENCE": "centy",
+        "CORS": "localhost:4200"
       }
     },
     "Docker": {
@@ -43,7 +45,8 @@
         "MONGODB": "mongodb://localhost:27017",
         "JWT_KEY": "98cf0eed-4b0c-405f-9913-dce91b99a506",
         "JWT_ISSUER": "centy",
-        "JWT_AUDIENCE": "centy"
+        "JWT_AUDIENCE": "centy",
+        "CORS": "localhost:4200"
       }
     }
   },

@@ -9,6 +9,7 @@ namespace centy;
 
 public class Startup
 {
+    private const string AllowOrigins = "_centyOrigins";
     private const string PortException = "Port configuration is invalid";
     public IConfiguration Configuration { get; }
 
@@ -22,7 +23,8 @@ public class Startup
         webHost.ConfigureKestrel(options =>
         {
             var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
-            var httpsPort = int.Parse(Environment.GetEnvironmentVariable("HTTPS_PORT") ?? throw new Exception(PortException));
+            var httpsPort = int.Parse(Environment.GetEnvironmentVariable("HTTPS_PORT") ??
+                                      throw new Exception(PortException));
 
             options.ListenAnyIP(port); // to listen for incoming http connection on port 80
 
@@ -33,9 +35,21 @@ public class Startup
             }
         });
     }
-    
+
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: AllowOrigins,
+                policy =>
+                {
+                    var allowedOrigin = Environment.GetEnvironmentVariable("CORS");
+                    policy.WithOrigins($"https://{allowedOrigin}", $"http://{allowedOrigin}");
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyHeader();
+                });
+        });
+
         var connectionString = Environment.GetEnvironmentVariable("MONGODB");
         services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
             {
@@ -67,7 +81,8 @@ public class Startup
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = JwtService.TokenIssuer,
                     ValidAudience = JwtService.TokenAudience,
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
                 };
             });
 
@@ -76,6 +91,7 @@ public class Startup
 
     public void Configure(WebApplication app, IWebHostEnvironment env)
     {
+        app.UseCors(AllowOrigins);
         app.UseAuthentication();
         app.UseAuthorization();
 

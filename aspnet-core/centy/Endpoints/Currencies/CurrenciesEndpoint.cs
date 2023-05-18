@@ -14,6 +14,7 @@ public class CurrenciesEndpoint : EndpointWithoutRequest<List<Currency>>
 
     public override void Configure()
     {
+        AllowAnonymous();
         Get("currencies/symbols");
         ResponseCache(3600);
     }
