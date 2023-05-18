@@ -45,6 +45,8 @@ public class Startup
                 {
                     var allowedOrigin = Environment.GetEnvironmentVariable("CORS");
                     policy.WithOrigins($"https://{allowedOrigin}", $"http://{allowedOrigin}");
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyHeader();
                 });
         });
 

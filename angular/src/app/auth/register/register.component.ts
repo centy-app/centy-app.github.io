@@ -2,10 +2,13 @@ import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModu
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { MaterialModule } from 'src/material.module';
+import { Observable, catchError, mergeMap, of } from 'rxjs';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Currency } from 'src/app/centy/currencies/state/currencies.models';
 import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
-import { MaterialModule } from 'src/material.module';
+import { RegisterService } from './register.service';
+import { LoginResponse } from '../login/login.models';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +20,7 @@ import { MaterialModule } from 'src/material.module';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    MatSnackBarModule
   ]
 })
 export class RegisterComponent implements OnInit, OnDestroy {
@@ -34,8 +38,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly currenciesService: CurrenciesService,
+    private readonly registerService: RegisterService,
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly media: MediaMatcher) { }
+    private readonly media: MediaMatcher,
+    private readonly snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.isDesctopHeight = this.media.matchMedia('(min-height: 700px)');
@@ -71,7 +77,21 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onRegister() {
-    console.warn(this.registerForm.value);
+    this.registerService.registerAndLoginRemote({
+      email: this.email.value,
+      password: this.password.value,
+      baseCurrencyCode: this.currency.value
+    })
+    .subscribe((result: LoginResponse) => {
+      if (result.success) {
+        console.warn(result);
+        // TODO: save to state
+      } else {
+        result.errors.forEach((er: any) => {
+          this.snackBar.open(er, 'OK');
+        });
+      }
+    });
   }
 
   ngOnDestroy(): void {
