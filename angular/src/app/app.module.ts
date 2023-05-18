@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from 'src/material.module';
+import { HttpClientModule } from '@angular/common/http';
 import { environment } from 'src/environment/environment';
 
 import { AppComponent } from './app.component';
@@ -43,6 +44,7 @@ import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,

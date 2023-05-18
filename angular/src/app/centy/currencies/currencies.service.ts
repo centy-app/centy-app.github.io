@@ -1,29 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 import { Currency } from './state/currencies.models';
+import { environment } from 'src/environment/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CurrenciesService {
-    constructor() {
-    }
+    symbolsUrl = environment.baseApiUrl + 'currencies/symbols';
 
-    private currencies: Currency[] = [
-        {
-            code: 'TS1',
-            description: 'Test 2 currency',
-            symbol: '$'
-        },
-        {
-            code: 'TS2',
-            description: 'Test 3 currency',
-            symbol: 'uah'
-        }
-    ]
+    constructor(private http: HttpClient) {}
 
     getCurrencies(): Observable<Currency[]> {
-        return of(this.currencies);
+        return this.http.get<Currency[]>(this.symbolsUrl);
     }
 }

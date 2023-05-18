@@ -12,8 +12,7 @@ import { Currency } from './currencies.models';
 export class CurrenciesEffects {
     constructor(private readonly actions$: Actions,
         private readonly currenciesService: CurrenciesService,
-        private store: Store<AppState>) {
-    }
+        private store: Store<AppState>) { }
 
     getCurrencies$ = createEffect(() =>
         this.actions$.pipe(
