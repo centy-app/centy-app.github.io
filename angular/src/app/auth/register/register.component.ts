@@ -34,8 +34,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currencies$: Observable<Currency[]>;
   isLoading$: Observable<boolean>;
 
-  isDesctopHeight: MediaQueryList;
-  private isDesctopHeightListener: () => void;
+  isDesktopHeight: MediaQueryList;
+  private isDesktopHeightListener: () => void;
 
   constructor(
     private readonly currenciesService: CurrenciesService,
@@ -45,9 +45,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private readonly snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.isDesctopHeight = this.media.matchMedia('(min-height: 700px)');
-    this.isDesctopHeightListener = () => this.changeDetectorRef.detectChanges();
-    this.isDesctopHeight.addEventListener('change', this.isDesctopHeightListener);
+    this.isDesktopHeight = this.media.matchMedia('(min-height: 700px)');
+    this.isDesktopHeightListener = () => this.changeDetectorRef.detectChanges();
+    this.isDesktopHeight.addEventListener('change', this.isDesktopHeightListener);
 
     this.email = new FormControl('', [Validators.required, Validators.email]);
     this.password = new FormControl('', Validators.required);
@@ -81,8 +81,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       email: this.email.value,
       password: this.password.value,
       baseCurrencyCode: this.currency.value
-    })
-    .subscribe((result: LoginResponse) => {
+    }).subscribe((result: LoginResponse) => {
       if (!result.success) {
         result.errors.forEach((er: any) => {
           this.snackBar.open(er, 'OK');
@@ -92,6 +91,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.isDesctopHeight.removeEventListener('change', this.isDesctopHeightListener);
+    this.isDesktopHeight.removeEventListener('change', this.isDesktopHeightListener);
   }
 }

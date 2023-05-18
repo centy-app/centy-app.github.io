@@ -49,7 +49,6 @@ export class RegisterService {
             .post<RegisterResponse>(this.registerUrl, registerModel, { headers })
             .pipe(
                 mergeMap(() => {
-                    console.log(registerModel.email + ' sucesfully registered.');
                     return of({
                         errors: [],
                         success: true

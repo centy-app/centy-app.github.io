@@ -31,7 +31,6 @@ export class LoginService {
         return this.http.post<LoginResponse>(this.loginUrl, loginModel, { headers })
             .pipe(
                 mergeMap((result) => {
-                    console.log(loginModel.email + ' sucesfully logged in.');
                     this.setLoginState({
                         email: result.email,
                         token: result.token,

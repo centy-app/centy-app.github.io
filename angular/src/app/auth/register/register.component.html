@@ -4,7 +4,7 @@
     </div>
     <ng-template #loaded>
         <form id="register-form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
-            <div *ngIf="isDesctopHeight.matches">
+            <div *ngIf="isDesktopHeight.matches">
                 <img src="../../../assets/typing.gif" alt="cat" />
             </div>
             <mat-form-field>
@@ -27,7 +27,6 @@
                 <mat-select [formControl]="currency" required>
                     <mat-option *ngFor="let currency of currencies$ | async"
                         value="{{currency.code}}">{{currency.description}}</mat-option>
-                    <mat-option value="two">Second option</mat-option>
                 </mat-select>
             </mat-form-field>
             <button mat-raised-button color="primary">Register</button>

@@ -19,10 +19,7 @@ $centy-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$centy-theme: mat.define-dark-theme((color: (primary: $centy-primary,
-        accent: $centy-accent,
-        warn: $centy-warn,
-      )));
+$centy-theme: mat.define-dark-theme((color: (primary: $centy-primary, accent: $centy-accent, warn: $centy-warn)));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
