@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Currency } from 'src/app/centy/currencies/state/currencies.models';
 import { Observable, Subscription, isEmpty } from 'rxjs';
 import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+  public mobileQuery: MediaQueryList;
+  private _mobileQueryListener: () => void;
+
   registerForm: FormGroup;
   email: FormControl;
   password: FormControl;
@@ -20,7 +24,14 @@ export class RegisterComponent implements OnInit {
   currencies$: Observable<Currency[]>;
   isLoading$: Observable<boolean>;
 
-  constructor(private readonly currenciesService: CurrenciesService) { }
+  constructor(
+    private readonly currenciesService: CurrenciesService,
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher) { 
+      this.mobileQuery = media.matchMedia('(min-height: 700px)');
+      this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+      this.mobileQuery.addListener(this._mobileQueryListener);
+    }
 
   ngOnInit(): void {
     this.email = new FormControl('', [Validators.required, Validators.email]);
@@ -52,5 +63,9 @@ export class RegisterComponent implements OnInit {
 
   onRegister() {
     console.warn(this.registerForm.value);
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 }

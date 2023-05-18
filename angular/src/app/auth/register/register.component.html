@@ -4,6 +4,9 @@
     </div>
     <ng-template #loaded>
         <form id="register-form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+            <div *ngIf="mobileQuery.matches">
+                <img src="../../../assets/typing.gif" alt="cat" />
+            </div>
             <mat-form-field>
                 <mat-label>Email</mat-label>
                 <input matInput required placeholder="name@domain.com" [formControl]="email" required>
