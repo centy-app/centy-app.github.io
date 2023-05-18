@@ -1,10 +1,10 @@
 export interface RegisterRequest {
-    email: string;
-    password: string;
-    baseCurrencyCode: string;
+  email: string;
+  password: string;
+  baseCurrencyCode: string;
 }
 
 export interface RegisterResponse {
-    errors: string[];
-    success: boolean
+  errors: string[];
+  success: boolean
 }

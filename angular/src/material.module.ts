@@ -12,18 +12,18 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-    exports: [
-        MatToolbarModule,
-        MatButtonModule,
-        MatIconModule,
-        MatSidenavModule,
-        MatMenuModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatProgressSpinnerModule,
-    ]
+  exports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatMenuModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+  ]
 })
 export class MaterialModule { }

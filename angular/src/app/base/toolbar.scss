@@ -1,16 +1,15 @@
 .toolbar {
-    height: auto;
+  height: auto;
 
-    .toolbar-spacer {
-        flex: 1 1 auto;
-    }
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
 
-    .toolbar-logo {
-        margin-top: 5pt;
-        margin-bottom: 5pt;
-        font-size: 25pt;
-        font-family: Brush;
-        cursor: pointer;
-    }
-
+  .toolbar-logo {
+    margin-top: 5pt;
+    margin-bottom: 5pt;
+    font-size: 25pt;
+    font-family: Brush;
+    cursor: pointer;
+  }
 }

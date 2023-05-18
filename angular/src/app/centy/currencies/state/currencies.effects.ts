@@ -10,22 +10,22 @@ import { Currency } from './currencies.models';
 
 @Injectable()
 export class CurrenciesEffects {
-    constructor(private readonly actions$: Actions,
-        private readonly currenciesService: CurrenciesService,
-        private store: Store<AppState>) { }
+  constructor(private readonly actions$: Actions,
+    private readonly currenciesService: CurrenciesService,
+    private store: Store<AppState>) { }
 
-    getCurrencies$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(fromCurrencies.getCurrencies.type),
-            withLatestFrom(this.store.select((store) => store.currencies)),
-            exhaustMap(([_, state]) => {
-                if (state.currencies.length == 0) {
-                    return this.currenciesService.getCurrenciesFromRemote()
-                } else {
-                    return of(state.currencies);
-                }
-            }),
-            map((currencies: Currency[]) => fromCurrencies.getCurrenciesSuccess({ currencies }))
-        )
-    );
+  getCurrencies$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromCurrencies.getCurrencies.type),
+      withLatestFrom(this.store.select((store) => store.currencies)),
+      exhaustMap(([_, state]) => {
+        if (state.currencies.length == 0) {
+          return this.currenciesService.getCurrenciesFromRemote()
+        } else {
+          return of(state.currencies);
+        }
+      }),
+      map((currencies: Currency[]) => fromCurrencies.getCurrenciesSuccess({ currencies }))
+    )
+  );
 }

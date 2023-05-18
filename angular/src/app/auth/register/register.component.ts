@@ -67,15 +67,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.isLoading$ = this.currenciesService.isLoading();
   }
 
-  private createCompareValidator(password: AbstractControl, confirm: AbstractControl) {
-    return () => {
-      if (password.value !== confirm.value) {
-        return { match_error: 'Password should match' };
-      }
-      return null;
-    };
-  }
-
   onRegister() {
     this.registerService.registerAndLoginRemote({
       email: this.email.value,
@@ -88,6 +79,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  private createCompareValidator(password: AbstractControl, confirm: AbstractControl) {
+    return () => {
+      if (password.value !== confirm.value) {
+        return { match_error: 'Password should match' };
+      }
+      return null;
+    };
   }
 
   ngOnDestroy(): void {

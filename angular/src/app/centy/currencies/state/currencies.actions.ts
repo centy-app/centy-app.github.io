@@ -5,8 +5,8 @@ const prefix = '[Currencies]';
 
 export const getCurrencies = createAction(`${prefix} Get Currencies`);
 export const getCurrenciesSuccess = createAction(
-    `${getCurrencies.type} Success`,
-    props<{
-        currencies: Currency[];
-    }>()
+  `${getCurrencies.type} Success`,
+  props<{
+    currencies: Currency[];
+  }>()
 );
