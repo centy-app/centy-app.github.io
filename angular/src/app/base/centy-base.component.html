@@ -19,8 +19,8 @@
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav class="menu" [opened]="mobileQuery.matches ? 'false' : 'true'"
-      [mode]="mobileQuery.matches ? 'over' : 'side'">
+    <mat-sidenav #sidenav class="menu" [opened]="isMobileWidth.matches ? 'false' : 'true'"
+      [mode]="isMobileWidth.matches ? 'over' : 'side'">
 
       <div (click)="onNavClick()">
         <button mat-stroked-button color="privary" routerLink="/centy">Home</button>

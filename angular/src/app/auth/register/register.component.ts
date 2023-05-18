@@ -20,9 +20,6 @@ import { MaterialModule } from 'src/material.module';
   ]
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  public mobileQuery: MediaQueryList;
-  private _mobileQueryListener: () => void;
-
   registerForm: FormGroup;
   email: FormControl;
   password: FormControl;
@@ -32,16 +29,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currencies$: Observable<Currency[]>;
   isLoading$: Observable<boolean>;
 
+  isDesctopHeight: MediaQueryList;
+  private isDesctopHeightListener: () => void;
+
   constructor(
     private readonly currenciesService: CurrenciesService,
-    changeDetectorRef: ChangeDetectorRef,
-    media: MediaMatcher) {
-    this.mobileQuery = media.matchMedia('(min-height: 700px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
-  }
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly media: MediaMatcher) { }
 
   ngOnInit(): void {
+    this.isDesctopHeight = this.media.matchMedia('(min-height: 700px)');
+    this.isDesctopHeightListener = () => this.changeDetectorRef.detectChanges();
+    this.isDesctopHeight.addEventListener('change', this.isDesctopHeightListener);
+
     this.email = new FormControl('', [Validators.required, Validators.email]);
     this.password = new FormControl('', Validators.required);
     this.confirm = new FormControl('', Validators.required);
@@ -75,6 +75,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    this.isDesctopHeight.removeEventListener('change', this.isDesctopHeightListener);
   }
 }

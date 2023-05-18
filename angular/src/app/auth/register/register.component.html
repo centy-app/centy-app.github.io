@@ -4,7 +4,7 @@
     </div>
     <ng-template #loaded>
         <form id="register-form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
-            <div *ngIf="mobileQuery.matches">
+            <div *ngIf="isDesctopHeight.matches">
                 <img src="../../../assets/typing.gif" alt="cat" />
             </div>
             <mat-form-field>
