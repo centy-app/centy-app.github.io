@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap, map, withLatestFrom } from 'rxjs/operators';
-
 import * as fromCurrencies from './index';
 import { AppState } from 'src/state/app-state.model';
 import { CurrenciesService } from '../currencies.service';

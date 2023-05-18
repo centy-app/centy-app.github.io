@@ -1,5 +1,4 @@
 import { Action, createReducer, on } from '@ngrx/store';
-
 import { CurrenciesState } from './currencies.models';
 import * as fromCurrencies from './index';
 

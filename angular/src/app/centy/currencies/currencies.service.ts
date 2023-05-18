@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription, take } from 'rxjs';
 import { Store } from '@ngrx/store';
-
 import { environment } from 'src/environments/environment';
 import { Currency } from './state/currencies.models';
 import { AppState } from 'src/state/app-state.model';

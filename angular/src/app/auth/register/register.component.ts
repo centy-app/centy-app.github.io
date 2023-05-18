@@ -1,14 +1,23 @@
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Currency } from 'src/app/centy/currencies/state/currencies.models';
-import { Observable, Subscription, isEmpty } from 'rxjs';
-import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { Currency } from 'src/app/centy/currencies/state/currencies.models';
+import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
+import { MaterialModule } from 'src/material.module';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ]
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   public mobileQuery: MediaQueryList;
