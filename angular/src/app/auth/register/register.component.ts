@@ -46,10 +46,37 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private readonly snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    this.initialyzeMediaMatcherListener();
+    this.initialyzeFormComponents();
+
+    this.currencies$ = this.currenciesService.getCurrencies();
+    this.isLoading$ = this.currenciesService.isLoading();
+  }
+
+  onRegister() {
+    this.submitButtonDisabled = true;
+
+    this.registerService.registerAndLoginRemote({
+      email: this.email.value,
+      password: this.password.value,
+      baseCurrencyCode: this.currency.value
+    }).subscribe((result: LoginResponse) => {
+      if (!result.success) {
+        this.submitButtonDisabled = false;
+        result.errors.forEach((er: any) => {
+          this.snackBar.open(er, 'OK');
+        });
+      }
+    });
+  }
+
+  private initialyzeMediaMatcherListener(): void {
     this.isDesktopHeight = this.media.matchMedia('(min-height: 700px)');
     this.isDesktopHeightListener = () => this.changeDetectorRef.detectChanges();
     this.isDesktopHeight.addEventListener('change', this.isDesktopHeightListener);
+  }
 
+  private initialyzeFormComponents(): void {
     this.email = new FormControl('', [Validators.required, Validators.email]);
     this.password = new FormControl('', Validators.required);
     this.confirm = new FormControl('', Validators.required);
@@ -62,27 +89,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       password: this.password,
       confirm: this.confirm,
       currency: this.currency
-    });
-
-    this.currencies$ = this.currenciesService.getCurrencies();
-    this.isLoading$ = this.currenciesService.isLoading();
-  }
-
-  onRegister() {
-    this.submitButtonDisabled = true;
-    
-    this.registerService.registerAndLoginRemote({
-      email: this.email.value,
-      password: this.password.value,
-      baseCurrencyCode: this.currency.value
-    }).subscribe((result: LoginResponse) => {
-      if (!result.success) {
-        result.errors.forEach((er: any) => {
-          this.snackBar.open(er, 'OK');
-        });
-      } else {
-        this.submitButtonDisabled = false;
-      }
     });
   }
 

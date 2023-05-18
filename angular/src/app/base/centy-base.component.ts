@@ -1,8 +1,8 @@
+import { Subscription } from 'rxjs';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { LoginService } from '../auth/login/login.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class CentyComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;
   isMobileWidth: MediaQueryList;
   private isMobileWidthListener: () => void;
-  private loginSubscription: Subscription;
+  private logoutSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
@@ -23,29 +23,36 @@ export class CentyComponent implements OnInit, OnDestroy {
     private loginService: LoginService) { }
 
   ngOnInit(): void {
-    this.isMobileWidth = this.media.matchMedia('(max-width: 600px)');
-    this.isMobileWidthListener = () => this.changeDetectorRef.detectChanges();
-    this.isMobileWidth.addEventListener('change', this.isMobileWidthListener);
+    this.initialyzeMediaMatcherListener();
+    this.initialyzeLogoutSubscription();
+  }
 
-    this.loginSubscription = this.loginService.getLoginState().subscribe((login) => {
+  onNavClick() {
+    if (this.isMobileWidth.matches) {
+      this.sidenav.close();
+    }
+  }
+
+  onLogoutClick() {
+    this.loginService.logout();
+  }
+
+  private initialyzeLogoutSubscription(): void {
+    this.logoutSubscription = this.loginService.getLoginState().subscribe((login) => {
       if (!login.token && !login.email) {
         this.router.navigateByUrl('');
       }
     });
   }
 
-  public onNavClick() {
-    if (this.isMobileWidth.matches) {
-      this.sidenav.close();
-    }
-  }
-
-  public onLogoutClick() {
-    this.loginService.logout();
+  private initialyzeMediaMatcherListener(): void {
+    this.isMobileWidth = this.media.matchMedia('(max-width: 600px)');
+    this.isMobileWidthListener = () => this.changeDetectorRef.detectChanges();
+    this.isMobileWidth.addEventListener('change', this.isMobileWidthListener);
   }
 
   ngOnDestroy(): void {
     this.isMobileWidth.removeEventListener('change', this.isMobileWidthListener);
-    this.loginSubscription.unsubscribe();
+    this.logoutSubscription.unsubscribe();
   }
 }

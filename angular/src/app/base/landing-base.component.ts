@@ -14,6 +14,10 @@ export class AuthComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.initializeLoginSubscription();
+  }
+
+  private initializeLoginSubscription(): void {
     this.loginSubscription = this.loginService.getLoginState().subscribe((login) => {
       if (login.token && login.email) {
         this.router.navigateByUrl('/centy');
