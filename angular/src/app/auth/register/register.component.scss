@@ -1,0 +1,25 @@
+#register-page {
+    height: 100%;
+
+    #register-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:focus {
+            transition: background-color 600000s 0s, color 600000s 0s;
+        }
+
+        input[data-autocompleted] {
+            background-color: transparent !important;
+        }
+
+        button {
+            width: 160pt;
+            height: 40pt;
+        }
+    }
+}

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Currency } from 'src/app/centy/currencies/state/currencies.models';
-import { Observable } from 'rxjs';
-
-import * as fromCurrencies from '../../centy/currencies/state';
-import { AppState } from 'src/state/app-state.model';
+import { Observable, Subscription, isEmpty } from 'rxjs';
+import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -12,27 +10,47 @@ import { AppState } from 'src/state/app-state.model';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+  registerForm: FormGroup;
+  email: FormControl;
+  password: FormControl;
+  confirm: FormControl;
+  currency: FormControl;
+  hidePassword: boolean;
+
   currencies$: Observable<Currency[]>;
   isLoading$: Observable<boolean>;
 
-  constructor(private readonly store: Store<AppState>) {
-  }
+  constructor(private readonly currenciesService: CurrenciesService) { }
 
   ngOnInit(): void {
-    this.initSubscriptions();
+    this.email = new FormControl('', [Validators.required, Validators.email]);
+    this.password = new FormControl('', Validators.required);
+    this.confirm = new FormControl('', Validators.required);
+    this.currency = new FormControl('', Validators.required);
+    this.hidePassword = true;
+
+    this.registerForm = new FormGroup({
+      email: this.email,
+      password: this.password,
+      confirm: this.confirm,
+      currency: this.currency
+    });
+
+    this.confirm.addValidators(this.createCompareValidator(this.password,this.confirm));
+
+    this.currencies$ = this.currenciesService.getCurrencies();
+    this.isLoading$ = this.currenciesService.isLoading();
   }
 
-  onRegisterClick() {
-    console.log("initDispatch");
-    this.initDispatch();
+  createCompareValidator(password: AbstractControl, confirm: AbstractControl) {
+    return () => {
+      if (password.value !== confirm.value)
+        return { match_error: 'Password should match' };
+      return null;
+    };
   }
 
-  private initDispatch(): void {
-    this.store.dispatch(fromCurrencies.getCurrencies());
-  }
-
-  private initSubscriptions(): void {
-    this.currencies$ = this.store.select((store) => store.currencies.currencies);
-    this.isLoading$ = this.store.select((store) => store.currencies.isLoading);
+  onRegister() {
+    console.warn(this.registerForm.value);
   }
 }

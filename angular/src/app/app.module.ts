@@ -19,6 +19,7 @@ import { ReportsComponent } from './centy/reports/reports.component';
 import { BalanceComponent } from './centy/reports/balance/balance.component';
 import { ExpensesComponent } from './centy/reports/expenses/expenses.component';
 import { SettingsComponent } from './centy/settings/settings.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -48,6 +49,8 @@ import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({
       currencies: currenciesReducers
     }),
