@@ -19,7 +19,6 @@ export class CurrenciesEffects {
         this.actions$.pipe(
             ofType(fromCurrencies.getCurrencies.type),
             withLatestFrom(this.store.select((store) => store.currencies)),
-            filter(([_, state]) => state.currencies.length == 0),
             switchMap(([_, state]) => {
                 if (state.currencies.length == 0) {
                     return this.currenciesService.getCurrenciesFromRemote()
