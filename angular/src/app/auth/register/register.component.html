@@ -29,7 +29,7 @@
             value="{{currency.code}}">{{currency.description}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-raised-button color="primary">Register</button>
+      <button mat-raised-button [disabled]="!registerForm.valid || submitButtonDisabled" color="primary">Register</button>
     </form>
   </ng-template>
 </div>

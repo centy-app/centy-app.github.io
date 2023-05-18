@@ -30,6 +30,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   password: FormControl;
   confirm: FormControl;
   currency: FormControl;
+  submitButtonDisabled: boolean = false;
 
   currencies$: Observable<Currency[]>;
   isLoading$: Observable<boolean>;
@@ -68,6 +69,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onRegister() {
+    this.submitButtonDisabled = true;
+    
     this.registerService.registerAndLoginRemote({
       email: this.email.value,
       password: this.password.value,
@@ -77,6 +80,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
         result.errors.forEach((er: any) => {
           this.snackBar.open(er, 'OK');
         });
+      } else {
+        this.submitButtonDisabled = false;
       }
     });
   }
