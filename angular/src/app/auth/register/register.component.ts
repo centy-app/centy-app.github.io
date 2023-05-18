@@ -19,7 +19,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   password: FormControl;
   confirm: FormControl;
   currency: FormControl;
-  hidePassword: boolean;
 
   currencies$: Observable<Currency[]>;
   isLoading$: Observable<boolean>;
@@ -27,18 +26,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
   constructor(
     private readonly currenciesService: CurrenciesService,
     changeDetectorRef: ChangeDetectorRef,
-    media: MediaMatcher) { 
-      this.mobileQuery = media.matchMedia('(min-height: 700px)');
-      this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-      this.mobileQuery.addListener(this._mobileQueryListener);
-    }
+    media: MediaMatcher) {
+    this.mobileQuery = media.matchMedia('(min-height: 700px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+  }
 
   ngOnInit(): void {
     this.email = new FormControl('', [Validators.required, Validators.email]);
     this.password = new FormControl('', Validators.required);
     this.confirm = new FormControl('', Validators.required);
     this.currency = new FormControl('', Validators.required);
-    this.hidePassword = true;
+
+    this.confirm.addValidators(this.createCompareValidator(this.password, this.confirm));
 
     this.registerForm = new FormGroup({
       email: this.email,
@@ -47,16 +47,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
       currency: this.currency
     });
 
-    this.confirm.addValidators(this.createCompareValidator(this.password,this.confirm));
-
     this.currencies$ = this.currenciesService.getCurrencies();
     this.isLoading$ = this.currenciesService.isLoading();
   }
 
-  createCompareValidator(password: AbstractControl, confirm: AbstractControl) {
+  private createCompareValidator(password: AbstractControl, confirm: AbstractControl) {
     return () => {
-      if (password.value !== confirm.value)
+      if (password.value !== confirm.value) {
         return { match_error: 'Password should match' };
+      }
+
       return null;
     };
   }
