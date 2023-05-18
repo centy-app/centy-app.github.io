@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from 'src/material.module';
 import { HttpClientModule } from '@angular/common/http';
-import { environment } from 'src/environment/environment';
+import { environment } from 'src/environments/environment';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './base/landing-base.component';
