@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(min-height: 700px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
 
   ngOnInit(): void {
@@ -75,6 +75,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
   }
 }
