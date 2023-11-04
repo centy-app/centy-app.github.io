@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { LoginService } from '../auth/login/login.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -9,23 +9,23 @@ import { LoginService } from '../auth/login/login.service';
   styleUrls: ['./landing-base.component.scss', './toolbar.scss']
 })
 export class AuthComponent implements OnInit, OnDestroy {
-  private loginSubscription: Subscription;
+  private authSubscription: Subscription;
 
-  constructor(private router: Router, private loginService: LoginService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.initializeLoginSubscription();
   }
 
   private initializeLoginSubscription(): void {
-    this.loginSubscription = this.loginService.getLoginState().subscribe((login) => {
-      if (login.token && login.email) {
+    this.authSubscription = this.authService.getAuthState().subscribe((authState) => {
+      if (authState.token && authState.email) {
         this.router.navigateByUrl('/centy');
       }
     });
   }
 
   ngOnDestroy(): void {
-    this.loginSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
   }
 }

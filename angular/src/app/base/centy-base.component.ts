@@ -3,7 +3,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { LoginService } from '../auth/login/login.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-centy',
@@ -14,13 +14,13 @@ export class CentyComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;
   isMobileWidth: MediaQueryList;
   private isMobileWidthListener: () => void;
-  private logoutSubscription: Subscription;
+  private authSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly media: MediaMatcher,
-    private loginService: LoginService) { }
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.initialyzeMediaMatcherListener();
@@ -34,12 +34,12 @@ export class CentyComponent implements OnInit, OnDestroy {
   }
 
   onLogoutClick() {
-    this.loginService.logout();
+    this.authService.logout();
   }
 
   private initialyzeLogoutSubscription(): void {
-    this.logoutSubscription = this.loginService.getLoginState().subscribe((login) => {
-      if (!login.token && !login.email) {
+    this.authSubscription = this.authService.getAuthState().subscribe((authState) => {
+      if (!authState.token && !authState.email) {
         this.router.navigateByUrl('');
       }
     });
@@ -53,6 +53,6 @@ export class CentyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.isMobileWidth.removeEventListener('change', this.isMobileWidthListener);
-    this.logoutSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
   }
 }

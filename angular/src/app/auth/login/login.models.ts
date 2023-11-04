@@ -10,9 +10,3 @@ export interface LoginResponse {
   errors: string[],
   success: boolean
 }
-
-export interface LoginState {
-  email: string;
-  token: string;
-  baseCurrencyCode: string;
-}

@@ -15,22 +15,22 @@ export class RegisterService {
   constructor(private http: HttpClient, private readonly loginService: LoginService) { }
 
   registerAndLoginRemote(registerRequest: RegisterRequest): Observable<LoginResponse> {
-    var loginEmptyResponse = { email: '', token: '', baseCurrencyCode: '' };
+    var registerEmptyResponse = { email: '', token: '', baseCurrencyCode: '' };
 
     return this.registerRemote(registerRequest).pipe(
       mergeMap((result) => {
         if (!result.success) {
-          return of({ ...result, ...loginEmptyResponse });
+          return of({ ...result, ...registerEmptyResponse });
         }
 
-        // Let's login since register went well.
+        // Let's login since register went well
         return this.loginService.loginRemote({ email: registerRequest.email, password: registerRequest.password });
       }),
       catchError((err) => {
         return of({
           errors: err?.error?.errors,
           success: false,
-          ...loginEmptyResponse
+          ...registerEmptyResponse
         });
       })
     );

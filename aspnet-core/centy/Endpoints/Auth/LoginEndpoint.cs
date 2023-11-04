@@ -49,7 +49,6 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
             return;
         }
 
-        AddError("Username or Password is incorrect.");
-        ThrowIfAnyErrors();
+        ThrowError("Username or Password is incorrect.");
     }
 }
