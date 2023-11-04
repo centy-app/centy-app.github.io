@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using centy.Domain.Auth;
+using centy.Infrastructure;
 using centy.Services.Currencies;
 
 namespace centy.Services.Auth;
@@ -16,15 +17,6 @@ public class JwtService : IJwtService
     {
         _logger = logger;
     }
-    
-    public static readonly string TokenIssuer =
-        Environment.GetEnvironmentVariable("JWT_ISSUER") ?? "centy";
-    
-    public static readonly string TokenAudience =
-        Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "centy";
-
-    public static readonly string TokenSigningKey =
-        Environment.GetEnvironmentVariable("JWT_KEY") ?? "98cf0eed-4b0c-405f-9913-dce91b99a506";
 
     public string CreateToken(ApplicationUser user)
     {
@@ -43,8 +35,8 @@ public class JwtService : IJwtService
         IEnumerable<Claim> claims,
         SigningCredentials credentials,
         DateTime expiration) => new(
-        TokenIssuer,
-        TokenAudience,
+        EnvironmentVariables.TokenIssuer,
+        EnvironmentVariables.TokenAudience,
         claims,
         expires: expiration,
         signingCredentials: credentials
@@ -58,7 +50,7 @@ public class JwtService : IJwtService
             {
                 _logger.LogWarning("{User} base currency is not set", user.Email);
             }
-            
+
             var claims = new List<Claim>
             {
                 new(JwtRegisteredClaimNames.Sub, "Centy"),
@@ -82,7 +74,7 @@ public class JwtService : IJwtService
     {
         return new SigningCredentials(
             new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(TokenSigningKey)
+                Encoding.UTF8.GetBytes(EnvironmentVariables.TokenSigningKey)
             ),
             SecurityAlgorithms.HmacSha256
         );

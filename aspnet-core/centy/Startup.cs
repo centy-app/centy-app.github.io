@@ -3,14 +3,13 @@ using Microsoft.IdentityModel.Tokens;
 using FastEndpoints.Swagger;
 using centy.Contracts.Responses.Infrastructure;
 using centy.Domain.Auth;
-using centy.Services.Auth;
+using centy.Infrastructure;
 
 namespace centy;
 
 public class Startup
 {
     private const string AllowOrigins = "_centyOrigins";
-    private const string PortException = "Port configuration is invalid";
     public IConfiguration Configuration { get; }
 
     public Startup(IConfiguration configuration)
@@ -22,16 +21,13 @@ public class Startup
     {
         webHost.ConfigureKestrel(options =>
         {
-            var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
-            var httpsPort = int.Parse(Environment.GetEnvironmentVariable("HTTPS_PORT") ??
-                                      throw new Exception(PortException));
+            options.ListenAnyIP(EnvironmentVariables
+                .ApplicationPort); // to listen for incoming http connection on port 80
 
-            options.ListenAnyIP(port); // to listen for incoming http connection on port 80
-
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            if (EnvironmentVariables.IsDevelopment)
             {
                 // Not working in local Docker so far due to missing certificate
-                options.ListenAnyIP(httpsPort, configure => configure.UseHttps());
+                options.ListenAnyIP(EnvironmentVariables.ApplicationHttpsPort, configure => configure.UseHttps());
             }
         });
     }
@@ -43,14 +39,13 @@ public class Startup
             options.AddPolicy(name: AllowOrigins,
                 policy =>
                 {
-                    var allowedOrigin = Environment.GetEnvironmentVariable("CORS");
-                    policy.WithOrigins($"https://{allowedOrigin}", $"http://{allowedOrigin}");
+                    policy.WithOrigins($"https://{EnvironmentVariables.AllowedOrigin}",
+                        $"http://{EnvironmentVariables.AllowedOrigin}");
                     policy.AllowAnyMethod();
                     policy.AllowAnyHeader();
                 });
         });
 
-        var connectionString = Environment.GetEnvironmentVariable("MONGODB");
         services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
             {
                 o.Password.RequireDigit = false;
@@ -59,7 +54,8 @@ public class Startup
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 5;
             })
-            .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(connectionString, "centy");
+            .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(EnvironmentVariables.MongoConnectionString,
+                "centy");
 
         services.AddFastEndpoints(o => o.IncludeAbstractValidators = true);
 
@@ -79,10 +75,11 @@ public class Startup
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = JwtService.TokenIssuer,
-                    ValidAudience = JwtService.TokenAudience,
+                    ValidIssuer = EnvironmentVariables.TokenIssuer,
+                    ValidAudience = EnvironmentVariables.TokenAudience,
                     IssuerSigningKey =
-                        new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtService.TokenSigningKey))
+                        new SymmetricSecurityKey(
+                            System.Text.Encoding.UTF8.GetBytes(EnvironmentVariables.TokenSigningKey))
                 };
             });
 

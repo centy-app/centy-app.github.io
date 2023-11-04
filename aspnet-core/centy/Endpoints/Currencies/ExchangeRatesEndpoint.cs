@@ -1,4 +1,5 @@
 ﻿using centy.Domain.Currencies;
+using centy.Infrastructure;
 using centy.Services.Currencies;
 
 namespace centy.Endpoints.Currencies;
@@ -15,7 +16,7 @@ public class ExchangeRatesEndpoint : EndpointWithoutRequest<ExchangeRates>
     public override void Configure()
     {
         Get("currencies/exchangeRates");
-        ResponseCache(3600);
+        if (!EnvironmentVariables.IsDevelopment) ResponseCache(3600);
     }
 
     public override async Task HandleAsync(CancellationToken ct)

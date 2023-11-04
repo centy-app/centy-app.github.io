@@ -1,4 +1,5 @@
 ﻿using centy.Domain.Currencies;
+using centy.Infrastructure;
 using centy.Services.Currencies;
 
 namespace centy.Endpoints.Currencies;
@@ -16,7 +17,7 @@ public class CurrenciesEndpoint : EndpointWithoutRequest<List<Currency>>
     {
         AllowAnonymous();
         Get("currencies/symbols");
-        ResponseCache(3600);
+        if (!EnvironmentVariables.IsDevelopment) ResponseCache(3600);
     }
 
     public override async Task HandleAsync(CancellationToken ct)
