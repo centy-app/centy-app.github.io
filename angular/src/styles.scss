@@ -42,3 +42,8 @@ body {
   font-family: 'Brush';
   src: url('assets/brush.ttf');
 }
+
+// https://github.com/angular/components/issues/13983 temporary fix
+.mat-drawer-inner-container {
+  overflow: hidden !important;
+}
