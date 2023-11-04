@@ -34,7 +34,10 @@ export class CentyComponent implements OnInit, OnDestroy {
   }
 
   onLogoutClick() {
-    this.authService.logout();
+    //TODO: Replace with styled pop-up
+    if (confirm("Are you sure you want to log out?")) {
+      this.authService.logout();
+    }
   }
 
   private initialyzeLogoutSubscription(): void {
