@@ -1,9 +1,11 @@
-import { Subscription } from 'rxjs';
-import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { MediaMatcher } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { AppState } from 'src/state/app-state.model';
+import * as fromAuth from 'src/app/auth/state';
 
 @Component({
   selector: 'app-centy',
@@ -20,7 +22,7 @@ export class CentyComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly media: MediaMatcher,
-    private authService: AuthService) { }
+    private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.initialyzeMediaMatcherListener();
@@ -36,12 +38,12 @@ export class CentyComponent implements OnInit, OnDestroy {
   onLogoutClick() {
     //TODO: Replace with styled pop-up
     if (confirm("Are you sure you want to log out?")) {
-      this.authService.logout();
+      this.store.dispatch(fromAuth.logOut());
     }
   }
 
   private initialyzeLogoutSubscription(): void {
-    this.authSubscription = this.authService.getAuthState().subscribe((authState) => {
+    this.authSubscription = this.store.select((store) => store.authState).subscribe(authState => {
       if (!authState.token && !authState.email) {
         this.router.navigateByUrl('');
       }

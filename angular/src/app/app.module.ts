@@ -10,6 +10,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { currenciesReducers } from './centy/currencies/state/currencies.reducers';
+import { authReducers } from './auth/state/auth.reducers';
 import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
 
 import { AppComponent } from './app.component';
@@ -29,7 +30,8 @@ import { CentyComponent } from './base/centy-base.component';
     BrowserAnimationsModule,
     MaterialModule,
     StoreModule.forRoot({
-      currencies: currenciesReducers
+      currenciesState: currenciesReducers,
+      authState: authReducers
     }),
     EffectsModule.forRoot([CurrenciesEffects]),
     !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 25 }) : []

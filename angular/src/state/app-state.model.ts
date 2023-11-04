@@ -1,5 +1,7 @@
 import { CurrenciesState } from "src/app/centy/currencies/state";
+import { AuthState } from "src/app/auth/state";
 
 export interface AppState {
-  currencies: CurrenciesState
+  currenciesState: CurrenciesState,
+  authState: AuthState
 }

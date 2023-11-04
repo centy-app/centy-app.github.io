@@ -18,11 +18,11 @@ export class CurrenciesService {
 
   getCurrencies(): Observable<Currency[]> {
     this.dispatchIfNeeded();
-    return this.store.select((store) => store.currencies.currencies);
+    return this.store.select((store) => store.currenciesState.currencies);
   }
 
   isLoading(): Observable<boolean> {
-    return this.store.select((store) => store.currencies.isLoading);
+    return this.store.select((store) => store.currenciesState.isLoading);
   }
 
   getCurrenciesFromRemote(): Observable<Currency[]> {
@@ -30,7 +30,7 @@ export class CurrenciesService {
   }
 
   private dispatchIfNeeded(): void {
-    var subscription = this.store.select((store) => store.currencies.currencies).pipe(take(1)).subscribe(
+    var subscription = this.store.select((store) => store.currenciesState.currencies).pipe(take(1)).subscribe(
       currencies => {
         if (currencies.length == 0) {
           this.store.dispatch(fromCurrencies.getCurrencies());
