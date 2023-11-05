@@ -27,4 +27,7 @@ public static class EnvironmentVariables
 
     public static readonly string MongoConnectionString =
         Environment.GetEnvironmentVariable("MONGODB") ?? throw new Exception("Connection string should be set");
+
+    public static readonly string ExchangeRateApiKey =
+        Environment.GetEnvironmentVariable("EXCHANGE_API_KEY") ?? "";
 }

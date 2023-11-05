@@ -12,7 +12,8 @@
         "JWT_KEY": "98cf0eed-4b0c-405f-9913-dce91b99a506",
         "JWT_ISSUER": "centy",
         "JWT_AUDIENCE": "centy",
-        "CORS": "localhost:4200"
+        "CORS": "localhost:4200",
+        "EXCHANGE_API_KEY": "2b2447159e7416de4a5371d4cf6e77de"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:44306"
@@ -29,7 +30,8 @@
         "JWT_KEY": "98cf0eed-4b0c-405f-9913-dce91b99a506",
         "JWT_ISSUER": "centy",
         "JWT_AUDIENCE": "centy",
-        "CORS": "localhost:4200"
+        "CORS": "localhost:4200",
+        "EXCHANGE_API_KEY": "2b2447159e7416de4a5371d4cf6e77de"
       }
     },
     "Docker": {
@@ -46,7 +48,8 @@
         "JWT_KEY": "98cf0eed-4b0c-405f-9913-dce91b99a506",
         "JWT_ISSUER": "centy",
         "JWT_AUDIENCE": "centy",
-        "CORS": "localhost:4200"
+        "CORS": "localhost:4200",
+        "EXCHANGE_API_KEY": "2b2447159e7416de4a5371d4cf6e77de"
       }
     }
   },

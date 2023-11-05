@@ -2,12 +2,13 @@
 using Newtonsoft.Json.Linq;
 using centy.Database.Repositories;
 using centy.Domain.Currencies;
+using centy.Infrastructure;
 
 namespace centy.Services.Currencies;
 
 public class ExchangeRateService : IExchangeRateService
 {
-    private const string LatestRatesApiUrl = "https://api.exchangerate.host/latest";
+    private const string LatestRatesApiUrl = "http://api.exchangerate.host/live";
     private readonly IExchangeRatesRepository _exchangeRatesRepository;
     private readonly ILogger<ExchangeRateService> _logger;
 
@@ -42,7 +43,7 @@ public class ExchangeRateService : IExchangeRateService
     private async Task<ExchangeRates> GetLatestFromRemoteAsync()
     {
         using HttpClient client = new();
-        var response = await client.GetAsync($"{LatestRatesApiUrl}?base={CurrenciesService.BaseCurrency}");
+        var response = await client.GetAsync($"{LatestRatesApiUrl}?source={CurrenciesService.BaseCurrency}&access_key={EnvironmentVariables.ExchangeRateApiKey}");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -52,10 +53,16 @@ public class ExchangeRateService : IExchangeRateService
         var jsonString = await response.Content.ReadAsStringAsync();
         dynamic data = JsonConvert.DeserializeObject(jsonString);
 
-        var rates = new List<ExchangeRate>();
-        foreach (JProperty rate in data.rates)
+        if (!(bool)data.success)
         {
-            rates.Add(new ExchangeRate(rate.Name, (double)rate.Value));
+            throw new Exception((string)data.error.info);
+        }
+
+        var rates = new List<ExchangeRate>();
+        var baseCurrencyLength = CurrenciesService.BaseCurrency.Length;
+        foreach (JProperty rate in data.quotes)
+        {
+            rates.Add(new ExchangeRate(rate.Name.Substring(baseCurrencyLength), (double)rate.Value));
         }
 
         return new ExchangeRates(CurrenciesService.BaseCurrency, DateTime.UtcNow, rates);

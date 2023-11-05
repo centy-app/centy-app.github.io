@@ -2,6 +2,12 @@
 
 .net 6 web api project
 
+## Prerequisites
+
+1. Obtain your own [ExchangeRate](https://exchangerate.host) API key on the site
+2. Replace EXCHANGE_API_KEY value in launchSettings.json with the key
+3. Install [MongoDb](https://www.mongodb.com) and update the connection string if needed in launchSettings.json
+
 ## Deploy
 
 ```sh

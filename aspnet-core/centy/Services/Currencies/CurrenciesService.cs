@@ -1,14 +1,15 @@
 ﻿using Newtonsoft.Json;
-using centy.Data.Currencies;
+using Newtonsoft.Json.Linq;
 using centy.Database.Repositories;
 using centy.Domain.Currencies;
+using centy.Infrastructure;
 
 namespace centy.Services.Currencies;
 
 public class CurrenciesService : ICurrenciesService
 {
     public const string BaseCurrency = "USD";
-    private const string SymbolsApiUrl = "https://api.exchangerate.host/symbols";
+    private const string SymbolsApiUrl = "http://api.exchangerate.host/list";
     private readonly ICurrenciesRepository _currenciesRepository;
     private readonly ILogger<CurrenciesService> _logger;
 
@@ -43,7 +44,7 @@ public class CurrenciesService : ICurrenciesService
     private async Task<List<Currency>> GetAvailableFromRemoteAsync()
     {
         using HttpClient client = new();
-        var response = await client.GetAsync(SymbolsApiUrl);
+        var response = await client.GetAsync($"{SymbolsApiUrl}?access_key={EnvironmentVariables.ExchangeRateApiKey}");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -51,16 +52,20 @@ public class CurrenciesService : ICurrenciesService
         }
 
         var jsonString = await response.Content.ReadAsStringAsync();
-        var data = JsonConvert.DeserializeObject<SymbolsDto>(jsonString);
+        dynamic data = JsonConvert.DeserializeObject(jsonString);
+
+        if (!(bool)data.success)
+        {
+            throw new Exception((string)data.error.info);
+        }
 
         var currencies = new List<Currency>();
-        foreach (var symbol in data.Symbols)
+        foreach (JProperty symbol in data.currencies)
         {
-            var currency = TeixeiraSoftware.Finance.Currency.AllCurrencies.FirstOrDefault(c =>
-                c.Symbol == symbol.Value.Code);
-            var sign = string.IsNullOrWhiteSpace(currency.Sign) ? symbol.Value.Code.ToLower() : currency.Sign;
+            var currency = TeixeiraSoftware.Finance.Currency.AllCurrencies.FirstOrDefault(c => c.Symbol == symbol.Name);
+            var sign = string.IsNullOrWhiteSpace(currency.Sign) ? symbol.Name.ToLower() : currency.Sign.ToLower();
 
-            currencies.Add(new Currency(symbol.Value.Code, symbol.Value.Description, sign));
+            currencies.Add(new Currency(symbol.Name, (string)symbol.Value, sign));
         }
 
         return currencies;
