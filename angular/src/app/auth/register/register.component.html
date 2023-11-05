@@ -9,17 +9,17 @@
       </div>
       <mat-form-field>
         <mat-label>Email</mat-label>
-        <input matInput required placeholder="name@domain.com" [formControl]="email" required>
+        <input matInput required autocomplete="new-email" placeholder="name@domain.com" [formControl]="email" required>
         <mat-error *ngIf="email.invalid">Email is invalid</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
-        <input matInput type="password" [formControl]="password">
+        <input matInput type="password" autocomplete="new-password" [formControl]="password">
         <mat-error *ngIf="password.invalid">Password is required</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Confirm password</mat-label>
-        <input matInput type="password" [formControl]="confirm">
+        <input matInput type="password" autocomplete="new-password" [formControl]="confirm">
         <mat-error *ngIf="confirm.invalid">Password should match</mat-error>
       </mat-form-field>
       <mat-form-field>
@@ -29,7 +29,8 @@
             value="{{currency.code}}">{{currency.description}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-raised-button [disabled]="!registerForm.valid || submitButtonDisabled" color="primary">Register</button>
+      <button mat-raised-button [disabled]="!registerForm.valid || submitButtonDisabled"
+        color="primary">Register</button>
     </form>
   </ng-template>
 </div>
