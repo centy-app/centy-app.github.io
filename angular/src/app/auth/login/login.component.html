@@ -1,1 +1,18 @@
-<span>login works!</span>
+<div id="login-page">
+  <form id="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <div *ngIf="isDesktopHeight.matches">
+      <img src="../../../assets/typing.gif" alt="cat" />
+    </div>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput required placeholder="name@domain.com" [formControl]="email" required>
+      <mat-error *ngIf="email.invalid">Email is invalid</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput type="password" [formControl]="password">
+      <mat-error *ngIf="password.invalid">Password is required</mat-error>
+    </mat-form-field>
+    <button mat-raised-button [disabled]="!loginForm.valid || submitButtonDisabled" color="primary">Log In</button>
+  </form>
+</div>

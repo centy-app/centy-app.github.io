@@ -1,11 +1,11 @@
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/material.module';
 import { Observable } from 'rxjs';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Currency } from 'src/app/centy/currencies/state/currencies.models';
 import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
 import { RegisterService } from './register.service';
@@ -20,8 +20,7 @@ import { LoginResponse } from '../login/login.models';
     CommonModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule,
-    MatSnackBarModule
+    ReactiveFormsModule
   ]
 })
 export class RegisterComponent implements OnInit, OnDestroy {
@@ -61,8 +60,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       password: this.password.value,
       baseCurrencyCode: this.currency.value
     }).subscribe((result: LoginResponse) => {
+      this.submitButtonDisabled = false;
       if (!result.success) {
-        this.submitButtonDisabled = false;
         result.errors.forEach((er: any) => {
           this.snackBar.open(er, 'OK');
         });

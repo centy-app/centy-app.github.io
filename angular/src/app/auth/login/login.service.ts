@@ -15,7 +15,7 @@ export class LoginService {
 
   constructor(private http: HttpClient, private readonly store: Store<AppState>) { }
 
-  public loginRemote(loginModel: LoginRequest): Observable<LoginResponse> {
+  loginRemote(loginModel: LoginRequest): Observable<LoginResponse> {
     const headers = { 'content-type': 'application/json' };
     return this.http.post<LoginResponse>(this.loginUrl, loginModel, { headers })
       .pipe(
