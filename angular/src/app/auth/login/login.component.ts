@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
@@ -21,14 +22,16 @@ import { LoginResponse } from './login.models';
     ReactiveFormsModule
   ]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   email: FormControl;
   password: FormControl;
   submitButtonDisabled: boolean = false;
 
   isDesktopHeight: MediaQueryList;
+
   private isDesktopHeightListener: () => void;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private readonly loginService: LoginService,
@@ -47,7 +50,7 @@ export class LoginComponent {
     this.loginService.loginRemote({
       email: this.email.value,
       password: this.password.value,
-    }).subscribe((result: LoginResponse) => {
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: LoginResponse) => {
       this.submitButtonDisabled = false;
       if (!result.success) {
         result.errors.forEach((er: any) => {

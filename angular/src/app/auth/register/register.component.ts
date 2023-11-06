@@ -1,11 +1,12 @@
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/material.module';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Currency } from 'src/app/centy/currencies/state/currencies.models';
 import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
 import { RegisterService } from './register.service';
@@ -35,7 +36,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
 
   isDesktopHeight: MediaQueryList;
+
   private isDesktopHeightListener: () => void;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     private readonly currenciesService: CurrenciesService,
@@ -59,7 +62,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       email: this.email.value,
       password: this.password.value,
       baseCurrencyCode: this.currency.value
-    }).subscribe((result: LoginResponse) => {
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: LoginResponse) => {
       this.submitButtonDisabled = false;
       if (!result.success) {
         result.errors.forEach((er: any) => {

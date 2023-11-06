@@ -21,6 +21,12 @@ const reducer = createReducer<CurrenciesState>(
       isLoading: false,
       currencies
     };
+  }),
+  on(fromCurrencies.getCurrenciesError, (state) => {
+    return {
+      ...state,
+      isLoading: false,
+    };
   })
 );
 
