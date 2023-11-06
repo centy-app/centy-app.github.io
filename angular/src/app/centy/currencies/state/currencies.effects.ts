@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { CurrenciesService } from '../currencies.service';
 import { Currency } from './currencies.models';
 import * as fromCurrencies from './index';

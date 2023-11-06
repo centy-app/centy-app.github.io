@@ -1,4 +1,4 @@
-import { Action, ActionReducer, MetaReducer, createReducer, on } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 import { AuthState } from './auth.models';
 import * as fromAuth from './index';
 

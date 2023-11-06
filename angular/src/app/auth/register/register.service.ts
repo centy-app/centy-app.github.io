@@ -10,7 +10,7 @@ import { LoginService } from "../login/login.service";
   providedIn: 'root'
 })
 export class RegisterService {
-  registerUrl = environment.baseApiUrl + 'auth/register';
+  private registerUrl = environment.baseApiUrl + 'auth/register';
 
   constructor(private http: HttpClient, private readonly loginService: LoginService) { }
 
