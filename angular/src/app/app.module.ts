@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from 'src/material.module';
 import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from 'src/material.module';
+import { AppRoutingModule } from './app-routing.module';
 import { environment } from 'src/environments/environment';
 
 import { StoreModule } from '@ngrx/store';
@@ -11,6 +11,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { currenciesReducers } from './centy/currencies/state/currencies.reducers';
 import { authReducers } from './auth/state/auth.reducers';
+import { metaReducers } from 'src/state/meta-reducers';
 import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
 
 import { AppComponent } from './app.component';
@@ -32,7 +33,7 @@ import { CentyComponent } from './base/centy-base.component';
     StoreModule.forRoot({
       currenciesState: currenciesReducers,
       authState: authReducers
-    }),
+    }, { metaReducers }),
     EffectsModule.forRoot([CurrenciesEffects]),
     !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 25 }) : []
   ],
