@@ -16,7 +16,7 @@ public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var user = await _userManager.FindByNameAsync(HttpContext?.User?.Identity?.Name);
+        var user = await _userManager.FindByNameAsync(HttpContext.User.Identity?.Name);
         var response = new AboutMeResponse
         {
             Id = user.Id,
