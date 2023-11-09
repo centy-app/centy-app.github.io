@@ -1,5 +1,5 @@
-﻿using centy.Domain.Categories;
-using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson.Serialization;
+using centy.Domain.Categories;
 using centy.Domain.Currencies;
 
 namespace centy.Database;

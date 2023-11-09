@@ -14,9 +14,9 @@ public class CategoriesService : ICategoriesService
         _logger = logger;
     }
     
-    public async Task<List<Category>> GetCategoriesAsync()
+    public async Task<List<Category>> GetUserCategoriesAsync(Guid userId)
     {
-        return await _categoriesRepository.GetAll();
+        return await _categoriesRepository.GetUserCategories(userId);
     }
     
     public async Task CreateCategoryAsync(Category category)
@@ -24,8 +24,8 @@ public class CategoriesService : ICategoriesService
         await _categoriesRepository.InsertAsync(category);
     }
 
-    public async Task DeleteCategoriesAsync(List<Guid> categories)
+    public async Task DeleteCategoriesAsync(List<Guid> categoryIds, Guid userId)
     {
-        await _categoriesRepository.DeleteAsync(categories);
+        await _categoriesRepository.DeleteAsync(categoryIds, userId);
     }
 }

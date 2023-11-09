@@ -62,7 +62,7 @@ public class ExchangeRateService : IExchangeRateService
         var baseCurrencyLength = CurrenciesService.BaseCurrency.Length;
         foreach (JProperty rate in data.quotes)
         {
-            rates.Add(new ExchangeRate(rate.Name.Substring(baseCurrencyLength), (double)rate.Value));
+            rates.Add(new ExchangeRate(rate.Name.ToUpperInvariant()[baseCurrencyLength..], (double)rate.Value));
         }
 
         return new ExchangeRates(CurrenciesService.BaseCurrency, DateTime.UtcNow, rates);

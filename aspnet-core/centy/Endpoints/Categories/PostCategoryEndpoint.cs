@@ -29,7 +29,7 @@ public class PostCategoryEndpoint : Endpoint<CreateCategoryRequest>
             Name = req.Name,
             Type = req.Type,
             Icon = req.Icon,
-            CurrencyCode = req.CurrencyCode
+            CurrencyCode = req.CurrencyCode.ToUpperInvariant()
         };
 
         await _categoriesService.CreateCategoryAsync(newCategory);
