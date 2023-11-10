@@ -63,9 +63,16 @@ public class CurrenciesService : ICurrenciesService
         foreach (JProperty symbol in data.currencies)
         {
             var currency = TeixeiraSoftware.Finance.Currency.AllCurrencies.FirstOrDefault(c => c.Symbol == symbol.Name);
-            var sign = string.IsNullOrWhiteSpace(currency.Sign) ? symbol.Name.ToLowerInvariant() : currency.Sign.ToLower();
+            var sign = string.IsNullOrWhiteSpace(currency.Sign)
+                ? symbol.Name.ToLowerInvariant()
+                : currency.Sign.ToLower();
 
-            currencies.Add(new Currency(symbol.Name.ToUpperInvariant(), (string)symbol.Value, sign));
+            currencies.Add(new Currency
+            {
+                Code = symbol.Name.ToUpperInvariant(),
+                Description = (string)symbol.Value,
+                Symbol = sign
+            });
         }
 
         return currencies;

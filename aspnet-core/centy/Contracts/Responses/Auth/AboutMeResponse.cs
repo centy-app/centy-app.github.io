@@ -1,6 +1,6 @@
 ﻿namespace centy.Contracts.Responses.Auth;
 
-public class AboutMeResponse
+public record AboutMeResponse
 {
     public Guid Id { get; init; }
     public string? Email { get; init; }

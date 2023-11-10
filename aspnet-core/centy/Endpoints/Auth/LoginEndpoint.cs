@@ -34,8 +34,8 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
         if (result.Succeeded)
         {
             var user = await _userManager.FindByEmailAsync(req.Email);
-
             var jwtToken = _jwtService.CreateToken(user);
+            
             var response = new LoginResponse
             {
                 Email = user.Email,

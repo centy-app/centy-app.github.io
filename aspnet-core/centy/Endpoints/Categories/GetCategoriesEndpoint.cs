@@ -1,7 +1,6 @@
-﻿using centy.Domain.Auth;
-using centy.Services.Categories;
+﻿using centy.Services.Categories;
 using centy.Domain.Categories;
-using Microsoft.AspNetCore.Identity;
+using centy.Services.Auth;
 
 namespace centy.Endpoints.Categories;
 
@@ -9,17 +8,17 @@ namespace centy.Endpoints.Categories;
 public class GetCategoriesEndpoint : EndpointWithoutRequest<List<Category>>
 {
     private readonly ICategoriesService _categoriesService;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserService _userService;
 
-    public GetCategoriesEndpoint(ICategoriesService categoriesService, UserManager<ApplicationUser> userManager)
+    public GetCategoriesEndpoint(ICategoriesService categoriesService, IUserService userService)
     {
         _categoriesService = categoriesService;
-        _userManager = userManager;
+        _userService = userService;
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var user = await _userManager.FindByNameAsync(HttpContext.User.Identity?.Name);
+        var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
         var result = await _categoriesService.GetUserCategoriesAsync(user.Id);
 
         await SendOkAsync(result, ct);

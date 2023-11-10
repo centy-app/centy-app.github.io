@@ -1,5 +1,5 @@
-﻿using centy.Domain.Categories;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
+using centy.Domain.Categories;
 
 namespace centy.Database.Repositories;
 
@@ -12,7 +12,7 @@ public class CategoriesRepository : BaseRepository, ICategoriesRepository
         _categories = Database.GetCollection<Category>("Categories");
     }
 
-    public async Task<List<Category>> GetUserCategories(Guid userId)
+    public async Task<List<Category>> GetUserCategoriesAsync(Guid userId)
     {
         return await _categories.Find(c => c.UserId == userId).ToListAsync();
     }
@@ -30,7 +30,7 @@ public class CategoriesRepository : BaseRepository, ICategoriesRepository
         return result.IsAcknowledged;
     }
 
-    public async Task DeleteAsync(List<Guid> categoryIds, Guid userId)
+    public async Task DeleteUserCategoriesAsync(List<Guid> categoryIds, Guid userId)
     {
         await _categories.DeleteManyAsync(c => categoryIds.Contains(c.Id) && c.UserId == userId);
     }

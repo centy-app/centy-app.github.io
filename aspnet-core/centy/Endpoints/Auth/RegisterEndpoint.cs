@@ -28,7 +28,7 @@ public class RegisterEndpoint : Endpoint<RegisterRequest>
         {
             UserName = req.Email,
             Email = req.Email,
-            BaseCurrencyCode = req.BaseCurrencyCode.ToUpperInvariant()
+            BaseCurrencyCode = req.BaseCurrencyCode?.ToUpperInvariant()
         };
 
         var result = await _userManager.CreateAsync(user, req.Password);

@@ -41,7 +41,7 @@
       "publishAllPorts": true,
       "useSSL": false,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Docker",
+        "ASPNETCORE_ENVIRONMENT": "Development",
         "HTTPS_PORT": "443",
         "PORT": "80",
         "MONGODB": "mongodb://localhost:27017",
