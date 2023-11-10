@@ -1,6 +1,5 @@
 ﻿using centy.Contracts.Requests.Categories;
 using centy.Services.Categories;
-using centy.Domain.Categories;
 using centy.Services.Auth;
 
 namespace centy.Endpoints.Categories;
@@ -21,13 +20,14 @@ public class PostCategoryEndpoint : Endpoint<CreateCategoryRequest>
     {
         var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
 
-        if (req.Icon is not null && req.Name is not null && req.CurrencyCode is not null)
+        if (req.Name is not null && req.CurrencyCode is not null)
         {
             await _categoriesService.CreateUserCategoryAsync(
-                req.ParentId, req.Type, req.Icon, req.Name,
+                req.ParentId, req.Type, req.IconId, req.Name,
                 req.CurrencyCode, user.Id);
 
             await SendOkAsync(ct);
+            return;
         }
 
 

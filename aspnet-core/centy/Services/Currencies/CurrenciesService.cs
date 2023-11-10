@@ -19,6 +19,11 @@ public class CurrenciesService : ICurrenciesService
         _logger = logger;
     }
 
+    public bool CurrencyExist(string? code)
+    {
+        return code is not null && _currenciesRepository.Exist(code);
+    }
+
     public async Task<List<Currency>> GetAvailableAsync()
     {
         var cachedCurrencies = await _currenciesRepository.GetAll();

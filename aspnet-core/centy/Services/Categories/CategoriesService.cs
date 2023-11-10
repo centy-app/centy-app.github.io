@@ -20,7 +20,15 @@ public class CategoriesService : ICategoriesService
         return categoryTree;
     }
 
-    public async Task CreateUserCategoryAsync(Guid parentId, CategoryType type, string icon, string name,
+    public List<CategoryTree> GetAllChildren(List<CategoryTree> categoryTree, Guid categoryId)
+    {
+        var result = new List<CategoryTree>();
+        FindChildren(categoryTree, categoryId, result);
+        return result;
+    }
+
+    public async Task CreateUserCategoryAsync(
+        Guid parentId, CategoryType type, Guid iconId, string name,
         string currencyCode, Guid userId)
     {
         var newCategory = new Category
@@ -30,16 +38,33 @@ public class CategoriesService : ICategoriesService
             ParentId = parentId,
             Name = name,
             Type = type,
-            Icon = icon,
+            IconId = iconId,
             CurrencyCode = currencyCode.ToUpperInvariant()
         };
+
+        //TODO: clear CurrencyCode for spending type, adjust validation
+
+        if (parentId != Guid.Empty)
+        {
+            var parent = await _categoriesRepository.GetUserCategory(parentId, userId);
+
+            if (parent is null)
+            {
+                throw new Exception("Parent category does not exist");
+            }
+
+            if (parent.Type != type)
+            {
+                throw new Exception("Wrong category type");
+            }
+        }
 
         await _categoriesRepository.InsertAsync(newCategory);
     }
 
-    public async Task UpdateUserCategoryAsync(Guid id, string name, string icon, Guid userId)
+    public async Task UpdateUserCategoryAsync(Guid id, string name, Guid iconId, Guid userId)
     {
-        await _categoriesRepository.UpdateAsync(id, name, icon, userId);
+        await _categoriesRepository.UpdateAsync(id, name, iconId, userId);
     }
 
     public async Task DeleteUserCategoryAsync(Guid categoryId, Guid userId)
@@ -54,7 +79,7 @@ public class CategoriesService : ICategoriesService
         await _categoriesRepository.DeleteUserCategoriesAsync(childrenIdsToDelete, userId);
     }
 
-    private List<CategoryTree> BuildCategoryTree(List<Category> categories)
+    private static List<CategoryTree> BuildCategoryTree(List<Category> categories)
     {
         var categoryLookup = categories.ToLookup(cat => cat.ParentId);
         var rootCategories = categoryLookup[Guid.Empty];
@@ -63,19 +88,20 @@ public class CategoriesService : ICategoriesService
         return categoryTree;
     }
 
-    private CategoryTree BuildCategoryTreeRecursive(Category category, ILookup<Guid, Category> categoryLookup)
+    private static CategoryTree BuildCategoryTreeRecursive(Category category, ILookup<Guid, Category> categoryLookup)
     {
         var categoryTree = new CategoryTree
         {
             Id = category.Id,
             UserId = category.UserId,
             Type = category.Type,
-            Icon = category.Icon,
+            IconId = category.IconId,
             Name = category.Name,
             CurrencyCode = category.CurrencyCode,
         };
 
-        var children = categoryLookup[category.Id].Select(child => BuildCategoryTreeRecursive(child, categoryLookup))
+        var children = categoryLookup[category.Id]
+            .Select(child => BuildCategoryTreeRecursive(child, categoryLookup))
             .ToList();
 
         if (children.Any())
@@ -86,14 +112,7 @@ public class CategoriesService : ICategoriesService
         return categoryTree;
     }
 
-    public List<CategoryTree> GetAllChildren(List<CategoryTree> categoryTree, Guid categoryId)
-    {
-        var result = new List<CategoryTree>();
-        FindChildren(categoryTree, categoryId, result);
-        return result;
-    }
-
-    private void FindChildren(List<CategoryTree> categoryTree, Guid categoryId, List<CategoryTree> result)
+    private static void FindChildren(List<CategoryTree> categoryTree, Guid categoryId, List<CategoryTree> result)
     {
         foreach (var category in categoryTree)
         {

@@ -1,6 +1,6 @@
 ﻿using centy.Contracts.Requests.Categories;
-using centy.Services.Auth;
 using centy.Services.Categories;
+using centy.Services.Auth;
 
 namespace centy.Endpoints.Categories;
 
@@ -20,11 +20,11 @@ public class PatchCategoryEndpoint : Endpoint<UpdateCategoryRequest>
     {
         var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
 
-        if (req.Name is not null && req.Icon is not null)
+        if (req.Name is not null)
         {
-            await _categoriesService.UpdateUserCategoryAsync(req.Id, req.Name, req.Icon, user.Id);
-
+            await _categoriesService.UpdateUserCategoryAsync(req.Id, req.Name, req.IconId, user.Id);
             await SendOkAsync(ct);
+            return;
         }
 
         AddError("Please ensure all field are filled in");

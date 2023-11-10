@@ -3,6 +3,6 @@
 public record UpdateCategoryRequest
 {
     public Guid Id { get; init; }
-    public string? Icon { get; init; }
+    public Guid IconId { get; init; }
     public string? Name { get; init; }
 }
