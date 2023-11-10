@@ -20,19 +20,18 @@ public class PostCategoryEndpoint : Endpoint<CreateCategoryRequest>
     public override async Task HandleAsync(CreateCategoryRequest req, CancellationToken ct)
     {
         var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
-        var newCategory = new Category
+
+        if (req.Icon is not null && req.Name is not null && req.CurrencyCode is not null)
         {
-            Id = Guid.NewGuid(),
-            UserId = user.Id,
-            ParentId = req.ParentId,
-            Name = req.Name,
-            Type = req.Type,
-            Icon = req.Icon,
-            CurrencyCode = req.CurrencyCode?.ToUpperInvariant()
-        };
+            await _categoriesService.CreateUserCategoryAsync(
+                req.ParentId, req.Type, req.Icon, req.Name,
+                req.CurrencyCode, user.Id);
 
-        await _categoriesService.CreateCategoryAsync(newCategory);
+            await SendOkAsync(ct);
+        }
 
-        await SendOkAsync(ct);
+
+        AddError("Please ensure all field are filled in");
+        await SendErrorsAsync(400, ct);
     }
 }

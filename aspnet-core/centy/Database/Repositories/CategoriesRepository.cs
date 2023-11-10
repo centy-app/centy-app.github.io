@@ -22,10 +22,14 @@ public class CategoriesRepository : BaseRepository, ICategoriesRepository
         await _categories.InsertOneAsync(category);
     }
 
-    public async Task<bool> UpdateAsync(Category category)
+    public async Task<bool> UpdateAsync(Guid id, string name, string icon, Guid userId)
     {
-        var result = await _categories.ReplaceOneAsync(c => c.Id == category.Id, category,
-            new ReplaceOptions { IsUpsert = true });
+        var result = await _categories.UpdateOneAsync(c => c.Id == id && c.UserId == userId,
+            Builders<Category>
+                .Update
+                .Set(r => r.Name, name)
+                .Set(r => r.Icon, icon),
+            new UpdateOptions() { IsUpsert = true });
 
         return result.IsAcknowledged;
     }

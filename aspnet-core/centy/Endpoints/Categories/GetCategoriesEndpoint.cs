@@ -5,7 +5,7 @@ using centy.Services.Auth;
 namespace centy.Endpoints.Categories;
 
 [HttpGet("categories")]
-public class GetCategoriesEndpoint : EndpointWithoutRequest<List<Category>>
+public class GetCategoriesEndpoint : EndpointWithoutRequest<List<CategoryTree>>
 {
     private readonly ICategoriesService _categoriesService;
     private readonly IUserService _userService;

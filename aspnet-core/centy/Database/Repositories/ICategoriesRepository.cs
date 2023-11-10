@@ -8,7 +8,7 @@ public interface ICategoriesRepository
 
     Task InsertAsync(Category category);
 
-    Task<bool> UpdateAsync(Category category);
+    Task<bool> UpdateAsync(Guid id, string name, string icon, Guid userId);
 
     Task DeleteUserCategoriesAsync(List<Guid> categoryIds, Guid userId);
 }
