@@ -28,7 +28,7 @@ public class CategoriesRepository : BaseRepository, ICategoriesRepository
         await _categories.InsertOneAsync(category);
     }
 
-    public async Task<bool> UpdateAsync(Guid id, string name, Guid iconId, Guid userId)
+    public async Task<bool> UpdateAsync(Guid id, string? name, Guid iconId, Guid userId)
     {
         var result = await _categories.UpdateOneAsync(c => c.Id == id && c.UserId == userId,
             Builders<Category>
@@ -37,7 +37,7 @@ public class CategoriesRepository : BaseRepository, ICategoriesRepository
                 .Set(r => r.IconId, iconId),
             new UpdateOptions() { IsUpsert = true });
 
-        return result.IsAcknowledged;
+        return result.IsAcknowledged && result.ModifiedCount > 0;
     }
 
     public async Task DeleteUserCategoriesAsync(List<Guid> categoryIds, Guid userId)

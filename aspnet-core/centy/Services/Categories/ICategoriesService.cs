@@ -12,7 +12,7 @@ public interface ICategoriesService
     Task CreateUserCategoryAsync(Guid parentId, CategoryType type, Guid iconId,
         string name, string currencyCode, ApplicationUser user);
 
-    Task UpdateUserCategoryAsync(Guid id, string name, Guid iconId, Guid userId);
+    Task<bool> UpdateUserCategoryAsync(Guid id, string? name, Guid iconId, Guid userId);
 
     Task DeleteUserCategoryAsync(Guid categoryId, Guid userId);
 }

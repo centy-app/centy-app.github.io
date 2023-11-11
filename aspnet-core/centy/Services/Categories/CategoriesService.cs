@@ -63,9 +63,9 @@ public class CategoriesService : ICategoriesService
         await _categoriesRepository.InsertAsync(newCategory);
     }
 
-    public async Task UpdateUserCategoryAsync(Guid id, string name, Guid iconId, Guid userId)
+    public async Task<bool> UpdateUserCategoryAsync(Guid id, string? name, Guid iconId, Guid userId)
     {
-        await _categoriesRepository.UpdateAsync(id, name, iconId, userId);
+        return await _categoriesRepository.UpdateAsync(id, name, iconId, userId);
     }
 
     public async Task DeleteUserCategoryAsync(Guid categoryId, Guid userId)

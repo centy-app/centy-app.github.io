@@ -20,14 +20,16 @@ public class PatchCategoryEndpoint : Endpoint<UpdateCategoryRequest>
     {
         var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
 
-        if (req.Name is not null)
+        var updated = await _categoriesService.UpdateUserCategoryAsync(req.Id, req.Name, req.IconId, user.Id);
+        if (updated)
         {
-            await _categoriesService.UpdateUserCategoryAsync(req.Id, req.Name, req.IconId, user.Id);
             await SendOkAsync(ct);
-            return;
+        }
+        else
+        {
+            AddError("Category not updated");
         }
 
-        AddError("Please ensure all field are filled in");
         await SendErrorsAsync(400, ct);
     }
 }
