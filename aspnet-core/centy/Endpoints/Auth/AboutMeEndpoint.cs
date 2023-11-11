@@ -1,22 +1,21 @@
-﻿using Microsoft.AspNetCore.Identity;
-using centy.Contracts.Responses.Auth;
-using centy.Domain.Auth;
+﻿using centy.Contracts.Responses.Auth;
+using centy.Services.Auth;
 
 namespace centy.Endpoints.Auth;
 
 [HttpGet("auth/aboutme")]
 public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserService _userService;
 
-    public AboutMeEndpoint(UserManager<ApplicationUser> userManager)
+    public AboutMeEndpoint(IUserService userService)
     {
-        _userManager = userManager;
+        _userService = userService;
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var user = await _userManager.FindByNameAsync(HttpContext?.User?.Identity?.Name);
+        var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
         var response = new AboutMeResponse
         {
             Id = user.Id,

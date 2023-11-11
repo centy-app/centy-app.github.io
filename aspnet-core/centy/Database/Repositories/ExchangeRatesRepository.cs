@@ -18,7 +18,7 @@ public class ExchangeRatesRepository : BaseRepository, IExchangeRatesRepository
 
     public async Task<ExchangeRates?> GetLatestAsync()
     {
-        return await _exchangeRates.Find(e => true).FirstOrDefaultAsync();
+        return await _exchangeRates.Find(_ => true).FirstOrDefaultAsync();
     }
 
     public async Task SetLatestAsync(ExchangeRates exchangeRates)

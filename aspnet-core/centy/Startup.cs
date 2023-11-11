@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FastEndpoints.Swagger;
 using centy.Contracts.Responses.Infrastructure;
@@ -21,13 +22,12 @@ public class Startup
     {
         webHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(EnvironmentVariables
-                .ApplicationPort); // to listen for incoming http connection on port 80
-
+            options.Listen(IPAddress.Any, EnvironmentVariables.ApplicationPort);
             if (EnvironmentVariables.IsDevelopment)
             {
-                // Not working in local Docker so far due to missing certificate
-                options.ListenAnyIP(EnvironmentVariables.ApplicationHttpsPort, configure => configure.UseHttps());
+                options.Listen(
+                    IPAddress.Loopback, EnvironmentVariables.ApplicationHttpsPort,
+                    listenOptions => { listenOptions.UseHttps("dev-cert.pfx", "localhost"); });
             }
         });
     }

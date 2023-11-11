@@ -1,6 +1,6 @@
 ﻿namespace centy.Contracts.Responses.Infrastructure;
 
-public class ValidationFailureResponse
+public record ValidationFailureResponse
 {
     public List<string>? Errors { get; init; }
 }

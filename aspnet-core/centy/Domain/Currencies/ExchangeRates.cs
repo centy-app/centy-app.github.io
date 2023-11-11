@@ -1,15 +1,8 @@
 ﻿namespace centy.Domain.Currencies;
 
-public class ExchangeRates
+public record ExchangeRates
 {
-    public ExchangeRates(string baseCurrency, DateTime date, List<ExchangeRate> rates)
-    {
-        BaseCurrency = baseCurrency;
-        Date = date;
-        Rates = rates;
-    }
-    
-    public string BaseCurrency { get; set; }
-    public DateTime Date { get; set; }
-    public List<ExchangeRate> Rates { get; set; }
+    public string? BaseCurrency { get; init; }
+    public DateTime Date { get; init; }
+    public List<ExchangeRate>? Rates { get; init; }
 }

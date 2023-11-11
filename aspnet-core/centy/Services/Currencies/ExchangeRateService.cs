@@ -43,7 +43,9 @@ public class ExchangeRateService : IExchangeRateService
     private async Task<ExchangeRates> GetLatestFromRemoteAsync()
     {
         using HttpClient client = new();
-        var response = await client.GetAsync($"{LatestRatesApiUrl}?source={CurrenciesService.BaseCurrency}&access_key={EnvironmentVariables.ExchangeRateApiKey}");
+        var url = $"{LatestRatesApiUrl}?source={CurrenciesService.BaseCurrency}" +
+                  $"&access_key={EnvironmentVariables.ExchangeRateApiKey}";
+        var response = await client.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -62,9 +64,18 @@ public class ExchangeRateService : IExchangeRateService
         var baseCurrencyLength = CurrenciesService.BaseCurrency.Length;
         foreach (JProperty rate in data.quotes)
         {
-            rates.Add(new ExchangeRate(rate.Name.Substring(baseCurrencyLength), (double)rate.Value));
+            rates.Add(new ExchangeRate
+            {
+                Code = rate.Name.ToUpperInvariant()[baseCurrencyLength..],
+                Rate = (double)rate.Value
+            });
         }
 
-        return new ExchangeRates(CurrenciesService.BaseCurrency, DateTime.UtcNow, rates);
+        return new ExchangeRates
+        {
+            BaseCurrency = CurrenciesService.BaseCurrency,
+            Date = DateTime.UtcNow,
+            Rates = rates
+        };
     }
 }

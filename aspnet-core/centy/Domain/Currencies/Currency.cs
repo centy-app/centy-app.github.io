@@ -1,15 +1,8 @@
 ﻿namespace centy.Domain.Currencies;
 
-public class Currency
+public record Currency
 {
-    public Currency(string code, string description, string symbol)
-    {
-        Code = code;
-        Description = description;
-        Symbol = symbol;
-    }
-
-    public string Code { get; set; }
-    public string Description { get; set; }
-    public string Symbol { get; set; }
+    public string? Code { get; init; }
+    public string? Description { get; init; }
+    public string? Symbol { get; init; }
 }

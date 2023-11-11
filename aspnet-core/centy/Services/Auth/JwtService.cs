@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using centy.Domain.Auth;
-using centy.Infrastructure;
 using centy.Services.Currencies;
+using centy.Infrastructure;
+using centy.Domain.Auth;
 
 namespace centy.Services.Auth;
 
@@ -70,7 +70,7 @@ public class JwtService : IJwtService
         }
     }
 
-    private SigningCredentials CreateSigningCredentials()
+    private static SigningCredentials CreateSigningCredentials()
     {
         return new SigningCredentials(
             new SymmetricSecurityKey(
