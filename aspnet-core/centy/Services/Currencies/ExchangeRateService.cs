@@ -43,9 +43,9 @@ public class ExchangeRateService : IExchangeRateService
     private async Task<ExchangeRates> GetLatestFromRemoteAsync()
     {
         using HttpClient client = new();
-        var response =
-            await client.GetAsync(
-                $"{LatestRatesApiUrl}?source={CurrenciesService.BaseCurrency}&access_key={EnvironmentVariables.ExchangeRateApiKey}");
+        var url = $"{LatestRatesApiUrl}?source={CurrenciesService.BaseCurrency}" +
+                  $"&access_key={EnvironmentVariables.ExchangeRateApiKey}";
+        var response = await client.GetAsync(url);
 
         if (!response.IsSuccessStatusCode)
         {

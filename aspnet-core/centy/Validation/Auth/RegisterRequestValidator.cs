@@ -8,8 +8,8 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     public RegisterRequestValidator(ICurrenciesService currenciesService)
     {
         RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(100);
-        RuleFor(x => x.Password).NotEmpty().MinimumLength(5);
-        RuleFor(x => x.BaseCurrencyCode)
-            .NotEmpty().MinimumLength(3).MaximumLength(3).Must(currenciesService.CurrencyExist);
+        RuleFor(x => x.Password).NotEmpty().MinimumLength(5).MaximumLength(100);
+        RuleFor(x => x.BaseCurrencyCode).NotEmpty().Must(currenciesService.CurrencyExist)
+            .MaximumLength(3);
     }
 }

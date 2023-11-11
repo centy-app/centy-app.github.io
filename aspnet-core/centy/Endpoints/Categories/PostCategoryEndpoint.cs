@@ -24,7 +24,7 @@ public class PostCategoryEndpoint : Endpoint<CreateCategoryRequest>
         {
             await _categoriesService.CreateUserCategoryAsync(
                 req.ParentId, req.Type, req.IconId, req.Name,
-                req.CurrencyCode, user.Id);
+                req.CurrencyCode, user);
 
             await SendOkAsync(ct);
             return;

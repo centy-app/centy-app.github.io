@@ -1,5 +1,6 @@
 ﻿using centy.Database.Repositories;
 using centy.Domain.Categories;
+using centy.Domain.Auth;
 
 namespace centy.Services.Categories;
 
@@ -29,24 +30,24 @@ public class CategoriesService : ICategoriesService
 
     public async Task CreateUserCategoryAsync(
         Guid parentId, CategoryType type, Guid iconId, string name,
-        string currencyCode, Guid userId)
+        string currencyCode, ApplicationUser user)
     {
         var newCategory = new Category
         {
             Id = Guid.NewGuid(),
-            UserId = userId,
+            UserId = user.Id,
             ParentId = parentId,
             Name = name,
             Type = type,
             IconId = iconId,
-            CurrencyCode = currencyCode.ToUpperInvariant()
+            CurrencyCode = type == CategoryType.Spending
+                ? currencyCode.ToUpperInvariant()
+                : user.BaseCurrencyCode
         };
-
-        //TODO: clear CurrencyCode for spending type, adjust validation
 
         if (parentId != Guid.Empty)
         {
-            var parent = await _categoriesRepository.GetUserCategory(parentId, userId);
+            var parent = await _categoriesRepository.GetUserCategory(parentId, user.Id);
 
             if (parent is null)
             {

@@ -1,4 +1,5 @@
 ﻿using centy.Domain.Categories;
+using centy.Domain.Auth;
 
 namespace centy.Services.Categories;
 
@@ -8,8 +9,8 @@ public interface ICategoriesService
 
     List<CategoryTree> GetAllChildren(List<CategoryTree> categoryTree, Guid categoryId);
 
-    Task CreateUserCategoryAsync(Guid parentId, CategoryType type, Guid iconId, string name, string currencyCode,
-        Guid userId);
+    Task CreateUserCategoryAsync(Guid parentId, CategoryType type, Guid iconId,
+        string name, string currencyCode, ApplicationUser user);
 
     Task UpdateUserCategoryAsync(Guid id, string name, Guid iconId, Guid userId);
 

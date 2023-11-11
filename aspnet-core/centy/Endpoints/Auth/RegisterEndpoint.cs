@@ -1,48 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using centy.Contracts.Requests.Auth;
-using centy.Domain.Auth;
+using centy.Services.Auth;
 
 namespace centy.Endpoints.Auth;
 
 [HttpPost("auth/register"), AllowAnonymous]
 public class RegisterEndpoint : Endpoint<RegisterRequest>
 {
+    private readonly IUserService _userService;
     private readonly ILogger<RegisterEndpoint> _logger;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public RegisterEndpoint(
-        ILogger<RegisterEndpoint> logger,
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+    public RegisterEndpoint(IUserService userService, ILogger<RegisterEndpoint> logger)
     {
+        _userService = userService;
         _logger = logger;
-        _userManager = userManager;
-        _signInManager = signInManager;
     }
 
     public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
     {
-        var user = new ApplicationUser
-        {
-            UserName = req.Email,
-            Email = req.Email,
-            BaseCurrencyCode = req.BaseCurrencyCode?.ToUpperInvariant()
-        };
-
-        var result = await _userManager.CreateAsync(user, req.Password);
+        var result = await _userService.RegisterAsync(req.Email, req.Password, req.BaseCurrencyCode);
 
         if (result.Succeeded)
         {
             _logger.LogInformation("{Email} successfully registered", req.Email);
-
-            await _signInManager.SignInAsync(user, isPersistent: false);
             await SendOkAsync(ct);
-            return;
         }
-
-        if (result.Errors.Any())
+        else if (result.Errors.Any())
         {
             foreach (var error in result.Errors)
             {
