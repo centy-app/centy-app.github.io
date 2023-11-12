@@ -22,8 +22,14 @@ public class CurrenciesEndpoint : EndpointWithoutRequest<List<Currency>>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var result = await _currenciesService.GetAvailableAsync();
-
-        await SendOkAsync(result, ct);
+        try
+        {
+            var result = await _currenciesService.GetAvailableAsync();
+            await SendOkAsync(result, ct);
+        }
+        catch (Exception ex)
+        {
+            ThrowError(ex.Message);
+        }
     }
 }

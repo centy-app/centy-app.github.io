@@ -1,6 +1,6 @@
-﻿using centy.Domain.Currencies;
+﻿using centy.Services.Currencies;
+using centy.Domain.Currencies;
 using centy.Infrastructure;
-using centy.Services.Currencies;
 
 namespace centy.Endpoints.Currencies;
 
@@ -21,8 +21,14 @@ public class ExchangeRatesEndpoint : EndpointWithoutRequest<ExchangeRates>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var result = await _exchangeRateService.GetLatestAsync();
-
-        await SendOkAsync(result, ct);
+        try
+        {
+            var result = await _exchangeRateService.GetLatestAsync();
+            await SendOkAsync(result, ct);
+        }
+        catch (Exception ex)
+        {
+            ThrowError(ex.Message);
+        }
     }
 }

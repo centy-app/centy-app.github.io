@@ -14,7 +14,6 @@ public class CurrenciesRepository : BaseRepository, ICurrenciesRepository
 
     public bool Exist(string? code)
     {
-        if (code == null) return false;
         var currency = _currencies.Find(c => c.Code == code).FirstOrDefault();
         return currency is not null;
     }

@@ -20,18 +20,18 @@ public class PostCategoryEndpoint : Endpoint<CreateCategoryRequest>
     {
         var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
 
-        if (req.Name is not null && req.CurrencyCode is not null)
+        try
         {
             await _categoriesService.CreateUserCategoryAsync(
                 req.ParentId, req.Type, req.IconId, req.Name,
                 req.CurrencyCode, user);
 
             await SendOkAsync(ct);
-            return;
         }
-
-
-        AddError("Please ensure all field are filled in");
-        await SendErrorsAsync(400, ct);
+        catch (Exception ex)
+        {
+            //TODO: Catch application known exceptions here, pass generic text for generic exception
+            ThrowError(ex.Message);
+        }
     }
 }

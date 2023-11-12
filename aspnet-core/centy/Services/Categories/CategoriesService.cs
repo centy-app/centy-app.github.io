@@ -29,8 +29,8 @@ public class CategoriesService : ICategoriesService
     }
 
     public async Task CreateUserCategoryAsync(
-        Guid parentId, CategoryType type, Guid iconId, string name,
-        string currencyCode, ApplicationUser user)
+        Guid parentId, CategoryType type, Guid iconId, string? name,
+        string? currencyCode, ApplicationUser user)
     {
         var newCategory = new Category
         {
@@ -41,7 +41,7 @@ public class CategoriesService : ICategoriesService
             Type = type,
             IconId = iconId,
             CurrencyCode = type == CategoryType.Spending
-                ? currencyCode.ToUpperInvariant()
+                ? currencyCode?.ToUpperInvariant()
                 : user.BaseCurrencyCode
         };
 
@@ -102,14 +102,9 @@ public class CategoriesService : ICategoriesService
         };
 
         var children = categoryLookup[category.Id]
-            .Select(child => BuildCategoryTreeRecursive(child, categoryLookup))
-            .ToList();
+            .Select(child => BuildCategoryTreeRecursive(child, categoryLookup)).ToList();
 
-        if (children.Any())
-        {
-            categoryTree.Children = children;
-        }
-
+        if (children.Any()) categoryTree.Children = children;
         return categoryTree;
     }
 
@@ -119,20 +114,11 @@ public class CategoriesService : ICategoriesService
         {
             if (category.Id == categoryId)
             {
-                // Found the category, add its children
-                if (category.Children != null)
-                {
-                    result.AddRange(category.Children);
-                }
-
+                if (category.Children != null) result.AddRange(category.Children);
                 return;
             }
 
-            // Recursively search in children
-            if (category.Children != null)
-            {
-                FindChildren(category.Children, categoryId, result);
-            }
+            if (category.Children != null) FindChildren(category.Children, categoryId, result);
         }
     }
 }

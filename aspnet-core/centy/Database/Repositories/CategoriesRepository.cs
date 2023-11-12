@@ -14,8 +14,7 @@ public class CategoriesRepository : BaseRepository, ICategoriesRepository
 
     public async Task<Category?> GetUserCategory(Guid id, Guid userId)
     {
-        var result = await _categories.Find(c => c.Id == id && c.UserId == userId).FirstOrDefaultAsync();
-        return result;
+        return await _categories.Find(c => c.Id == id && c.UserId == userId).FirstOrDefaultAsync();
     }
 
     public async Task<List<Category>> GetUserCategoriesAsync(Guid userId)

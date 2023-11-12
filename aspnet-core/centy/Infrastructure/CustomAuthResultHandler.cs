@@ -18,11 +18,11 @@ public class CustomAuthResultHandler : IAuthorizationMiddlewareResultHandler
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             context.Response.ContentType = "text/plain";
             await context.Response.WriteAsync("Unauthorized");
-
-            return;
         }
-
-        // Fallback to the default implementation
-        await _defaultHandler.HandleAsync(next, context, policy, authorizeResult);
+        else
+        {
+            // Fallback to the default implementation
+            await _defaultHandler.HandleAsync(next, context, policy, authorizeResult);
+        }
     }
 }

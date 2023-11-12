@@ -21,7 +21,7 @@ public class CurrenciesService : ICurrenciesService
 
     public bool CurrencyExist(string? code)
     {
-        return code is not null && _currenciesRepository.Exist(code);
+        return _currenciesRepository.Exist(code);
     }
 
     public async Task<List<Currency>> GetAvailableAsync()
