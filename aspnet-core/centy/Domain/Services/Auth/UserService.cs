@@ -47,12 +47,12 @@ public class UserService : IUserService
 
     public async Task<ApplicationUser> GetUserByNameAsync(string? name)
     {
-        if (string.IsNullOrEmpty(name)) throw new UnauthorizedAccessException("User name is not valid.");
+        if (string.IsNullOrEmpty(name)) throw new ArgumentException("User name is not valid.");
 
         //TODO: introduce caching
         var result = await _userManager.FindByNameAsync(name);
 
-        if (result is null) throw new UnauthorizedAccessException("User not exist.");
+        if (result is null) throw new Exception("User not exist.");
         return result;
     }
 }
