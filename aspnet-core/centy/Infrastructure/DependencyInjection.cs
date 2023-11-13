@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using centy.Database.Repositories;
-using centy.Services.Currencies;
-using centy.Services.Categories;
-using centy.Services.Auth;
+using centy.Infrastructure.Database.Repositories;
+using centy.Domain.Services.Categories;
+using centy.Domain.Services.Currencies;
+using centy.Domain.Services.Auth;
 
 namespace centy.Infrastructure;
 

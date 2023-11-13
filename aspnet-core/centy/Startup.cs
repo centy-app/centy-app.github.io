@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FastEndpoints.Swagger;
-using centy.Contracts.Responses.Infrastructure;
-using centy.Domain.Auth;
+using centy.API.Contracts.Responses.Infrastructure;
+using centy.Domain.ValueObjects.Auth;
 using centy.Infrastructure;
 
 namespace centy;

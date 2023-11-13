@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>5f9ba23d-6048-4efb-a708-38de727e9a1d</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <Authors>Maksym Shchyhol</Authors>
     <RepositoryUrl>https://github.com/centy-app/centy-app.github.io</RepositoryUrl>
-    <LangVersion>10</LangVersion>
+    <LangVersion>11</LangVersion>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
@@ -27,6 +27,11 @@
     <PackageReference Include="MongoDB.Driver" Version="2.13.2" />
     <PackageReference Include="TeixeiraSoftware.Finance.Currency" Version="4.1.0" />
     <PackageReference Include="TeixeiraSoftware.Finance.ICurrency" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="API\" />
+    <Folder Include="Domain\ValueObjects\" />
   </ItemGroup>
 
 </Project>

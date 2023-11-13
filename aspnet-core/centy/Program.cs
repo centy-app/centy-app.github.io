@@ -1,6 +1,6 @@
 using centy;
-using centy.Database;
 using centy.Infrastructure;
+using centy.Infrastructure.Database;
 
 CentyDbInitializer.RegisterMappings();
 
