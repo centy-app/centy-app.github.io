@@ -71,10 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "centy:build:production"
+              "buildTarget": "centy:build:production"
             },
             "development": {
-              "browserTarget": "centy:build:development"
+              "buildTarget": "centy:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "centy:build"
+            "buildTarget": "centy:build"
           }
         },
         "test": {
