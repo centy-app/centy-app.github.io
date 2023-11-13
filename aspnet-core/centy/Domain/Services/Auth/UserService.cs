@@ -30,7 +30,6 @@ public class UserService : IUserService
         {
             return IdentityResult.Failed(new IdentityError
             {
-                Code = "0001",
                 Description = "Invalid email or password"
             });
         }
