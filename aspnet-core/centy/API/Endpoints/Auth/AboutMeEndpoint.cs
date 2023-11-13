@@ -15,21 +15,21 @@ public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
+        try
+        {
+            var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
+            var response = new AboutMeResponse
+            {
+                Id = user.Id,
+                Email = user.Email,
+                BaseCurrencyCode = user.BaseCurrencyCode
+            };
 
-        if (user is null)
+            await SendOkAsync(response, ct);
+        }
+        catch
         {
             await SendUnauthorizedAsync(ct);
-            return;
         }
-
-        var response = new AboutMeResponse
-        {
-            Id = user.Id,
-            Email = user.Email,
-            BaseCurrencyCode = user.BaseCurrencyCode
-        };
-
-        await SendOkAsync(response, ct);
     }
 }

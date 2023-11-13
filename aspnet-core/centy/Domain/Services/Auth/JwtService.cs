@@ -49,13 +49,13 @@ public class JwtService : IJwtService
             if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Email))
             {
                 _logger.LogError("{UserId} name or email is not set", user.Id);
-                throw new Exception("User should have name and email set");
+                throw new Exception("User should have name and email set.");
             }
 
             if (string.IsNullOrWhiteSpace(user.BaseCurrencyCode))
             {
                 _logger.LogError("{User} base currency is not set", user.Email);
-                throw new Exception("User should have base currency set");
+                throw new Exception("User should have base currency set.");
             }
 
             var claims = new List<Claim>

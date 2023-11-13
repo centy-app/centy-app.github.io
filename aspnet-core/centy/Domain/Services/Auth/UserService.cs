@@ -45,14 +45,14 @@ public class UserService : IUserService
         return await _userManager.CreateAsync(user, password);
     }
 
-    public async Task<ApplicationUser?> GetUserByNameAsync(string? name)
+    public async Task<ApplicationUser> GetUserByNameAsync(string? name)
     {
-        if (string.IsNullOrEmpty(name))
-        {
-            return null;
-        }
+        if (string.IsNullOrEmpty(name)) throw new UnauthorizedAccessException("User name is not valid.");
 
         //TODO: introduce caching
-        return await _userManager.FindByNameAsync(name);
+        var result = await _userManager.FindByNameAsync(name);
+
+        if (result is null) throw new UnauthorizedAccessException("User not exist.");
+        return result;
     }
 }

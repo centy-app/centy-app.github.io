@@ -2,7 +2,7 @@
 
 public static class EnvironmentVariables
 {
-    private const string PortException = "Port configuration is invalid";
+    private const string PortException = "Port configuration is invalid.";
 
     public static readonly int ApplicationPort =
         int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new Exception(PortException));
@@ -23,10 +23,10 @@ public static class EnvironmentVariables
         Environment.GetEnvironmentVariable("JWT_KEY") ?? "98cf0eed-4b0c-405f-9913-dce91b99a506";
 
     public static readonly string AllowedOrigin =
-        Environment.GetEnvironmentVariable("CORS") ?? throw new Exception("CORS should be set");
+        Environment.GetEnvironmentVariable("CORS") ?? throw new Exception("CORS should be set.");
 
     public static readonly string MongoConnectionString =
-        Environment.GetEnvironmentVariable("MONGODB") ?? throw new Exception("Connection string should be set");
+        Environment.GetEnvironmentVariable("MONGODB") ?? throw new Exception("Connection string should be set.");
 
     public static readonly string ExchangeRateApiKey =
         Environment.GetEnvironmentVariable("EXCHANGE_API_KEY") ?? "";

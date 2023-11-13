@@ -26,20 +26,13 @@ public class DeleteCategoryEndpoint : Endpoint<DeleteCategoryRequest>
         try
         {
             var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
-            if (user is null)
-            {
-                await SendUnauthorizedAsync(ct);
-                return;
-            }
-
             await _categoriesService.DeleteUserCategoryAsync(req.Id, user.Id);
-
             await SendOkAsync(ct);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "DeleteUserCategory failed with message {Message}", ex.Message);
-            ThrowError("Category not deleted");
+            ThrowError("Category not deleted.");
         }
     }
 }

@@ -36,7 +36,6 @@ public class CurrenciesService : ICurrenciesService
         {
             var currencies = await GetAvailableFromRemoteAsync();
             await _currenciesRepository.InsertManyAsync(currencies);
-
             return currencies;
         }
         catch (Exception ex)
@@ -53,16 +52,19 @@ public class CurrenciesService : ICurrenciesService
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Can't retrieve symbols from remote. Status code: {response.StatusCode}");
+            throw new Exception($"Can't retrieve symbols from remote. Status code: {response.StatusCode}.");
         }
 
         var jsonString = await response.Content.ReadAsStringAsync();
-        dynamic data = JsonConvert.DeserializeObject(jsonString);
+        var currencies = DeserializeCurrencies(jsonString);
 
-        if (!(bool)data.success)
-        {
-            throw new Exception((string)data.error.info);
-        }
+        return currencies;
+    }
+
+    private static List<Currency> DeserializeCurrencies(string jsonString)
+    {
+        dynamic data = JsonConvert.DeserializeObject(jsonString);
+        if (!(bool)data.success) throw new Exception((string)data.error.info);
 
         var currencies = new List<Currency>();
         foreach (JProperty symbol in data.currencies)

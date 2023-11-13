@@ -30,7 +30,6 @@ public class ExchangeRateService : IExchangeRateService
         {
             var rates = await GetLatestFromRemoteAsync();
             await _exchangeRatesRepository.SetLatestAsync(rates);
-
             return rates;
         }
         catch (Exception ex)
@@ -45,21 +44,28 @@ public class ExchangeRateService : IExchangeRateService
         using HttpClient client = new();
         var url = $"{LatestRatesApiUrl}?source={CurrenciesService.BaseCurrency}" +
                   $"&access_key={EnvironmentVariables.ExchangeRateApiKey}";
-        var response = await client.GetAsync(url);
 
+        var response = await client.GetAsync(url);
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Can't retrieve latest rates from remote. Status code: {response.StatusCode}");
+            throw new Exception($"Can't retrieve latest rates from remote. Status code: {response.StatusCode}.");
         }
 
         var jsonString = await response.Content.ReadAsStringAsync();
-        dynamic data = JsonConvert.DeserializeObject(jsonString);
+        var rates = DeserializeExchangeRates(jsonString);
 
-        if (!(bool)data.success)
+        return new ExchangeRates
         {
-            throw new Exception((string)data.error.info);
-        }
+            BaseCurrency = CurrenciesService.BaseCurrency,
+            Date = DateTime.UtcNow,
+            Rates = rates
+        };
+    }
 
+    private static List<ExchangeRate> DeserializeExchangeRates(string jsonString)
+    {
+        dynamic data = JsonConvert.DeserializeObject(jsonString);
+        if (!(bool)data.success) throw new Exception((string)data.error.info);
         var rates = new List<ExchangeRate>();
         var baseCurrencyLength = CurrenciesService.BaseCurrency.Length;
         foreach (JProperty rate in data.quotes)
@@ -71,11 +77,6 @@ public class ExchangeRateService : IExchangeRateService
             });
         }
 
-        return new ExchangeRates
-        {
-            BaseCurrency = CurrenciesService.BaseCurrency,
-            Date = DateTime.UtcNow,
-            Rates = rates
-        };
+        return rates;
     }
 }

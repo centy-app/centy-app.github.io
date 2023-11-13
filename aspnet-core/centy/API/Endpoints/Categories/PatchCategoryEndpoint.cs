@@ -8,33 +8,36 @@ namespace centy.API.Endpoints.Categories;
 public class PatchCategoryEndpoint : Endpoint<UpdateCategoryRequest>
 {
     private readonly ICategoriesService _categoriesService;
+    private readonly ILogger<PatchCategoryEndpoint> _logger;
     private readonly IUserService _userService;
 
-    public PatchCategoryEndpoint(ICategoriesService categoriesService, IUserService userService)
+    public PatchCategoryEndpoint(
+        ICategoriesService categoriesService,
+        IUserService userService,
+        ILogger<PatchCategoryEndpoint> logger)
     {
         _categoriesService = categoriesService;
         _userService = userService;
+        _logger = logger;
     }
 
     public override async Task HandleAsync(UpdateCategoryRequest req, CancellationToken ct)
     {
-        var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
-        if (user is null)
+        try
         {
-            await SendUnauthorizedAsync(ct);
-            return;
+            var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
+            var updated = await _categoriesService.UpdateUserCategoryAsync(req.Id, req.Name, req.IconId, user.Id);
+            if (updated)
+            {
+                await SendOkAsync(ct);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning("Category {Category} not updated, error message: {Exception}", req.Id, ex.Message);
         }
 
-        var updated = await _categoriesService.UpdateUserCategoryAsync(req.Id, req.Name, req.IconId, user.Id);
-        if (updated)
-        {
-            await SendOkAsync(ct);
-        }
-        else
-        {
-            AddError("Category not updated");
-        }
-
-        await SendErrorsAsync(400, ct);
+        ThrowError("Category not updated.");
     }
 }

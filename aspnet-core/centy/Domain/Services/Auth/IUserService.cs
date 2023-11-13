@@ -9,5 +9,5 @@ public interface IUserService
 
     Task<IdentityResult> RegisterAsync(string? email, string? password, string? baseCurrencyCode);
 
-    Task<ApplicationUser?> GetUserByNameAsync(string? name);
+    Task<ApplicationUser> GetUserByNameAsync(string? name);
 }

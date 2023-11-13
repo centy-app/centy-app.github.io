@@ -42,7 +42,7 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
         }
         else
         {
-            ThrowError("Username or Password is incorrect");
+            ThrowError("Username or Password is incorrect.");
         }
     }
 }

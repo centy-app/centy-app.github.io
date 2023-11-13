@@ -19,11 +19,6 @@ public class PostCategoryEndpoint : Endpoint<CreateCategoryRequest>
     public override async Task HandleAsync(CreateCategoryRequest req, CancellationToken ct)
     {
         var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
-        if (user is null)
-        {
-            await SendUnauthorizedAsync(ct);
-            return;
-        }
 
         try
         {
