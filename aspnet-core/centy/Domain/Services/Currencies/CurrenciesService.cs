@@ -41,7 +41,7 @@ public class CurrenciesService : ICurrenciesService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occur while retrieving available currencies: {Exception}", ex.Message);
-            return cachedCurrencies ?? throw new Exception("Currencies data is missing.");
+            return cachedCurrencies ?? throw new Exception("Currencies cache is missing.");
         }
     }
 
