@@ -1,4 +1,4 @@
-﻿using centy.Domain.ValueObjects.Categories;
+﻿using centy.Domain.Entities.Categories;
 
 namespace centy.Infrastructure.Database.Repositories;
 

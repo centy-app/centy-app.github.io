@@ -1,4 +1,4 @@
-﻿using centy.Domain.ValueObjects.Currencies;
+﻿using centy.Domain.Entities.Currencies;
 using centy.Domain.Services.Currencies;
 using centy.Infrastructure;
 
@@ -7,10 +7,12 @@ namespace centy.API.Endpoints.Currencies;
 public class ExchangeRatesEndpoint : EndpointWithoutRequest<ExchangeRates>
 {
     private readonly IExchangeRateService _exchangeRateService;
+    private readonly ILogger<ExchangeRatesEndpoint> _logger;
 
-    public ExchangeRatesEndpoint(IExchangeRateService exchangeRateService)
+    public ExchangeRatesEndpoint(IExchangeRateService exchangeRateService, ILogger<ExchangeRatesEndpoint> logger)
     {
         _exchangeRateService = exchangeRateService;
+        _logger = logger;
     }
 
     public override void Configure()
@@ -28,7 +30,8 @@ public class ExchangeRatesEndpoint : EndpointWithoutRequest<ExchangeRates>
         }
         catch (Exception ex)
         {
-            ThrowError(ex.Message);
+            _logger.LogWarning("Exchange rates could not be retrieved, error message: {Exception}", ex.Message);
+            ThrowError("Exchange rates could not be retrieved.");
         }
     }
 }

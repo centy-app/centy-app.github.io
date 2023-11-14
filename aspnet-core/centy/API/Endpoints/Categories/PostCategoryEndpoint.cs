@@ -7,21 +7,28 @@ namespace centy.API.Endpoints.Categories;
 [HttpPost("categories")]
 public class PostCategoryEndpoint : Endpoint<CreateCategoryRequest>
 {
+    private readonly ILogger<PostCategoryEndpoint> _logger;
     private readonly ICategoriesService _categoriesService;
     private readonly IUserService _userService;
 
-    public PostCategoryEndpoint(ICategoriesService categoriesService, IUserService userService)
+    public PostCategoryEndpoint(
+        ILogger<PostCategoryEndpoint> logger,
+        ICategoriesService categoriesService,
+        IUserService userService)
     {
+        _logger = logger;
         _categoriesService = categoriesService;
         _userService = userService;
     }
 
     public override async Task HandleAsync(CreateCategoryRequest req, CancellationToken ct)
     {
-        var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
-
+        var userId = Guid.Empty;
         try
         {
+            var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
+            userId = user.Id;
+
             await _categoriesService.CreateUserCategoryAsync(
                 req.ParentId, req.Type, req.IconId, req.Name,
                 req.CurrencyCode, user);
@@ -30,8 +37,8 @@ public class PostCategoryEndpoint : Endpoint<CreateCategoryRequest>
         }
         catch (Exception ex)
         {
-            //TODO: Catch application known exceptions here, pass generic text for generic exception
-            ThrowError(ex.Message);
+            _logger.LogWarning("Category not saved for user: {User}, error message: {Exception}", userId, ex.Message);
+            ThrowError("Category could not be saved.");
         }
     }
 }

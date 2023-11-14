@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization;
-using centy.Domain.ValueObjects.Categories;
-using centy.Domain.ValueObjects.Currencies;
+using centy.Domain.Entities.Categories;
+using centy.Domain.Entities.Currencies;
 
 namespace centy.Infrastructure.Database;
 

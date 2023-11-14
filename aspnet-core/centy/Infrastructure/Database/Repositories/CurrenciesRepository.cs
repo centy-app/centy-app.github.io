@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using centy.Domain.ValueObjects.Currencies;
+using centy.Domain.Entities.Currencies;
 
 namespace centy.Infrastructure.Database.Repositories;
 

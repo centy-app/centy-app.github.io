@@ -3,8 +3,7 @@ using System.Globalization;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using centy.Domain.Services.Currencies;
-using centy.Domain.ValueObjects.Auth;
+using centy.Domain.Entities.Auth;
 using centy.Infrastructure;
 
 namespace centy.Domain.Services.Auth;

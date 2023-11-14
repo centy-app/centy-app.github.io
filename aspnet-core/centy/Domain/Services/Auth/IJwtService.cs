@@ -1,4 +1,4 @@
-﻿using centy.Domain.ValueObjects.Auth;
+﻿using centy.Domain.Entities.Auth;
 
 namespace centy.Domain.Services.Auth;
 

@@ -7,10 +7,12 @@ namespace centy.API.Endpoints.Auth;
 public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
 {
     private readonly IUserService _userService;
+    private readonly ILogger<AboutMeEndpoint> _logger;
 
-    public AboutMeEndpoint(IUserService userService)
+    public AboutMeEndpoint(IUserService userService, ILogger<AboutMeEndpoint> logger)
     {
         _userService = userService;
+        _logger = logger;
     }
 
     public override async Task HandleAsync(CancellationToken ct)
@@ -27,8 +29,9 @@ public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
 
             await SendOkAsync(response, ct);
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError("About me failed with message {Message}", ex.Message);
             await SendUnauthorizedAsync(ct);
         }
     }

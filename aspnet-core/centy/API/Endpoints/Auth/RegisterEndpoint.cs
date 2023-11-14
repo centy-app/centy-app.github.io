@@ -34,7 +34,7 @@ public class RegisterEndpoint : Endpoint<RegisterRequest>
         }
         else
         {
-            AddError("An unknown error occurred.");
+            AddError("An unknown error occurred while registering the new user.");
         }
 
         ThrowIfAnyErrors();

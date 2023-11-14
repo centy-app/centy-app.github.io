@@ -31,8 +31,8 @@ public class DeleteCategoryEndpoint : Endpoint<DeleteCategoryRequest>
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "DeleteUserCategory failed with message {Message}", ex.Message);
-            ThrowError("Category not deleted.");
+            _logger.LogError(ex, "User category {Category} delete failed with message {Message}", req.Id, ex.Message);
+            ThrowError("Category could not be deleted.");
         }
     }
 }

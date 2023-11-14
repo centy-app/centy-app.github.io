@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using centy.Infrastructure.Database.Repositories;
-using centy.Domain.ValueObjects.Currencies;
+using centy.Domain.Entities.Currencies;
 using centy.Infrastructure;
 
 namespace centy.Domain.Services.Currencies;

@@ -1,4 +1,4 @@
-﻿namespace centy.Domain.ValueObjects.Currencies;
+﻿namespace centy.Domain.Entities.Currencies;
 
 public record ExchangeRates
 {

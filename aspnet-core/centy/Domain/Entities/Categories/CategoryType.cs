@@ -1,4 +1,4 @@
-﻿namespace centy.Domain.ValueObjects.Categories;
+﻿namespace centy.Domain.Entities.Categories;
 
 public enum CategoryType
 {

@@ -1,9 +1,9 @@
-﻿namespace centy.Domain.ValueObjects.Categories;
+﻿namespace centy.Domain.Entities.Categories;
 
-public record CategoryTree
+public record Category
 {
     public Guid Id { get; init; }
-    public List<CategoryTree>? Children { get; set; }
+    public Guid ParentId { get; init; }
     public Guid UserId { get; init; }
     public CategoryType Type { get; init; }
     public Guid IconId { get; init; }

@@ -1,4 +1,4 @@
-﻿using centy.Domain.ValueObjects.Currencies;
+﻿using centy.Domain.Entities.Currencies;
 using centy.Domain.Services.Currencies;
 using centy.Infrastructure;
 
@@ -7,10 +7,12 @@ namespace centy.API.Endpoints.Currencies;
 public class CurrenciesEndpoint : EndpointWithoutRequest<List<Currency>>
 {
     private readonly ICurrenciesService _currenciesService;
+    private readonly ILogger<CurrenciesEndpoint> _logger;
 
-    public CurrenciesEndpoint(ICurrenciesService currenciesService)
+    public CurrenciesEndpoint(ICurrenciesService currenciesService, ILogger<CurrenciesEndpoint> logger)
     {
         _currenciesService = currenciesService;
+        _logger = logger;
     }
 
     public override void Configure()
@@ -29,7 +31,8 @@ public class CurrenciesEndpoint : EndpointWithoutRequest<List<Currency>>
         }
         catch (Exception ex)
         {
-            ThrowError(ex.Message);
+            _logger.LogWarning("Currencies could not be retrieved, error message: {Exception}", ex.Message);
+            ThrowError("Currencies could not be retrieved.");
         }
     }
 }

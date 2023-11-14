@@ -8,41 +8,48 @@ namespace centy.API.Endpoints.Auth;
 [HttpPost("auth/login"), AllowAnonymous]
 public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
 {
+    private readonly ILogger<LoginEndpoint> _logger;
     private readonly IUserService _userService;
     private readonly IJwtService _jwtService;
 
-    public LoginEndpoint(IUserService userService, IJwtService jwtService)
+    public LoginEndpoint(
+        ILogger<LoginEndpoint> logger,
+        IUserService userService,
+        IJwtService jwtService)
     {
         _userService = userService;
         _jwtService = jwtService;
+        _logger = logger;
     }
 
     public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
     {
-        var result = await _userService.LogInAsync(req.Email, req.Password);
-        if (result.Succeeded)
+        try
         {
-            var user = await _userService.GetUserByNameAsync(req.Email);
-            if (user is null)
+            var result = await _userService.LogInAsync(req.Email, req.Password);
+            if (result.Succeeded)
             {
-                await SendUnauthorizedAsync(ct);
-                return;
+                var user = await _userService.GetUserByNameAsync(req.Email);
+                var jwtToken = _jwtService.CreateToken(user);
+
+                var response = new LoginResponse
+                {
+                    Email = user.Email,
+                    Token = jwtToken,
+                    BaseCurrencyCode = user.BaseCurrencyCode
+                };
+
+                await SendOkAsync(response, ct);
             }
-
-            var jwtToken = _jwtService.CreateToken(user);
-
-            var response = new LoginResponse
+            else
             {
-                Email = user.Email,
-                Token = jwtToken,
-                BaseCurrencyCode = user.BaseCurrencyCode
-            };
-
-            await SendOkAsync(response, ct);
+                ThrowError("Username or Password is incorrect.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            ThrowError("Username or Password is incorrect.");
+            _logger.LogError("Login endpoint failed with message {Message}", ex.Message);
+            ThrowError("An unknown error occurred during log in, please contact the support.");
         }
     }
 }

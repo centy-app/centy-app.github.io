@@ -12,9 +12,9 @@ public class PatchCategoryEndpoint : Endpoint<UpdateCategoryRequest>
     private readonly IUserService _userService;
 
     public PatchCategoryEndpoint(
+        ILogger<PatchCategoryEndpoint> logger,
         ICategoriesService categoriesService,
-        IUserService userService,
-        ILogger<PatchCategoryEndpoint> logger)
+        IUserService userService)
     {
         _categoriesService = categoriesService;
         _userService = userService;
@@ -30,14 +30,12 @@ public class PatchCategoryEndpoint : Endpoint<UpdateCategoryRequest>
             if (updated)
             {
                 await SendOkAsync(ct);
-                return;
             }
         }
         catch (Exception ex)
         {
             _logger.LogWarning("Category {Category} not updated, error message: {Exception}", req.Id, ex.Message);
+            ThrowError("Category could not be updated.");
         }
-
-        ThrowError("Category not updated.");
     }
 }
