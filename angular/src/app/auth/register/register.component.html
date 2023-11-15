@@ -1,36 +1,41 @@
 <div id="register-page">
-  <div *ngIf="isLoading$ | async; else loaded">
+  @if (isLoading$ | async) {
     <mat-spinner></mat-spinner>
-  </div>
-  <ng-template #loaded>
-    <form id="register-form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
-      <div *ngIf="isDesktopHeight.matches">
-        <img src="../../../assets/typing.gif" alt="cat" />
-      </div>
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput required autocomplete="new-email" placeholder="name@domain.com" [formControl]="email" required>
-        <mat-error *ngIf="email.invalid">Email is invalid</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Password</mat-label>
-        <input matInput type="password" autocomplete="new-password" [formControl]="password">
-        <mat-error *ngIf="password.invalid">Password is required</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Confirm password</mat-label>
-        <input matInput type="password" autocomplete="new-password" [formControl]="confirm">
-        <mat-error *ngIf="confirm.invalid">Password should match</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Base currency</mat-label>
-        <mat-select [formControl]="currency" required>
-          <mat-option *ngFor="let currency of currencies$ | async"
-            value="{{currency.code}}">{{currency.description}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-raised-button [disabled]="!registerForm.valid || submitButtonDisabled"
-        color="primary">Register</button>
-    </form>
-  </ng-template>
+  } @else {
+  <form id="register-form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    @if (isDesktopHeight.matches) {
+      <img src="../../../assets/typing.gif" alt="cat" />
+    }
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput required autocomplete="new-email" placeholder="name@domain.com" [formControl]="email" required>
+      @if (email.invalid) {
+        <mat-error>Email is invalid</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput type="password" autocomplete="new-password" [formControl]="password">
+      @if (password.invalid) {
+        <mat-error>Password is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Confirm password</mat-label>
+      <input matInput type="password" autocomplete="new-password" [formControl]="confirm">
+      @if (confirm.invalid) {
+        <mat-error>Password should match</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Base currency</mat-label>
+      <mat-select [formControl]="currency" required>
+        @for (currency of currencies$ | async; track currency.code) {
+          <mat-option value="{{currency.code}}">{{currency.description}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button [disabled]="!registerForm.valid || submitButtonDisabled" color="primary">Register</button>
+  </form>
+  }
 </div>
