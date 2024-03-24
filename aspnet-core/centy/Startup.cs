@@ -1,7 +1,6 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using FastEndpoints.Swagger;
+using FastEndpoints.Security;
 using centy.API.Contracts.Responses.Infrastructure;
 using centy.Domain.Entities.Auth;
 using centy.Infrastructure;
@@ -25,8 +24,7 @@ public class Startup
             options.Listen(IPAddress.Any, EnvironmentVariables.ApplicationPort);
             if (EnvironmentVariables.IsDevelopment)
             {
-                options.Listen(
-                    IPAddress.Loopback, EnvironmentVariables.ApplicationHttpsPort,
+                options.Listen(IPAddress.Loopback, EnvironmentVariables.ApplicationHttpsPort,
                     listenOptions => { listenOptions.UseHttps("dev-cert.pfx", "localhost"); });
             }
         });
@@ -57,33 +55,20 @@ public class Startup
             .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(EnvironmentVariables.MongoConnectionString,
                 "centy");
 
+        services.AddAuthenticationJwtBearer(s => { s.SigningKey = EnvironmentVariables.TokenSigningKey; });
+
+        services.AddAuthorization();
         services.AddFastEndpoints(o => o.IncludeAbstractValidators = true);
 
-        services.AddAuthentication(options =>
+        services.AddMvcCore().AddApiExplorer();
+        services.SwaggerDocument(o =>
+        {
+            o.DocumentSettings = s =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options => options.SlidingExpiration = true)
-            .AddJwtBearer(option =>
-            {
-                option.SaveToken = true;
-                option.TokenValidationParameters = new TokenValidationParameters
-                {
-                    SaveSigninToken = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = EnvironmentVariables.TokenIssuer,
-                    ValidAudience = EnvironmentVariables.TokenAudience,
-                    IssuerSigningKey =
-                        new SymmetricSecurityKey(
-                            System.Text.Encoding.UTF8.GetBytes(EnvironmentVariables.TokenSigningKey))
-                };
-            });
-
-        services.AddSwaggerDoc();
+                s.Title = "Centy API";
+                s.Version = "v1";
+            };
+        });
     }
 
     public void Configure(WebApplication app, IWebHostEnvironment env)
@@ -105,8 +90,8 @@ public class Startup
 
         if (env.IsDevelopment())
         {
-            app.UseOpenApi();
-            app.UseSwaggerUi3(s => s.ConfigureDefaults());
+            app.UseSwaggerGen();
+            app.UseSwaggerUi();
         }
 
         app.Run();
