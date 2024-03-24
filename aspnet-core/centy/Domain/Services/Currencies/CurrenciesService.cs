@@ -63,7 +63,7 @@ public class CurrenciesService : ICurrenciesService
 
     private static List<Currency> DeserializeCurrencies(string jsonString)
     {
-        dynamic data = JsonConvert.DeserializeObject(jsonString);
+        dynamic data = JsonConvert.DeserializeObject(jsonString) ?? throw new InvalidOperationException();
         if (!(bool)data.success) throw new Exception((string)data.error.info);
 
         var currencies = new List<Currency>();
@@ -77,7 +77,7 @@ public class CurrenciesService : ICurrenciesService
             currencies.Add(new Currency
             {
                 Code = symbol.Name.ToUpperInvariant(),
-                Description = (string)symbol.Value,
+                Description = (string)symbol.Value!,
                 Symbol = sign
             });
         }

@@ -64,7 +64,7 @@ public class ExchangeRateService : IExchangeRateService
 
     private static List<ExchangeRate> DeserializeExchangeRates(string jsonString)
     {
-        dynamic data = JsonConvert.DeserializeObject(jsonString);
+        dynamic data = JsonConvert.DeserializeObject(jsonString) ?? throw new InvalidOperationException();
         if (!(bool)data.success) throw new Exception((string)data.error.info);
         var rates = new List<ExchangeRate>();
         var baseCurrencyLength = CurrenciesService.BaseCurrency.Length;
