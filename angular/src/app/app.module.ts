@@ -35,7 +35,7 @@ import { CentyComponent } from './base/centy-base.component';
       authState: authReducers
     }, { metaReducers }),
     EffectsModule.forRoot([CurrenciesEffects]),
-    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 25 }) : []
+    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 25 , connectInZone: true}) : []
   ],
   providers: [],
   bootstrap: [AppComponent]
