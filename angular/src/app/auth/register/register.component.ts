@@ -6,11 +6,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/material.module';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { Currency } from 'src/app/centy/currencies/state/currencies.models';
-import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
+
+import { Observable } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+
 import { RegisterService } from './register.service';
 import { LoginResponse } from '../login/login.models';
+import { Currency } from 'src/app/centy/currencies/state/currencies.models';
+import { CurrenciesState, CurrenciesStateModel } from 'src/app/centy/currencies/state/currencies.state';
+import { GetCurrencies } from 'src/app/centy/currencies/state/currencies.actions';
 
 @Component({
   selector: 'app-register',
@@ -32,8 +36,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currency: FormControl;
   submitButtonDisabled: boolean = false;
 
-  currencies$: Observable<Currency[]>;
-  isLoading$: Observable<boolean>;
+  @Select(CurrenciesState.getCurrencies) currencies$: Observable<Currency[]>;
+  @Select(CurrenciesState.getIsLoading) isLoading$: Observable<boolean>;
 
   isDesktopHeight: MediaQueryList;
 
@@ -41,18 +45,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
 
   constructor(
-    private readonly currenciesService: CurrenciesService,
     private readonly registerService: RegisterService,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly media: MediaMatcher,
-    private readonly snackBar: MatSnackBar) { }
+    private readonly snackBar: MatSnackBar,
+    private store: Store) { }
 
   ngOnInit(): void {
     this.initialyzeMediaMatcherListener();
     this.initialyzeFormComponents();
 
-    this.currencies$ = this.currenciesService.getCurrencies();
-    this.isLoading$ = this.currenciesService.isLoading();
+    this.store.dispatch(new GetCurrencies());
   }
 
   onRegister() {

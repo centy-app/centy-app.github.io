@@ -31,7 +31,7 @@ public class AboutMeEndpoint : EndpointWithoutRequest<AboutMeResponse>
         }
         catch (Exception ex)
         {
-            _logger.LogError("About me failed with message {Message}", ex.Message);
+            _logger.LogError("About me failed with exception message: {Exception}", ex.Message);
             await SendUnauthorizedAsync(ct);
         }
     }

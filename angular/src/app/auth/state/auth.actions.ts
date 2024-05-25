@@ -1,11 +1,10 @@
-import { createAction, props } from '@ngrx/store';
-import { AuthState } from './auth.models';
+import { AuthStateModel } from './auth.models';
 
-const prefix = '[Auth]';
+export class LogIn {
+  static readonly type = '[Auth] Log In';
+  constructor(public payload: AuthStateModel) {}
+}
 
-export const logIn = createAction(
-  `${prefix} Log In`,
-  props<AuthState>()
-);
-
-export const logOut = createAction(`${prefix} Log Out`);
+export class LogOut {
+  static readonly type = '[Auth] Log Out';
+}

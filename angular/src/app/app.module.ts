@@ -3,20 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/material.module';
-import { AppRoutingModule } from './app-routing.module';
+
+import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { authStoragePlugin } from 'src/state/state-plugins';
+import { CurrenciesState } from './centy/currencies/state/currencies.state';
+
 import { environment } from 'src/environments/environment';
-
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { currenciesReducers } from './centy/currencies/state/currencies.reducers';
-import { authReducers } from './auth/state/auth.reducers';
-import { metaReducers } from 'src/state/meta-reducers';
-import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
-
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './base/landing-base.component';
 import { CentyComponent } from './base/centy-base.component';
+import { AuthState } from './auth/state/auth.state';
 
 @NgModule({
   declarations: [
@@ -30,14 +28,18 @@ import { CentyComponent } from './base/centy-base.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    StoreModule.forRoot({
-      currenciesState: currenciesReducers,
-      authState: authReducers
-    }, { metaReducers }),
-    EffectsModule.forRoot([CurrenciesEffects]),
-    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 25 , connectInZone: true}) : []
+    NgxsModule.forRoot([AuthState, CurrenciesState], {
+      developmentMode: !environment.production
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    {
+      provide: NGXS_PLUGINS,
+      useValue: authStoragePlugin,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
