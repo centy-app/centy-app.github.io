@@ -17,6 +17,7 @@ import { AuthState, AuthStateModel } from '../auth/state/auth.state';
 export class CentyComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;
   isMobileWidth: MediaQueryList;
+
   private isMobileWidthListener: () => void;
   private authSubscription: Subscription;
 

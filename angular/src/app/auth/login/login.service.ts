@@ -20,7 +20,10 @@ export class LoginService {
       .pipe(
         mergeMap((result) => {
           this.store.dispatch(new LogIn(result));
-          return of({ ...result, errors: [], success: true })
+          return of({
+            ...result, errors: [],
+            success: true
+          })
         }),
         catchError((err) => {
           return of({

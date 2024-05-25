@@ -5,9 +5,7 @@ import { LogIn, LogOut } from 'src/app/auth/state/auth.actions';
 export function authStoragePlugin(state: AuthStateModel, action: LogOut | LogIn, next: any) {
   if (getActionTypeFromInstance(action) === LogIn.type) {
     updateLocalStorage((action as LogIn).payload);
-  }
-
-  if (getActionTypeFromInstance(action) === LogOut.type) {
+  } else if (getActionTypeFromInstance(action) === LogOut.type) {
     updateLocalStorage(undefined);
   }
 

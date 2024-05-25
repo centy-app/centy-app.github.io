@@ -66,12 +66,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
       password: this.password.value,
       baseCurrencyCode: this.currency.value
     }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: LoginResponse) => {
-      this.submitButtonDisabled = false;
       if (!result.success) {
         result.errors.forEach((er: any) => {
           this.snackBar.open(er, 'OK');
         });
       }
+
+      this.submitButtonDisabled = false;
     });
   }
 
@@ -100,7 +101,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private createCompareValidator(password: AbstractControl, confirm: AbstractControl) {
     return () => {
       if (password.value !== confirm.value) {
-        return { match_error: 'Password should match' };
+        return {
+          match_error: 'Password should match'
+        };
       }
       return null;
     };
