@@ -1,8 +1,10 @@
+import { DestroyRef, inject, Injectable } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, map } from 'rxjs';
 import { State, Selector, Action, StateContext } from '@ngxs/store';
-import { Currency } from './currencies.models';
 import { GetCurrencies, GetCurrenciesError, GetCurrenciesSuccess } from './currencies.actions';
 import { CurrenciesService } from '../currencies.service';
-import { Injectable } from '@angular/core';
+import { Currency } from './currencies.models';
 
 @State<CurrenciesStateModel>({
   name: 'currenciesState',
@@ -13,6 +15,8 @@ import { Injectable } from '@angular/core';
 })
 @Injectable()
 export class CurrenciesState {
+  private destroyRef = inject(DestroyRef);
+
   constructor(private currenciesService: CurrenciesService) {
   }
 
@@ -27,10 +31,19 @@ export class CurrenciesState {
   }
 
   @Action(GetCurrencies)
-  getCurrencies({ patchState }: StateContext<CurrenciesStateModel>) {
+  getCurrencies({ dispatch, patchState }: StateContext<CurrenciesStateModel>) {
     patchState({ isLoading: true });
 
-    this.currenciesService.getCurrenciesFromRemote();
+    this.currenciesService.getCurrenciesFromRemote().pipe(
+      takeUntilDestroyed(this.destroyRef),
+      map(currencies => {
+        dispatch(new GetCurrenciesSuccess({ currencies }));
+      }),
+      catchError((error) => {
+        dispatch(new GetCurrenciesError());
+        return Promise.reject(error);
+      })
+    ).subscribe();
   }
 
   @Action(GetCurrenciesSuccess)
