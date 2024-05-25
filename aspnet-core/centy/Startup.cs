@@ -59,7 +59,7 @@ public class Startup
 
         services.AddAuthorization();
         services.AddFastEndpoints(o => o.IncludeAbstractValidators = true);
-        
+
         services.AddResponseCaching();
 
         services.AddMvcCore().AddApiExplorer();
@@ -89,7 +89,7 @@ public class Startup
                 };
             };
         });
-        
+
         app.UseResponseCaching();
 
         if (env.IsDevelopment())

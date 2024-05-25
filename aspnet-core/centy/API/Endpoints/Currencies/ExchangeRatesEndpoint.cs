@@ -18,7 +18,10 @@ public class ExchangeRatesEndpoint : EndpointWithoutRequest<ExchangeRates>
     public override void Configure()
     {
         Get("currencies/exchangeRates");
-        if (!EnvironmentVariables.IsDevelopment) ResponseCache(3600);
+        if (!EnvironmentVariables.IsDevelopment)
+        {
+            ResponseCache(3600);
+        }
     }
 
     public override async Task HandleAsync(CancellationToken ct)

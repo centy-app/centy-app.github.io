@@ -27,7 +27,7 @@ public class JwtService : IJwtService
             new(ClaimTypes.Name, user.UserName),
             new(ClaimTypes.Email, user.Email)
         };
-        
+
         var jwtToken = JwtBearer.CreateToken(
             o =>
             {
