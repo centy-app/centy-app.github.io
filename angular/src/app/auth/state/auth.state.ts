@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Action, State, StateContext } from "@ngxs/store";
-import { AuthStateModel } from "./auth.models";
 import { LogIn, LogOut } from "./auth.actions";
+
+export interface AuthStateModel {
+  email: string;
+  token: string;
+  baseCurrencyCode: string;
+}
 
 export const initialAuthState: AuthStateModel = {
   email: localStorage.getItem('email') ?? '',

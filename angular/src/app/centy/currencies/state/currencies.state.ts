@@ -4,7 +4,12 @@ import { catchError, map } from 'rxjs';
 import { State, Selector, Action, StateContext } from '@ngxs/store';
 import { GetCurrencies, GetCurrenciesError, GetCurrenciesSuccess } from './currencies.actions';
 import { CurrenciesService } from '../currencies.service';
-import { Currency } from './currencies.models';
+import { Currency } from '../currencies.models';
+
+export interface CurrenciesState {
+  currencies: Currency[];
+  isLoading: boolean;
+}
 
 @State<CurrenciesStateModel>({
   name: 'currenciesState',

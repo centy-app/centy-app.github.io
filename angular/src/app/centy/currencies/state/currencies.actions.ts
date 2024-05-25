@@ -1,4 +1,4 @@
-import { Currency } from './currencies.models';
+import { Currency } from '../currencies.models';
 
 export class GetCurrencies {
   public static readonly type = '[Currencies] Get Currencies';

@@ -2,8 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { AuthStateModel } from '../auth/state/auth.models';
-import { AuthState } from '../auth/state/auth.state';
+import { AuthState, AuthStateModel } from '../auth/state/auth.state';
 
 @Component({
   selector: 'app-auth',

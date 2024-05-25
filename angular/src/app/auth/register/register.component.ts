@@ -12,8 +12,8 @@ import { Select, Store } from '@ngxs/store';
 
 import { RegisterService } from './register.service';
 import { LoginResponse } from '../login/login.models';
-import { Currency } from 'src/app/centy/currencies/state/currencies.models';
-import { CurrenciesState, CurrenciesStateModel } from 'src/app/centy/currencies/state/currencies.state';
+import { Currency } from 'src/app/centy/currencies/currencies.models';
+import { CurrenciesState } from 'src/app/centy/currencies/state/currencies.state';
 import { GetCurrencies } from 'src/app/centy/currencies/state/currencies.actions';
 
 @Component({

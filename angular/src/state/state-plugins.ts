@@ -1,6 +1,6 @@
 import { getActionTypeFromInstance, NgxsPlugin } from '@ngxs/store';
+import { AuthStateModel } from 'src/app/auth/state/auth.state';
 import { LogIn, LogOut } from 'src/app/auth/state/auth.actions';
-import { AuthStateModel } from 'src/app/auth/state/auth.models';
 
 export function authStoragePlugin(state: AuthStateModel, action: LogOut | LogIn, next: any) {
   if (getActionTypeFromInstance(action) === LogIn.type) {

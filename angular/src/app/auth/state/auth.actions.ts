@@ -1,4 +1,4 @@
-import { AuthStateModel } from './auth.models';
+import { AuthStateModel } from "./auth.state";
 
 export class LogIn {
   static readonly type = '[Auth] Log In';

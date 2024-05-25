@@ -12,8 +12,3 @@ export enum CategoryType {
   Spending = 0,
   Asset = 1,
 }
-
-export interface CategoriesStateModel {
-  categories: CategoryTree[];
-  isLoading: boolean;
-}

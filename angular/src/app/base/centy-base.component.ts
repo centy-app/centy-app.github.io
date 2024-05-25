@@ -7,8 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 
 import { LogOut } from '../auth/state/auth.actions';
-import { AuthState } from '../auth/state/auth.state';
-import { AuthStateModel } from '../auth/state/auth.models';
+import { AuthState, AuthStateModel } from '../auth/state/auth.state';
 
 @Component({
   selector: 'app-centy',
@@ -20,7 +19,7 @@ export class CentyComponent implements OnInit, OnDestroy {
   isMobileWidth: MediaQueryList;
   private isMobileWidthListener: () => void;
   private authSubscription: Subscription;
-  
+
   @Select(AuthState) authState$: Observable<AuthStateModel>;
 
   constructor(
