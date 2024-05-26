@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/material.module';
 
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
@@ -16,6 +16,7 @@ import { AuthComponent } from './base/landing-base.component';
 import { CentyComponent } from './base/centy-base.component';
 import { AuthState } from './auth/state/auth.state';
 import { CategoriesState } from './centy/categories/state/categories.state';
+import { AuthInterceptor } from 'src/infrastructure/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,11 @@ import { CategoriesState } from './centy/categories/state/categories.state';
     {
       provide: NGXS_PLUGINS,
       useValue: authStoragePlugin,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
       multi: true
     }
   ],

@@ -4,6 +4,7 @@ using FastEndpoints.Security;
 using centy.API.Contracts.Responses.Infrastructure;
 using centy.Domain.Entities.Auth;
 using centy.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace centy;
 
@@ -52,10 +53,17 @@ public class Startup
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 5;
             })
-            .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(EnvironmentVariables.MongoConnectionString,
+            .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(
+                EnvironmentVariables.MongoConnectionString,
                 "centy");
 
         services.AddAuthenticationJwtBearer(s => { s.SigningKey = EnvironmentVariables.TokenSigningKey; });
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        });
 
         services.AddAuthorization();
         services.AddFastEndpoints(o => o.IncludeAbstractValidators = true);

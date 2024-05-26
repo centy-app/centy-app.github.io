@@ -4,7 +4,6 @@ using centy.Domain.Services.Auth;
 
 namespace centy.API.Endpoints.Categories;
 
-[HttpGet("categories")]
 public class GetCategoriesEndpoint : EndpointWithoutRequest<List<CategoryTree>>
 {
     private readonly ILogger<GetCategoriesEndpoint> _logger;
@@ -19,6 +18,11 @@ public class GetCategoriesEndpoint : EndpointWithoutRequest<List<CategoryTree>>
         _logger = logger;
         _categoriesService = categoriesService;
         _userService = userService;
+    }
+    
+    public override void Configure()
+    {
+        Get("categories");
     }
 
     public override async Task HandleAsync(CancellationToken ct)
