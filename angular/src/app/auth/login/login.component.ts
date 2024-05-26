@@ -51,12 +51,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: this.email.value,
       password: this.password.value,
     }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: LoginResponse) => {
-      if (!result.success && result.errors) {
-        result.errors.forEach((er: any) => {
-          this.snackBar.open(er, 'OK');
-        });
-      } else {
-        this.snackBar.open('Unexpected error occurred while logging in', 'OK');
+      if (!result.success) {
+        if (result.errors) {
+          result.errors.forEach((er: any) => {
+            this.snackBar.open(er, 'OK');
+          });
+        } else {
+          this.snackBar.open('Unexpected error occurred while logging in', 'OK');
+        }
       }
 
       this.submitButtonDisabled = false;
