@@ -55,6 +55,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.initialyzeMediaMatcherListener();
     this.initialyzeFormComponents();
 
+    // TODO: Awoid duplicated call to get currencies on init if it's already populated
     this.store.dispatch(new GetCurrencies());
   }
 

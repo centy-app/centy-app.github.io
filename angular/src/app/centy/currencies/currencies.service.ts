@@ -12,7 +12,7 @@ export class CurrenciesService {
 
   constructor(private http: HttpClient) { }
 
-  public getCurrenciesFromRemote(): Observable<Currency[]> {
+  public getCurrencies(): Observable<Currency[]> {
     return this.http.get<Currency[]>(this.symbolsUrl);
   }
 }

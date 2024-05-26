@@ -1,12 +1,12 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, map } from 'rxjs';
+import { catchError, map, tap } from 'rxjs';
 import { State, Selector, Action, StateContext } from '@ngxs/store';
 import { GetCurrencies, GetCurrenciesError, GetCurrenciesSuccess } from './currencies.actions';
 import { CurrenciesService } from '../currencies.service';
 import { Currency } from '../currencies.models';
 
-export interface CurrenciesState {
+export interface CurrenciesStateModel {
   currencies: Currency[];
   isLoading: boolean;
 }
@@ -39,30 +39,29 @@ export class CurrenciesState {
   getCurrencies({ dispatch, patchState }: StateContext<CurrenciesStateModel>) {
     patchState({ isLoading: true });
 
-    this.currenciesService.getCurrenciesFromRemote().pipe(
+    this.currenciesService.getCurrencies().pipe(
       takeUntilDestroyed(this.destroyRef),
-      map(currencies => {
-        dispatch(new GetCurrenciesSuccess({ currencies }));
+      tap(currencies => {
+        return dispatch(new GetCurrenciesSuccess({ currencies }));
       }),
       catchError((error) => {
-        dispatch(new GetCurrenciesError());
-        return Promise.reject(error);
+        return dispatch(new GetCurrenciesError());
       })
     ).subscribe();
   }
 
   @Action(GetCurrenciesSuccess)
   getCurrenciesSuccess({ patchState }: StateContext<CurrenciesStateModel>, { payload }: GetCurrenciesSuccess) {
-    patchState({ isLoading: false, currencies: payload.currencies });
+    patchState({
+      isLoading: false,
+      currencies: payload.currencies
+    });
   }
 
   @Action(GetCurrenciesError)
   getCurrenciesError({ patchState }: StateContext<CurrenciesStateModel>) {
-    patchState({ isLoading: false });
+    patchState({
+      isLoading: false
+    });
   }
-}
-
-export interface CurrenciesStateModel {
-  currencies: Currency[];
-  isLoading: boolean;
 }

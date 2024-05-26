@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { AuthComponent } from './base/landing-base.component';
 import { CentyComponent } from './base/centy-base.component';
 import { AuthState } from './auth/state/auth.state';
+import { CategoriesState } from './centy/categories/state/categories.state';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { AuthState } from './auth/state/auth.state';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    NgxsModule.forRoot([AuthState, CurrenciesState], {
+    NgxsModule.forRoot([AuthState, CurrenciesState, CategoriesState], {
       developmentMode: !environment.production
     }),
     NgxsReduxDevtoolsPluginModule.forRoot()
