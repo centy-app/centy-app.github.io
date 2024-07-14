@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Action, State, StateContext } from "@ngxs/store";
+import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { LogIn, LogOut } from "./auth.actions";
 
 export interface AuthStateModel {
@@ -20,6 +20,11 @@ export const initialAuthState: AuthStateModel = {
 })
 @Injectable()
 export class AuthState {
+
+  @Selector()
+  static getAuth(state: AuthStateModel) {
+    return state;
+  }
 
   @Action(LogIn)
   logIn(ctx: StateContext<AuthStateModel>, action: LogIn) {
