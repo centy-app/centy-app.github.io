@@ -1,0 +1,1 @@
+var s=(()=>{let e=class e{constructor(r){this.payload=r}};e.type="[Auth] Log In";let t=e;return t})(),o=(()=>{let e=class e{};e.type="[Auth] Log Out";let t=e;return t})();var c={production:!0,baseApiUrl:"https://centy-api.herokuapp.com/"};export{s as a,o as b,c};
