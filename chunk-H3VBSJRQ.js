@@ -1,1 +1,0 @@
-var r=(()=>{let e=class e{};e.type="[Categories] Get Categories";let t=e;return t})(),a=(()=>{let e=class e{constructor(s){this.payload=s}};e.type="[Categories] Get Categories Success";let t=e;return t})(),i=(()=>{let e=class e{};e.type="[Categories] Get Categories Error";let t=e;return t})();export{r as a,a as b,i as c};
