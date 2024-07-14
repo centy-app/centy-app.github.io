@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 
 import { Observable, Subscription } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 
 import { LogOut } from '../auth/state/auth.actions';
 import { AuthState, AuthStateModel } from '../auth/state/auth.state';
@@ -21,7 +21,7 @@ export class CentyComponent implements OnInit, OnDestroy {
   private isMobileWidthListener: () => void;
   private authSubscription: Subscription;
 
-  @Select(AuthState) authState$: Observable<AuthStateModel>;
+  authState$: Observable<AuthStateModel> = inject(Store).select(AuthState.getAuth);
 
   constructor(
     private readonly router: Router,

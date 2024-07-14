@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { AuthState, AuthStateModel } from '../auth/state/auth.state';
 
 @Component({
@@ -11,7 +11,7 @@ import { AuthState, AuthStateModel } from '../auth/state/auth.state';
 })
 export class AuthComponent implements OnInit, OnDestroy {
   private authSubscription: Subscription;
-  @Select(AuthState) authState$: Observable<AuthStateModel>;
+  authState$: Observable<AuthStateModel> = inject(Store).select(AuthState.getAuth);
 
   constructor(private router: Router, private store: Store) { }
 

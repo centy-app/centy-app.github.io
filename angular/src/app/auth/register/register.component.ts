@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/material.module';
 
 import { Observable } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 
 import { RegisterService } from './register.service';
 import { LoginResponse } from '../login/login.models';
@@ -36,8 +36,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currency: FormControl;
   submitButtonDisabled: boolean = false;
 
-  @Select(CurrenciesState.getCurrencies) currencies$: Observable<Currency[]>;
-  @Select(CurrenciesState.getIsLoading) isLoading$: Observable<boolean>;
+  currencies$: Observable<Currency[]> = inject(Store).select(CurrenciesState.getCurrencies);
+  isLoading$: Observable<boolean> = inject(Store).select(CurrenciesState.getIsLoading);
 
   isDesktopHeight: MediaQueryList;
 
