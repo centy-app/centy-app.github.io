@@ -19,12 +19,12 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
-    <PackageReference Include="FastEndpoints" Version="5.23.0" />
-    <PackageReference Include="FastEndpoints.Attributes" Version="5.23.0" />
-    <PackageReference Include="FastEndpoints.Security" Version="5.23.0" />
-    <PackageReference Include="FastEndpoints.Swagger" Version="5.23.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
-    <PackageReference Include="MongoDB.Driver" Version="2.24.0" />
+    <PackageReference Include="FastEndpoints" Version="5.27.0" />
+    <PackageReference Include="FastEndpoints.Attributes" Version="5.27.0" />
+    <PackageReference Include="FastEndpoints.Security" Version="5.27.0" />
+    <PackageReference Include="FastEndpoints.Swagger" Version="5.27.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.27.0" />
     <PackageReference Include="TeixeiraSoftware.Finance.Currency" Version="4.1.0" />
     <PackageReference Include="TeixeiraSoftware.Finance.ICurrency" Version="1.0.0" />
   </ItemGroup>

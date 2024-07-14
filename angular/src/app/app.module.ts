@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MaterialModule } from 'src/material.module';
 
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
@@ -18,35 +18,29 @@ import { AuthState } from './auth/state/auth.state';
 import { CategoriesState } from './centy/categories/state/categories.state';
 import { AuthInterceptor } from 'src/infrastructure/auth-interceptor';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    AuthComponent,
-    CentyComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    NgxsModule.forRoot([AuthState, CurrenciesState, CategoriesState], {
-      developmentMode: !environment.production
-    }),
-    NgxsReduxDevtoolsPluginModule.forRoot()
-  ],
-  providers: [
-    {
-      provide: NGXS_PLUGINS,
-      useValue: authStoragePlugin,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        AuthComponent,
+        CentyComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MaterialModule,
+        NgxsModule.forRoot([AuthState, CurrenciesState, CategoriesState], {
+            developmentMode: !environment.production
+        }),
+        NgxsReduxDevtoolsPluginModule.forRoot()], providers: [
+        {
+            provide: NGXS_PLUGINS,
+            useValue: authStoragePlugin,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
