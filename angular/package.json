@@ -6,7 +6,7 @@
     "start": "ng serve --configuration development",
     "build": "ng build --prod",
     "watch": "ng build --watch --configuration development",
-    "deploy": "ng deploy",
+    "deploy": "ng deploy --dir=dist/centy/browser --repo=https://github.com/centy-app/centy-app.github.io",
     "test": "ng test"
   },
   "private": true,
