@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
+import { MatTreeModule } from '@angular/material/tree';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,18 +15,19 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   exports: [
-    MatToolbarModule,
-    MatButtonModule,
     MatIconModule,
-    MatSidenavModule,
     MatMenuModule,
     MatCardModule,
-    MatFormFieldModule,
-    MatSelectModule,
+    MatTreeModule,
     MatInputModule,
-    MatAutocompleteModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatToolbarModule,
+    MatSidenavModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule
   ]
 })
 export class MaterialModule { }
