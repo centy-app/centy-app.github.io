@@ -40,10 +40,12 @@ export class CategoriesComponent implements OnInit {
   constructor(private store: Store, private categoriesService: CategoriesService) { 
     this.spendingCategories$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(categories => {
       this.spendingDataSource.data = categories;
+      this.expandAllNodes(this.spendingTreeControl, categories);
     });
 
     this.assetsCategories$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(categories => {
       this.assetsDataSource.data = categories;
+      this.expandAllNodes(this.assetsTreeControl, categories);
     });
   }
 
@@ -51,8 +53,6 @@ export class CategoriesComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new GetCategories());
-    this.spendingTreeControl.dataNodes.forEach(node => this.spendingTreeControl.expand(node));
-    this.assetsTreeControl.dataNodes.forEach(node => this.assetsTreeControl.expand(node));
   }
 
   onCreateSubCategory(node: CategoryTree) {
@@ -71,6 +71,15 @@ export class CategoriesComponent implements OnInit {
   onDeleteCategory(node: CategoryTree) {
     this.categoriesService.deleteCategory(node.id).subscribe(() => {
       this.store.dispatch(new GetCategories());
+    });
+  }
+
+  private expandAllNodes(treeControl: NestedTreeControl<CategoryTree>, nodes: CategoryTree[]) {
+    nodes.forEach(node => {
+      treeControl.expand(node);
+      if (node.children) {
+        this.expandAllNodes(treeControl, node.children);
+      }
     });
   }
 }
