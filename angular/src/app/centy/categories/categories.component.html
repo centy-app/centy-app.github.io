@@ -3,6 +3,7 @@
 
 <mat-tab-group>
   <mat-tab label="Spending">
+    <button mat-raised-button color="primary" (click)="onCreateTopLevelSpendingCategory()">New Spending Category</button>
     <mat-tree [dataSource]="spendingDataSource" [treeControl]="spendingTreeControl" class="example-tree">
       <!-- This is the tree node template for leaf nodes -->
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
@@ -39,6 +40,7 @@
   </mat-tab>
 
   <mat-tab label="Assets">
+    <button mat-raised-button color="primary" (click)="onCreateTopLevelAssetCategory()">New Asset Category</button>
     <mat-tree [dataSource]="assetsDataSource" [treeControl]="assetsTreeControl" class="example-tree">
       <!-- This is the tree node template for leaf nodes -->
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>

@@ -26,6 +26,11 @@ export class AuthState {
     return state;
   }
 
+  @Selector()
+  static getDefaultCurrency(state: AuthStateModel) {
+    return state.baseCurrencyCode;
+  }
+
   @Action(LogIn)
   logIn(ctx: StateContext<AuthStateModel>, action: LogIn) {
     const state = ctx.getState();

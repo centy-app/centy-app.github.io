@@ -15,6 +15,7 @@ import { MaterialModule } from 'src/material.module';
 import { CategoryTree } from './categories.models';
 import { CategoriesService } from './categories.service';
 import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { AuthState } from 'src/app/auth/state/auth.state';
 
 @Component({
   selector: 'app-categories',
@@ -37,6 +38,7 @@ export class CategoriesComponent implements OnInit {
 
   spendingCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getSpendingCategories);
   assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getAssetsCategories);
+  defaultCurrency$: Observable<string> = inject(Store).select(AuthState.getDefaultCurrency);
   private destroyRef = inject(DestroyRef);
 
   constructor(private store: Store, private categoriesService: CategoriesService, private dialog: MatDialog) { 
@@ -86,6 +88,43 @@ export class CategoriesComponent implements OnInit {
       if (result) {
         this.onDeleteCategory(node);
       }
+    });
+  }
+
+  onCreateTopLevelSpendingCategory() {
+    this.defaultCurrency$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(defaultCurrency => {
+      const newCategory = {
+        parentId: this.generateGuid(),
+        type: 0,
+        name: 'New Top Level Spending Category',
+        currencyCode: defaultCurrency,
+        iconId: '00000000-0000-0000-0000-000000000000' // empty guid
+      };
+      this.categoriesService.createCategory(newCategory).subscribe(() => {
+        this.store.dispatch(new GetCategories());
+      });
+    });
+  }
+
+  onCreateTopLevelAssetCategory() {
+    this.defaultCurrency$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(defaultCurrency => {
+      const newCategory = {
+        parentId: this.generateGuid(),
+        type: 1,
+        name: 'New Top Level Asset Category',
+        currencyCode: defaultCurrency,
+        iconId: '00000000-0000-0000-0000-000000000000' // empty guid
+      };
+      this.categoriesService.createCategory(newCategory).subscribe(() => {
+        this.store.dispatch(new GetCategories());
+      });
+    });
+  }
+
+  private generateGuid(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
     });
   }
 
