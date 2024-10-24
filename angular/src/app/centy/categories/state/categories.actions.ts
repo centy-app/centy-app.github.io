@@ -12,3 +12,11 @@ export class GetCategoriesSuccess {
 export class GetCategoriesError {
   public static readonly type = '[Categories] Get Categories Error';
 }
+
+export class GetSpendingCategories {
+  public static readonly type = '[Categories] Get Spending Categories';
+}
+
+export class GetAssetsCategories {
+  public static readonly type = '[Categories] Get Assets Categories';
+}

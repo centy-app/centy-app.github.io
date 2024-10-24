@@ -26,22 +26,29 @@ import { CategoryTree } from './categories.models';
 })
 export class CategoriesComponent implements OnInit {
 
-  treeControl = new NestedTreeControl<CategoryTree>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<CategoryTree>();
+  spendingTreeControl = new NestedTreeControl<CategoryTree>(node => node.children);
+  spendingDataSource = new MatTreeNestedDataSource<CategoryTree>();
 
-  categories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getCategories);
+  assetsTreeControl = new NestedTreeControl<CategoryTree>(node => node.children);
+  assetsDataSource = new MatTreeNestedDataSource<CategoryTree>();
+
+  spendingCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getSpendingCategories);
+  assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getAssetsCategories);
   private destroyRef = inject(DestroyRef);
 
   constructor(private store: Store) { 
-    this.categories$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(categories => {
-      this.dataSource.data = categories;
+    this.spendingCategories$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(categories => {
+      this.spendingDataSource.data = categories;
+    });
+
+    this.assetsCategories$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(categories => {
+      this.assetsDataSource.data = categories;
     });
   }
 
   hasChild = (_: number, node: CategoryTree) => !!node.children && node.children.length > 0;
 
   ngOnInit() {
-    // TODO: Awoid duplicated call to categories on init if it's already populated
     this.store.dispatch(new GetCategories());
   }
 }
