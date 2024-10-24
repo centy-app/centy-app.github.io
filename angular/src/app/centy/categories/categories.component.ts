@@ -12,6 +12,7 @@ import { GetCategories } from './state/categories.actions';
 import { CategoriesState } from './state/categories.state';
 import { MaterialModule } from 'src/material.module';
 import { CategoryTree } from './categories.models';
+import { CategoriesService } from './categories.service';
 
 @Component({
   selector: 'app-categories',
@@ -36,7 +37,7 @@ export class CategoriesComponent implements OnInit {
   assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getAssetsCategories);
   private destroyRef = inject(DestroyRef);
 
-  constructor(private store: Store) { 
+  constructor(private store: Store, private categoriesService: CategoriesService) { 
     this.spendingCategories$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(categories => {
       this.spendingDataSource.data = categories;
     });
@@ -50,5 +51,26 @@ export class CategoriesComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new GetCategories());
+    this.spendingTreeControl.dataNodes.forEach(node => this.spendingTreeControl.expand(node));
+    this.assetsTreeControl.dataNodes.forEach(node => this.assetsTreeControl.expand(node));
+  }
+
+  onCreateSubCategory(node: CategoryTree) {
+    const newCategory = {
+      parentId: node.id,
+      type: node.type,
+      name: 'New Subcategory',
+      currencyCode: node.currencyCode,
+      iconId: '00000000-0000-0000-0000-000000000000' // empty guid
+    };
+    this.categoriesService.createCategory(newCategory).subscribe(() => {
+      this.store.dispatch(new GetCategories());
+    });
+  }
+
+  onDeleteCategory(node: CategoryTree) {
+    this.categoriesService.deleteCategory(node.id).subscribe(() => {
+      this.store.dispatch(new GetCategories());
+    });
   }
 }

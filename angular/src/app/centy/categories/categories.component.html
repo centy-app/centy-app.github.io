@@ -7,6 +7,12 @@
       <!-- This is the tree node template for leaf nodes -->
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         {{node.name}} {{node.currencyCode}}
+        <button mat-icon-button (click)="onCreateSubCategory(node)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onDeleteCategory(node)">
+          <mat-icon>delete</mat-icon>
+        </button>
       </mat-tree-node>
 
       <!-- This is the tree node template for expandable nodes -->
@@ -18,6 +24,12 @@
             </mat-icon>
           </button>
           {{node.name}} {{node.currencyCode}}
+          <button mat-icon-button (click)="onCreateSubCategory(node)">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onDeleteCategory(node)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
         <div [class.example-tree-invisible]="!spendingTreeControl.isExpanded(node)" role="group">
           <ng-container matTreeNodeOutlet></ng-container>
@@ -31,6 +43,12 @@
       <!-- This is the tree node template for leaf nodes -->
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         {{node.name}} {{node.currencyCode}}
+        <button mat-icon-button (click)="onCreateSubCategory(node)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onDeleteCategory(node)">
+          <mat-icon>delete</mat-icon>
+        </button>
       </mat-tree-node>
 
       <!-- This is the tree node template for expandable nodes -->
@@ -42,6 +60,12 @@
             </mat-icon>
           </button>
           {{node.name}} {{node.currencyCode}}
+          <button mat-icon-button (click)="onCreateSubCategory(node)">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onDeleteCategory(node)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
         <div [class.example-tree-invisible]="!assetsTreeControl.isExpanded(node)" role="group">
           <ng-container matTreeNodeOutlet></ng-container>
