@@ -17,6 +17,7 @@ import { CentyComponent } from './base/centy-base.component';
 import { AuthState } from './auth/state/auth.state';
 import { CategoriesState } from './centy/categories/state/categories.state';
 import { AuthInterceptor } from 'src/infrastructure/auth-interceptor';
+import { DeleteConfirmationDialogModule } from './centy/categories/delete-confirmation-dialog/delete-confirmation-dialog.module';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -30,7 +31,9 @@ import { AuthInterceptor } from 'src/infrastructure/auth-interceptor';
         NgxsModule.forRoot([AuthState, CurrenciesState, CategoriesState], {
             developmentMode: !environment.production
         }),
-        NgxsReduxDevtoolsPluginModule.forRoot()], providers: [
+        NgxsReduxDevtoolsPluginModule.forRoot(),
+        DeleteConfirmationDialogModule
+    ], providers: [
         {
             provide: NGXS_PLUGINS,
             useValue: authStoragePlugin,

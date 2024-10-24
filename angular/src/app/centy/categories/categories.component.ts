@@ -4,6 +4,7 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -13,6 +14,7 @@ import { CategoriesState } from './state/categories.state';
 import { MaterialModule } from 'src/material.module';
 import { CategoryTree } from './categories.models';
 import { CategoriesService } from './categories.service';
+import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'app-categories',
@@ -37,7 +39,7 @@ export class CategoriesComponent implements OnInit {
   assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getAssetsCategories);
   private destroyRef = inject(DestroyRef);
 
-  constructor(private store: Store, private categoriesService: CategoriesService) { 
+  constructor(private store: Store, private categoriesService: CategoriesService, private dialog: MatDialog) { 
     this.spendingCategories$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(categories => {
       this.spendingDataSource.data = categories;
       this.expandAllNodes(this.spendingTreeControl, categories);
@@ -71,6 +73,19 @@ export class CategoriesComponent implements OnInit {
   onDeleteCategory(node: CategoryTree) {
     this.categoriesService.deleteCategory(node.id).subscribe(() => {
       this.store.dispatch(new GetCategories());
+    });
+  }
+
+  openDeleteConfirmationDialog(node: CategoryTree): void {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      width: '250px',
+      data: { name: node.name }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.onDeleteCategory(node);
+      }
     });
   }
 
