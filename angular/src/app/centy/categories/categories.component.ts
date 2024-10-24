@@ -29,7 +29,6 @@ import { AuthState } from 'src/app/auth/state/auth.state';
   ]
 })
 export class CategoriesComponent implements OnInit {
-
   spendingTreeControl = new NestedTreeControl<CategoryTree>(node => node.children);
   spendingDataSource = new MatTreeNestedDataSource<CategoryTree>();
 
@@ -39,6 +38,7 @@ export class CategoriesComponent implements OnInit {
   spendingCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getSpendingCategories);
   assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getAssetsCategories);
   defaultCurrency$: Observable<string> = inject(Store).select(AuthState.getDefaultCurrency);
+  
   private destroyRef = inject(DestroyRef);
 
   constructor(private store: Store, private categoriesService: CategoriesService, private dialog: MatDialog) { 
@@ -59,13 +59,43 @@ export class CategoriesComponent implements OnInit {
     this.store.dispatch(new GetCategories());
   }
 
+  onCreateTopLevelSpendingCategory() {
+    this.defaultCurrency$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(defaultCurrency => {
+      const newCategory = {
+        parentId: undefined,
+        type: 0,
+        name: 'New Top Level Spending',
+        currencyCode: defaultCurrency,
+        iconId: undefined
+      };
+      this.categoriesService.createCategory(newCategory).subscribe(() => {
+        this.store.dispatch(new GetCategories());
+      });
+    });
+  }
+
+  onCreateTopLevelAssetCategory() {
+    this.defaultCurrency$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(defaultCurrency => {
+      const newCategory = {
+        parentId: undefined,
+        type: 1,
+        name: 'New Top Level Asset',
+        currencyCode: defaultCurrency,
+        iconId: undefined
+      };
+      this.categoriesService.createCategory(newCategory).subscribe(() => {
+        this.store.dispatch(new GetCategories());
+      });
+    });
+  }
+
   onCreateSubCategory(node: CategoryTree) {
     const newCategory = {
       parentId: node.id,
       type: node.type,
       name: 'New Subcategory',
       currencyCode: node.currencyCode,
-      iconId: '00000000-0000-0000-0000-000000000000' // empty guid
+      iconId: undefined
     };
     this.categoriesService.createCategory(newCategory).subscribe(() => {
       this.store.dispatch(new GetCategories());
@@ -88,43 +118,6 @@ export class CategoriesComponent implements OnInit {
       if (result) {
         this.onDeleteCategory(node);
       }
-    });
-  }
-
-  onCreateTopLevelSpendingCategory() {
-    this.defaultCurrency$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(defaultCurrency => {
-      const newCategory = {
-        parentId: this.generateGuid(),
-        type: 0,
-        name: 'New Top Level Spending Category',
-        currencyCode: defaultCurrency,
-        iconId: '00000000-0000-0000-0000-000000000000' // empty guid
-      };
-      this.categoriesService.createCategory(newCategory).subscribe(() => {
-        this.store.dispatch(new GetCategories());
-      });
-    });
-  }
-
-  onCreateTopLevelAssetCategory() {
-    this.defaultCurrency$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(defaultCurrency => {
-      const newCategory = {
-        parentId: this.generateGuid(),
-        type: 1,
-        name: 'New Top Level Asset Category',
-        currencyCode: defaultCurrency,
-        iconId: '00000000-0000-0000-0000-000000000000' // empty guid
-      };
-      this.categoriesService.createCategory(newCategory).subscribe(() => {
-        this.store.dispatch(new GetCategories());
-      });
-    });
-  }
-
-  private generateGuid(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
     });
   }
 

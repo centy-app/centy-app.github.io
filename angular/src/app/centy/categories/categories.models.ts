@@ -14,9 +14,9 @@ export enum CategoryType {
 }
 
 export interface CreateCategoryRequest {
-  parentId: string;
+  parentId: string | undefined;
   type: CategoryType;
-  iconId: string;
+  iconId: string | undefined;
   name?: string;
   currencyCode?: string;
 }
