@@ -28,3 +28,7 @@
 .example-tree div[role=group] > .mat-tree-node {
   padding-left: 40px;
 }
+
+:host ::ng-deep .mat-mdc-tab-body-content {
+  overflow: hidden !important;
+}
