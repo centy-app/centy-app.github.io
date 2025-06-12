@@ -1,10 +1,10 @@
 ﻿using System.Net;
-using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FastEndpoints.Security;
+using FastEndpoints.Swagger;
 using centy.API.Contracts.Responses.Infrastructure;
 using centy.Domain.Entities.Auth;
 using centy.Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace centy;
 
@@ -89,7 +89,7 @@ public class Startup
 
         app.UseFastEndpoints(x =>
         {
-            x.Errors.ResponseBuilder = (failures, ctx, statusCode) =>
+            x.Errors.ResponseBuilder = (failures, _, _) =>
             {
                 return new ValidationFailureResponse
                 {
