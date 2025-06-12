@@ -6,11 +6,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/material.module';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { Currency } from 'src/app/centy/currencies/state/currencies.models';
-import { CurrenciesService } from 'src/app/centy/currencies/currencies.service';
+
+import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
+
 import { RegisterService } from './register.service';
 import { LoginResponse } from '../login/login.models';
+import { Currency } from 'src/app/centy/currencies/currencies.models';
+import { CurrenciesState } from 'src/app/centy/currencies/state/currencies.state';
+import { GetCurrencies } from 'src/app/centy/currencies/state/currencies.actions';
 
 @Component({
   selector: 'app-register',
@@ -32,8 +36,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currency: FormControl;
   submitButtonDisabled: boolean = false;
 
-  currencies$: Observable<Currency[]>;
-  isLoading$: Observable<boolean>;
+  currencies$: Observable<Currency[]> = inject(Store).select(CurrenciesState.getCurrencies);
+  isLoading$: Observable<boolean> = inject(Store).select(CurrenciesState.getIsLoading);
 
   isDesktopHeight: MediaQueryList;
 
@@ -41,18 +45,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
 
   constructor(
-    private readonly currenciesService: CurrenciesService,
     private readonly registerService: RegisterService,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private readonly media: MediaMatcher,
-    private readonly snackBar: MatSnackBar) { }
+    private readonly snackBar: MatSnackBar,
+    private store: Store) { }
 
   ngOnInit(): void {
     this.initialyzeMediaMatcherListener();
     this.initialyzeFormComponents();
 
-    this.currencies$ = this.currenciesService.getCurrencies();
-    this.isLoading$ = this.currenciesService.isLoading();
+    // TODO: Awoid duplicated call to get currencies on init if it's already populated
+    this.store.dispatch(new GetCurrencies());
   }
 
   onRegister() {
@@ -63,12 +67,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
       password: this.password.value,
       baseCurrencyCode: this.currency.value
     }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result: LoginResponse) => {
-      this.submitButtonDisabled = false;
       if (!result.success) {
         result.errors.forEach((er: any) => {
           this.snackBar.open(er, 'OK');
         });
       }
+
+      this.submitButtonDisabled = false;
     });
   }
 
@@ -97,7 +102,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private createCompareValidator(password: AbstractControl, confirm: AbstractControl) {
     return () => {
       if (password.value !== confirm.value) {
-        return { match_error: 'Password should match' };
+        return {
+          match_error: 'Password should match'
+        };
       }
       return null;
     };

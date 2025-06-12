@@ -24,7 +24,8 @@ public class CategoriesService : ICategoriesService
     public List<CategoryTree> GetAllChildren(List<CategoryTree> categoryTree, Guid categoryId)
     {
         var result = new List<CategoryTree>();
-        FindChildren(categoryTree, categoryId, result);
+        GetAllChildrenInternal(categoryTree, categoryId, result);
+
         return result;
     }
 
@@ -40,27 +41,30 @@ public class CategoriesService : ICategoriesService
             Name = name,
             Type = type,
             IconId = iconId,
-            CurrencyCode = type == CategoryType.Spending
-                ? currencyCode?.ToUpperInvariant()
-                : user.BaseCurrencyCode
+            CurrencyCode = type == CategoryType.Spending ? currencyCode?.ToUpperInvariant() : user.BaseCurrencyCode
         };
 
         if (parentId != Guid.Empty)
         {
             var parent = await _categoriesRepository.GetUserCategory(parentId, user.Id);
 
-            if (parent is null)
-            {
-                throw new Exception("Parent category does not exist");
-            }
-
-            if (parent.Type != type)
-            {
-                throw new Exception("Wrong category type");
-            }
+            ValidateParent(parent, type);
         }
 
         await _categoriesRepository.InsertAsync(newCategory);
+    }
+
+    private static void ValidateParent(Category? parent, CategoryType type)
+    {
+        if (parent is null)
+        {
+            throw new Exception("Parent category does not exist");
+        }
+
+        if (parent.Type != type)
+        {
+            throw new Exception("Wrong category type");
+        }
     }
 
     public async Task<bool> UpdateUserCategoryAsync(Guid id, string? name, Guid iconId, Guid userId)
@@ -104,11 +108,17 @@ public class CategoriesService : ICategoriesService
         var children = categoryLookup[category.Id]
             .Select(child => BuildCategoryTreeRecursive(child, categoryLookup)).ToList();
 
-        if (children.Any()) categoryTree.Children = children;
+        if (children.Any())
+        {
+            categoryTree.Children = children;
+        }
+
         return categoryTree;
     }
 
-    private static void FindChildren(List<CategoryTree> categoryTree, Guid categoryId, List<CategoryTree> result)
+    // Recursively retrieves all children of a given category in the category tree.
+    private static void GetAllChildrenInternal(List<CategoryTree> categoryTree, Guid categoryId,
+        List<CategoryTree> result)
     {
         foreach (var category in categoryTree)
         {
@@ -118,7 +128,7 @@ public class CategoriesService : ICategoriesService
                 return;
             }
 
-            if (category.Children != null) FindChildren(category.Children, categoryId, result);
+            if (category.Children != null) GetAllChildrenInternal(category.Children, categoryId, result);
         }
     }
 }

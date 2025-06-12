@@ -51,7 +51,11 @@ public class UserService : IUserService
         //TODO: introduce caching
         var result = await _userManager.FindByNameAsync(name);
 
-        if (result is null) throw new Exception("User not exist.");
+        if (result is null)
+        {
+            throw new Exception("User not exist.");
+        }
+
         return result;
     }
 }

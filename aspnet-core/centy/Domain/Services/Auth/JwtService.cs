@@ -27,7 +27,7 @@ public class JwtService : IJwtService
             new(ClaimTypes.Name, user.UserName),
             new(ClaimTypes.Email, user.Email)
         };
-        
+
         var jwtToken = JwtBearer.CreateToken(
             o =>
             {
@@ -35,6 +35,7 @@ public class JwtService : IJwtService
                 o.ExpireAt = DateTime.UtcNow.AddDays(2);
                 o.User.Claims.AddRange(claims);
                 o.User["UserId"] = user.Id.ToString();
+                o.User["Name"] = user.UserName;
             });
 
         return jwtToken;

@@ -1,0 +1,14 @@
+/* Styles for the confirmation dialog */
+h1 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+mat-dialog-content {
+  font-size: 16px;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}

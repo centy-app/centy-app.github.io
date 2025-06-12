@@ -19,7 +19,11 @@ public class CurrenciesEndpoint : EndpointWithoutRequest<List<Currency>>
     {
         AllowAnonymous();
         Get("currencies/symbols");
-        if (!EnvironmentVariables.IsDevelopment) ResponseCache(3600);
+        
+        if (!EnvironmentVariables.IsDevelopment)
+        {
+            ResponseCache(3600);
+        }
     }
 
     public override async Task HandleAsync(CancellationToken ct)

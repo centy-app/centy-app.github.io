@@ -1,3 +1,78 @@
 <!-- Main page to configure the assets and spending categories,
-    each will represented as an infinite three -->
-<span>categories works!</span>
+    each will represented as an infinite tree -->
+
+<mat-tab-group>
+  <mat-tab label="Spending">
+    <button mat-raised-button color="primary" (click)="onCreateTopLevelSpendingCategory()">New Spending Category</button>
+    <mat-tree [dataSource]="spendingDataSource" [treeControl]="spendingTreeControl" class="example-tree">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        {{node.name}} {{node.currencyCode}}
+        <button mat-icon-button (click)="onCreateSubCategory(node)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="openDeleteConfirmationDialog(node)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-tree-node>
+
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <div class="mat-tree-node">
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{spendingTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          {{node.name}} {{node.currencyCode}}
+          <button mat-icon-button (click)="onCreateSubCategory(node)">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openDeleteConfirmationDialog(node)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div [class.example-tree-invisible]="!spendingTreeControl.isExpanded(node)" role="group">
+          <ng-container matTreeNodeOutlet></ng-container>
+        </div>
+      </mat-nested-tree-node>
+    </mat-tree>
+  </mat-tab>
+
+  <mat-tab label="Assets">
+    <button mat-raised-button color="primary" (click)="onCreateTopLevelAssetCategory()">New Asset Category</button>
+    <mat-tree [dataSource]="assetsDataSource" [treeControl]="assetsTreeControl" class="example-tree">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        {{node.name}} {{node.currencyCode}}
+        <button mat-icon-button (click)="onCreateSubCategory(node)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="openDeleteConfirmationDialog(node)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-tree-node>
+
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <div class="mat-tree-node">
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{assetsTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          {{node.name}} {{node.currencyCode}}
+          <button mat-icon-button (click)="onCreateSubCategory(node)">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openDeleteConfirmationDialog(node)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div [class.example-tree-invisible]="!assetsTreeControl.isExpanded(node)" role="group">
+          <ng-container matTreeNodeOutlet></ng-container>
+        </div>
+      </mat-nested-tree-node>
+    </mat-tree>
+  </mat-tab>
+</mat-tab-group>

@@ -48,7 +48,7 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
         }
         catch (Exception ex)
         {
-            _logger.LogError("Login endpoint failed with message {Message}", ex.Message);
+            _logger.LogError("Login endpoint failed with exception message: {Exception}", ex.Message);
             ThrowError("An unknown error occurred during log in, please contact the support.");
         }
     }

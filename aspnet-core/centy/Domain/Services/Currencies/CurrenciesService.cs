@@ -64,7 +64,10 @@ public class CurrenciesService : ICurrenciesService
     private static List<Currency> DeserializeCurrencies(string jsonString)
     {
         dynamic data = JsonConvert.DeserializeObject(jsonString) ?? throw new InvalidOperationException();
-        if (!(bool)data.success) throw new Exception((string)data.error.info);
+        if (!(bool)data.success)
+        {
+            throw new Exception((string)data.error.info);
+        }
 
         var currencies = new List<Currency>();
         foreach (JProperty symbol in data.currencies)

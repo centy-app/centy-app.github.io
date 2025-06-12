@@ -4,7 +4,6 @@ using centy.Domain.Services.Auth;
 
 namespace centy.API.Endpoints.Categories;
 
-[HttpGet("categories")]
 public class GetCategoriesEndpoint : EndpointWithoutRequest<List<CategoryTree>>
 {
     private readonly ILogger<GetCategoriesEndpoint> _logger;
@@ -20,6 +19,11 @@ public class GetCategoriesEndpoint : EndpointWithoutRequest<List<CategoryTree>>
         _categoriesService = categoriesService;
         _userService = userService;
     }
+    
+    public override void Configure()
+    {
+        Get("categories");
+    }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
@@ -33,7 +37,7 @@ public class GetCategoriesEndpoint : EndpointWithoutRequest<List<CategoryTree>>
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Get categories failed with message {Message} for user: {User}", ex.Message, userId);
+            _logger.LogError(ex, "Get categories failed for user {User} with exception message: {Exception}", userId, ex.Message);
             ThrowError("Categories could not be retrieved.");
         }
     }

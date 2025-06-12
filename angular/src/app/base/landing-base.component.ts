@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from 'src/state/app-state.model';
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { AuthState, AuthStateModel } from '../auth/state/auth.state';
 
 @Component({
   selector: 'app-auth',
@@ -11,15 +11,16 @@ import { AppState } from 'src/state/app-state.model';
 })
 export class AuthComponent implements OnInit, OnDestroy {
   private authSubscription: Subscription;
+  authState$: Observable<AuthStateModel> = inject(Store).select(AuthState.getAuth);
 
-  constructor(private router: Router, private store: Store<AppState>) { }
+  constructor(private router: Router, private store: Store) { }
 
   ngOnInit(): void {
     this.initializeLoginSubscription();
   }
 
   private initializeLoginSubscription(): void {
-    this.authSubscription = this.store.select((store) => store.authState).subscribe(authState => {
+    this.authSubscription = this.authState$.subscribe((authState) => {
       if (authState.token && authState.email) {
         this.router.navigateByUrl('/centy');
       }

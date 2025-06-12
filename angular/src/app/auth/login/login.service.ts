@@ -1,11 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Store } from '@ngrx/store';
 import { Observable, catchError, mergeMap, of } from "rxjs";
+import { Store } from '@ngxs/store';
 import { environment } from "src/environments/environment";
 import { LoginRequest, LoginResponse } from "./login.models";
-import { AppState } from "src/state/app-state.model";
-import * as fromAuth from 'src/app/auth/state';
+import { LogIn } from "../state/auth.actions";
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +12,18 @@ import * as fromAuth from 'src/app/auth/state';
 export class LoginService {
   private loginUrl = environment.baseApiUrl + 'auth/login';
 
-  constructor(private http: HttpClient, private readonly store: Store<AppState>) { }
+  constructor(private http: HttpClient, private store: Store) { }
 
   loginRemote(loginModel: LoginRequest): Observable<LoginResponse> {
     const headers = { 'content-type': 'application/json' };
     return this.http.post<LoginResponse>(this.loginUrl, loginModel, { headers })
       .pipe(
         mergeMap((result) => {
-          this.store.dispatch(fromAuth.logIn({
-            email: result.email,
-            token: result.token,
-            baseCurrencyCode: result.baseCurrencyCode
-          }));
-          return of({ ...result, errors: [], success: true })
+          this.store.dispatch(new LogIn(result));
+          return of({
+            ...result, errors: [],
+            success: true
+          })
         }),
         catchError((err) => {
           return of({

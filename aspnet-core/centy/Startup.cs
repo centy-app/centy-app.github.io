@@ -1,6 +1,7 @@
 ﻿using System.Net;
-using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FastEndpoints.Security;
+using FastEndpoints.Swagger;
 using centy.API.Contracts.Responses.Infrastructure;
 using centy.Domain.Entities.Auth;
 using centy.Infrastructure;
@@ -52,13 +53,22 @@ public class Startup
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 5;
             })
-            .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(EnvironmentVariables.MongoConnectionString,
+            .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>(
+                EnvironmentVariables.MongoConnectionString,
                 "centy");
 
         services.AddAuthenticationJwtBearer(s => { s.SigningKey = EnvironmentVariables.TokenSigningKey; });
 
+        services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        });
+
         services.AddAuthorization();
         services.AddFastEndpoints(o => o.IncludeAbstractValidators = true);
+
+        services.AddResponseCaching();
 
         services.AddMvcCore().AddApiExplorer();
         services.SwaggerDocument(o =>
@@ -79,7 +89,7 @@ public class Startup
 
         app.UseFastEndpoints(x =>
         {
-            x.Errors.ResponseBuilder = (failures, ctx, statusCode) =>
+            x.Errors.ResponseBuilder = (failures, _, _) =>
             {
                 return new ValidationFailureResponse
                 {
@@ -87,6 +97,8 @@ public class Startup
                 };
             };
         });
+
+        app.UseResponseCaching();
 
         if (env.IsDevelopment())
         {

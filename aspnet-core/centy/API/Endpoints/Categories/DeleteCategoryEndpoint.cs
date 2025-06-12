@@ -1,11 +1,10 @@
-﻿using centy.API.Contracts.Requests.Categories;
-using centy.Domain.Services.Categories;
+﻿using centy.Domain.Services.Categories;
 using centy.Domain.Services.Auth;
 
 namespace centy.API.Endpoints.Categories;
 
 [HttpDelete("categories/{id}")]
-public class DeleteCategoryEndpoint : Endpoint<DeleteCategoryRequest>
+public class DeleteCategoryEndpoint : EndpointWithoutRequest
 {
     private readonly ICategoriesService _categoriesService;
     private readonly ILogger<DeleteCategoryEndpoint> _logger;
@@ -21,17 +20,18 @@ public class DeleteCategoryEndpoint : Endpoint<DeleteCategoryRequest>
         _logger = logger;
     }
 
-    public override async Task HandleAsync(DeleteCategoryRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CancellationToken ct)
     {
+        var categoryId = Route<Guid>("id");
         try
         {
             var user = await _userService.GetUserByNameAsync(HttpContext.User.Identity?.Name);
-            await _categoriesService.DeleteUserCategoryAsync(req.Id, user.Id);
+            await _categoriesService.DeleteUserCategoryAsync(categoryId, user.Id);
             await SendOkAsync(ct);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "User category {Category} delete failed with message {Message}", req.Id, ex.Message);
+            _logger.LogError(ex, "User category {Category} delete failed with exception message: {Exception}", categoryId, ex.Message);
             ThrowError("Category could not be deleted.");
         }
     }

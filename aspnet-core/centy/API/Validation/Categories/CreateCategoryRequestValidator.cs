@@ -9,7 +9,6 @@ public class CreateCategoryRequestValidator : AbstractValidator<CreateCategoryRe
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
         RuleFor(x => x.Type).IsInEnum();
-        RuleFor(x => x.CurrencyCode).NotEmpty().Must(currenciesService.CurrencyExist)
-            .MaximumLength(3);
+        RuleFor(x => x.CurrencyCode).NotEmpty().Must(currenciesService.CurrencyExist).MaximumLength(3);
     }
 }
