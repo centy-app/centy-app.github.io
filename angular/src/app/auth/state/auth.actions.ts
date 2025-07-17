@@ -1,9 +1,8 @@
 import { createAction, props } from '@ngrx/store';
-import { AuthStateModel } from './auth.state';
 
 export const logIn = createAction(
   '[Auth] Log In',
-  props<{ payload: AuthStateModel }>()
+  props<{ email: string; token: string; baseCurrencyCode: string }>()
 );
 
 export const logOut = createAction('[Auth] Log Out');

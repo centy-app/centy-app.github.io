@@ -8,10 +8,10 @@ export class AuthEffects {
   logIn$ = createEffect(
     () => this.actions$.pipe(
       ofType(logIn),
-      tap(({ payload }) => {
-        localStorage.setItem('email', payload.email ?? '');
-        localStorage.setItem('token', payload.token ?? '');
-        localStorage.setItem('baseCurrencyCode', payload.baseCurrencyCode ?? '');
+      tap(({ email, token, baseCurrencyCode }) => {
+        localStorage.setItem('email', email ?? '');
+        localStorage.setItem('token', token ?? '');
+        localStorage.setItem('baseCurrencyCode', baseCurrencyCode ?? '');
       })
     ),
     { dispatch: false }

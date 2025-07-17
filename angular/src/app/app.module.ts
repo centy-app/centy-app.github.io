@@ -18,9 +18,8 @@ import { AuthInterceptor } from 'src/infrastructure/auth-interceptor';
 import { DeleteConfirmationDialogModule } from './centy/categories/delete-confirmation-dialog/delete-confirmation-dialog.module';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { authReducer } from './auth/state/auth.reducer';
+import { AuthStoreModule } from './auth/state/auth-store.module';
 import { EffectsModule } from '@ngrx/effects';
-import { AuthEffects } from './auth/state/auth.effects';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -31,8 +30,9 @@ import { AuthEffects } from './auth/state/auth.effects';
         AppRoutingModule,
         BrowserAnimationsModule,
         MaterialModule,
-        StoreModule.forRoot({ authState: authReducer, currenciesState: currenciesReducer, categoriesState: categoriesReducer }),
-        EffectsModule.forRoot([AuthEffects, CurrenciesEffects, CategoriesEffects]),
+        AuthStoreModule,
+        StoreModule.forRoot({ currenciesState: currenciesReducer, categoriesState: categoriesReducer }),
+        EffectsModule.forRoot([CurrenciesEffects, CategoriesEffects]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
         DeleteConfirmationDialogModule
     ], providers: [

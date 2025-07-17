@@ -19,7 +19,7 @@ export class LoginService {
     return this.http.post<LoginResponse>(this.loginUrl, loginModel, { headers })
       .pipe(
         mergeMap((result) => {
-          this.store.dispatch(logIn({ payload: result }));
+          this.store.dispatch(logIn({ email: result.email, token: result.token, baseCurrencyCode: result.baseCurrencyCode }));
           return of({
             ...result, errors: [],
             success: true
