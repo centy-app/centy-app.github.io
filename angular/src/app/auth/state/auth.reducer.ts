@@ -6,4 +6,4 @@ export const authReducer = createReducer(
   initialAuthState,
   on(logIn, (state, { email, token, baseCurrencyCode }) => ({ ...state, email, token, baseCurrencyCode })),
   on(logOut, () => ({ email: '', token: '', baseCurrencyCode: '' }))
-); 
+);

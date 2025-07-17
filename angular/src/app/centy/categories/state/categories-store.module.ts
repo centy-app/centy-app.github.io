@@ -10,4 +10,4 @@ import { CategoriesEffects } from './categories.effects';
     EffectsModule.forFeature([CategoriesEffects])
   ]
 })
-export class CategoriesStoreModule {} 
+export class CategoriesStoreModule {}

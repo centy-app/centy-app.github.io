@@ -30,4 +30,4 @@ export class AuthEffects {
   );
 
   constructor(private actions$: Actions) {}
-} 
+}

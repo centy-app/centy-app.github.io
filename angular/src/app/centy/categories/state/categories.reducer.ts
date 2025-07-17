@@ -20,4 +20,4 @@ export const categoriesReducer = createReducer(
   on(getCategoriesError, (state) => ({ ...state, isLoading: false })),
   on(getSpendingCategories, (state) => ({ ...state, isLoading: true })),
   on(getAssetsCategories, (state) => ({ ...state, isLoading: true }))
-); 
+);

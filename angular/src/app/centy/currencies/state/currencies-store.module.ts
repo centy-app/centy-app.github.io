@@ -10,4 +10,4 @@ import { CurrenciesEffects } from './currencies.effects';
     EffectsModule.forFeature([CurrenciesEffects])
   ]
 })
-export class CurrenciesStoreModule {} 
+export class CurrenciesStoreModule {}

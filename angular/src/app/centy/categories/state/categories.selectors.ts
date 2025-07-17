@@ -21,4 +21,4 @@ export const selectAssetsCategories = createSelector(
 export const selectIsLoading = createSelector(
   selectCategoriesState,
   (state) => state?.isLoading ?? false
-); 
+);
