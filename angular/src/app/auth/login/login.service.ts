@@ -1,10 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, catchError, mergeMap, of } from "rxjs";
-import { Store } from '@ngxs/store';
+import { Store } from '@ngrx/store';
 import { environment } from "src/environments/environment";
 import { LoginRequest, LoginResponse } from "./login.models";
-import { LogIn } from "../state/auth.actions";
+import { logIn } from '../state/auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class LoginService {
     return this.http.post<LoginResponse>(this.loginUrl, loginModel, { headers })
       .pipe(
         mergeMap((result) => {
-          this.store.dispatch(new LogIn(result));
+          this.store.dispatch(logIn({ payload: result }));
           return of({
             ...result, errors: [],
             success: true

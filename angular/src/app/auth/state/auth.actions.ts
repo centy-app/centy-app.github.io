@@ -1,10 +1,9 @@
-import { AuthStateModel } from "./auth.state";
+import { createAction, props } from '@ngrx/store';
+import { AuthStateModel } from './auth.state';
 
-export class LogIn {
-  static readonly type = '[Auth] Log In';
-  constructor(public payload: AuthStateModel) {}
-}
+export const logIn = createAction(
+  '[Auth] Log In',
+  props<{ payload: AuthStateModel }>()
+);
 
-export class LogOut {
-  static readonly type = '[Auth] Log Out';
-}
+export const logOut = createAction('[Auth] Log Out');

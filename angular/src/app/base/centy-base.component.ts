@@ -4,10 +4,11 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 
 import { Observable, Subscription } from 'rxjs';
-import { Store } from '@ngxs/store';
+import { Store } from '@ngrx/store';
 
-import { LogOut } from '../auth/state/auth.actions';
-import { AuthState, AuthStateModel } from '../auth/state/auth.state';
+import { logOut } from '../auth/state/auth.actions';
+import { AuthStateModel } from '../auth/state/auth.state';
+import { getAuth } from '../auth/state/auth.selectors';
 
 @Component({
   selector: 'app-centy',
@@ -21,7 +22,7 @@ export class CentyComponent implements OnInit, OnDestroy {
   private isMobileWidthListener: () => void;
   private authSubscription: Subscription;
 
-  authState$: Observable<AuthStateModel> = inject(Store).select(AuthState.getAuth);
+  authState$: Observable<AuthStateModel> = inject(Store).select(getAuth);
 
   constructor(
     private readonly router: Router,
@@ -43,7 +44,7 @@ export class CentyComponent implements OnInit, OnDestroy {
   onLogoutClick() {
     //TODO: Replace with styled pop-up
     if (confirm("Are you sure you want to log out?")) {
-      this.store.dispatch(new LogOut());
+      this.store.dispatch(logOut());
     }
   }
 
