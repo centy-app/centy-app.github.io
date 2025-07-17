@@ -1,14 +1,11 @@
+import { createAction, props } from '@ngrx/store';
 import { Currency } from '../currencies.models';
 
-export class GetCurrencies {
-  public static readonly type = '[Currencies] Get Currencies';
-}
+export const getCurrencies = createAction('[Currencies] Get Currencies');
 
-export class GetCurrenciesSuccess {
-  public static readonly type = '[Currencies] Get Currencies Success';
-  constructor(public readonly payload: { currencies: Currency[] }) { }
-}
+export const getCurrenciesSuccess = createAction(
+  '[Currencies] Get Currencies Success',
+  props<{ currencies: Currency[] }>()
+);
 
-export class GetCurrenciesError {
-  public static readonly type = '[Currencies] Get Currencies Error';
-}
+export const getCurrenciesError = createAction('[Currencies] Get Currencies Error');

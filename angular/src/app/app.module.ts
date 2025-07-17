@@ -4,9 +4,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MaterialModule } from 'src/material.module';
 
-import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
+import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { CurrenciesState } from './centy/currencies/state/currencies.state';
+import { currenciesReducer } from './centy/currencies/state/currencies.reducer';
+import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
 
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,13 +33,12 @@ import { AuthEffects } from './auth/state/auth.effects';
         BrowserAnimationsModule,
         MaterialModule,
         NgxsModule.forRoot([
-            CurrenciesState,
             CategoriesState
         ], {
             developmentMode: !environment.production
         }),
-        StoreModule.forRoot({ authState: authReducer }),
-        EffectsModule.forRoot([AuthEffects]),
+        StoreModule.forRoot({ authState: authReducer, currenciesState: currenciesReducer }),
+        EffectsModule.forRoot([AuthEffects, CurrenciesEffects]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
         NgxsReduxDevtoolsPluginModule.forRoot(),
         DeleteConfirmationDialogModule

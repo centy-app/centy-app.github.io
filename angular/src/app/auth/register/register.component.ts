@@ -8,13 +8,13 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/material.module';
 
 import { Observable } from 'rxjs';
-import { Store } from '@ngxs/store';
+import { Store } from '@ngrx/store';
+import { getCurrencies as getCurrenciesSelector, getIsLoading } from 'src/app/centy/currencies/state/currencies.selectors';
+import { getCurrencies as getCurrenciesAction } from 'src/app/centy/currencies/state/currencies.actions';
 
 import { RegisterService } from './register.service';
 import { LoginResponse } from '../login/login.models';
 import { Currency } from 'src/app/centy/currencies/currencies.models';
-import { CurrenciesState } from 'src/app/centy/currencies/state/currencies.state';
-import { GetCurrencies } from 'src/app/centy/currencies/state/currencies.actions';
 
 @Component({
   selector: 'app-register',
@@ -36,8 +36,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currency: FormControl;
   submitButtonDisabled: boolean = false;
 
-  currencies$: Observable<Currency[]> = inject(Store).select(CurrenciesState.getCurrencies);
-  isLoading$: Observable<boolean> = inject(Store).select(CurrenciesState.getIsLoading);
+  currencies$: Observable<Currency[]> = inject(Store).select(getCurrenciesSelector);
+  isLoading$: Observable<boolean> = inject(Store).select(getIsLoading);
 
   isDesktopHeight: MediaQueryList;
 
@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.initialyzeFormComponents();
 
     // TODO: Awoid duplicated call to get currencies on init if it's already populated
-    this.store.dispatch(new GetCurrencies());
+    this.store.dispatch(getCurrenciesAction());
   }
 
   onRegister() {
