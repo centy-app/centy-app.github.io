@@ -8,13 +8,14 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { currenciesReducer } from './centy/currencies/state/currencies.reducer';
 import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
+import { categoriesReducer } from './centy/categories/state/categories.reducer';
+import { CategoriesEffects } from './centy/categories/state/categories.effects';
 
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './base/landing-base.component';
 import { CentyComponent } from './base/centy-base.component';
-import { CategoriesState } from './centy/categories/state/categories.state';
 import { AuthInterceptor } from 'src/infrastructure/auth-interceptor';
 import { DeleteConfirmationDialogModule } from './centy/categories/delete-confirmation-dialog/delete-confirmation-dialog.module';
 import { StoreModule } from '@ngrx/store';
@@ -33,12 +34,12 @@ import { AuthEffects } from './auth/state/auth.effects';
         BrowserAnimationsModule,
         MaterialModule,
         NgxsModule.forRoot([
-            CategoriesState
+            // CategoriesState removed (now using NgRx)
         ], {
             developmentMode: !environment.production
         }),
-        StoreModule.forRoot({ authState: authReducer, currenciesState: currenciesReducer }),
-        EffectsModule.forRoot([AuthEffects, CurrenciesEffects]),
+        StoreModule.forRoot({ authState: authReducer, currenciesState: currenciesReducer, categoriesState: categoriesReducer }),
+        EffectsModule.forRoot([AuthEffects, CurrenciesEffects, CategoriesEffects]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
         NgxsReduxDevtoolsPluginModule.forRoot(),
         DeleteConfirmationDialogModule

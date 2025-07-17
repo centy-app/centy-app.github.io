@@ -6,11 +6,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Store } from '@ngxs/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { GetCategories } from './state/categories.actions';
-import { CategoriesState } from './state/categories.state';
+import { getSpendingCategories, getAssetsCategories } from './state/categories.selectors';
+import { getCategories as getCategoriesAction } from './state/categories.actions';
 import { MaterialModule } from 'src/material.module';
 import { CategoryTree } from './categories.models';
 import { CategoriesService } from './categories.service';
@@ -36,8 +36,8 @@ export class CategoriesComponent implements OnInit {
   assetsTreeControl = new NestedTreeControl<CategoryTree>(node => node.children);
   assetsDataSource = new MatTreeNestedDataSource<CategoryTree>();
 
-  spendingCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getSpendingCategories);
-  assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(CategoriesState.getAssetsCategories);
+  spendingCategories$: Observable<CategoryTree[]> = inject(Store).select(getSpendingCategories);
+  assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(getAssetsCategories);
   defaultCurrency$: Observable<string> = inject(Store).select(getDefaultCurrency);
   
   private destroyRef = inject(DestroyRef);
@@ -57,7 +57,7 @@ export class CategoriesComponent implements OnInit {
   hasChild = (_: number, node: CategoryTree) => !!node.children && node.children.length > 0;
 
   ngOnInit() {
-    this.store.dispatch(new GetCategories());
+    this.store.dispatch(getCategoriesAction());
   }
 
   onCreateTopLevelSpendingCategory() {
@@ -70,7 +70,7 @@ export class CategoriesComponent implements OnInit {
         iconId: undefined
       };
       this.categoriesService.createCategory(newCategory).subscribe(() => {
-        this.store.dispatch(new GetCategories());
+        this.store.dispatch(getCategoriesAction());
       });
     });
   }
@@ -85,7 +85,7 @@ export class CategoriesComponent implements OnInit {
         iconId: undefined
       };
       this.categoriesService.createCategory(newCategory).subscribe(() => {
-        this.store.dispatch(new GetCategories());
+        this.store.dispatch(getCategoriesAction());
       });
     });
   }
@@ -99,13 +99,13 @@ export class CategoriesComponent implements OnInit {
       iconId: undefined
     };
     this.categoriesService.createCategory(newCategory).subscribe(() => {
-      this.store.dispatch(new GetCategories());
+      this.store.dispatch(getCategoriesAction());
     });
   }
 
   onDeleteCategory(node: CategoryTree) {
     this.categoriesService.deleteCategory(node.id).subscribe(() => {
-      this.store.dispatch(new GetCategories());
+      this.store.dispatch(getCategoriesAction());
     });
   }
 

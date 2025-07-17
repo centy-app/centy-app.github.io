@@ -1,22 +1,15 @@
+import { createAction, props } from '@ngrx/store';
 import { CategoryTree } from '../categories.models';
 
-export class GetCategories {
-  public static readonly type = '[Categories] Get Categories';
-}
+export const getCategories = createAction('[Categories] Get Categories');
 
-export class GetCategoriesSuccess {
-  public static readonly type = '[Categories] Get Categories Success';
-  constructor(public readonly payload: { categories: CategoryTree[] }) { }
-}
+export const getCategoriesSuccess = createAction(
+  '[Categories] Get Categories Success',
+  props<{ categories: CategoryTree[] }>()
+);
 
-export class GetCategoriesError {
-  public static readonly type = '[Categories] Get Categories Error';
-}
+export const getCategoriesError = createAction('[Categories] Get Categories Error');
 
-export class GetSpendingCategories {
-  public static readonly type = '[Categories] Get Spending Categories';
-}
+export const getSpendingCategories = createAction('[Categories] Get Spending Categories');
 
-export class GetAssetsCategories {
-  public static readonly type = '[Categories] Get Assets Categories';
-}
+export const getAssetsCategories = createAction('[Categories] Get Assets Categories');
