@@ -3,22 +3,22 @@ import { CategoriesStateModel } from './categories.state';
 
 export const selectCategoriesState = createFeatureSelector<CategoriesStateModel>('categoriesState');
 
-export const getCategories = createSelector(
+export const selectCategories = createSelector(
   selectCategoriesState,
   (state) => state?.categories ?? []
 );
 
-export const getSpendingCategories = createSelector(
+export const selectSpendingCategories = createSelector(
   selectCategoriesState,
   (state) => state?.spendingCategories ?? []
 );
 
-export const getAssetsCategories = createSelector(
+export const selectAssetsCategories = createSelector(
   selectCategoriesState,
   (state) => state?.assetsCategories ?? []
 );
 
-export const isLoading = createSelector(
+export const selectIsLoading = createSelector(
   selectCategoriesState,
   (state) => state?.isLoading ?? false
 ); 

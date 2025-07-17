@@ -9,7 +9,7 @@ import { MaterialModule } from 'src/material.module';
 
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { getCurrencies as getCurrenciesSelector, getIsLoading } from 'src/app/centy/currencies/state/currencies.selectors';
+import { selectCurrencies, selectIsLoading } from 'src/app/centy/currencies/state/currencies.selectors';
 import { getCurrencies as getCurrenciesAction } from 'src/app/centy/currencies/state/currencies.actions';
 
 import { RegisterService } from './register.service';
@@ -36,8 +36,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currency: FormControl;
   submitButtonDisabled: boolean = false;
 
-  currencies$: Observable<Currency[]> = inject(Store).select(getCurrenciesSelector);
-  isLoading$: Observable<boolean> = inject(Store).select(getIsLoading);
+  currencies$: Observable<Currency[]> = inject(Store).select(selectCurrencies);
+  isLoading$: Observable<boolean> = inject(Store).select(selectIsLoading);
 
   isDesktopHeight: MediaQueryList;
 

@@ -3,12 +3,12 @@ import { CurrenciesStateModel } from './currencies.state';
 
 export const selectCurrenciesState = createFeatureSelector<CurrenciesStateModel>('currenciesState');
 
-export const getCurrencies = createSelector(
+export const selectCurrencies = createSelector(
   selectCurrenciesState,
   (state) => state.currencies
 );
 
-export const getIsLoading = createSelector(
+export const selectIsLoading = createSelector(
   selectCurrenciesState,
   (state) => state.isLoading
 );

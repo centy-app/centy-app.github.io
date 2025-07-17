@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { getSpendingCategories, getAssetsCategories } from './state/categories.selectors';
+import { selectSpendingCategories, selectAssetsCategories } from './state/categories.selectors';
 import { getCategories as getCategoriesAction } from './state/categories.actions';
 import { MaterialModule } from 'src/material.module';
 import { CategoryTree } from './categories.models';
@@ -36,8 +36,8 @@ export class CategoriesComponent implements OnInit {
   assetsTreeControl = new NestedTreeControl<CategoryTree>(node => node.children);
   assetsDataSource = new MatTreeNestedDataSource<CategoryTree>();
 
-  spendingCategories$: Observable<CategoryTree[]> = inject(Store).select(getSpendingCategories);
-  assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(getAssetsCategories);
+  spendingCategories$: Observable<CategoryTree[]> = inject(Store).select(selectSpendingCategories);
+  assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(selectAssetsCategories);
   defaultCurrency$: Observable<string> = inject(Store).select(getDefaultCurrency);
   
   private destroyRef = inject(DestroyRef);
