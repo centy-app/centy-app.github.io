@@ -4,10 +4,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MaterialModule } from 'src/material.module';
 
-import { currenciesReducer } from './centy/currencies/state/currencies.reducer';
-import { CurrenciesEffects } from './centy/currencies/state/currencies.effects';
 import { categoriesReducer } from './centy/categories/state/categories.reducer';
 import { CategoriesEffects } from './centy/categories/state/categories.effects';
+import { CurrenciesStoreModule } from './centy/currencies/state/currencies-store.module';
 
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -31,10 +30,11 @@ import { EffectsModule } from '@ngrx/effects';
         BrowserAnimationsModule,
         MaterialModule,
         AuthStoreModule,
-        StoreModule.forRoot({ currenciesState: currenciesReducer, categoriesState: categoriesReducer }),
-        EffectsModule.forRoot([CurrenciesEffects, CategoriesEffects]),
+        StoreModule.forRoot({ categoriesState: categoriesReducer }),
+        EffectsModule.forRoot([CategoriesEffects]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-        DeleteConfirmationDialogModule
+        DeleteConfirmationDialogModule,
+        CurrenciesStoreModule
     ], providers: [
         {
             provide: HTTP_INTERCEPTORS,
