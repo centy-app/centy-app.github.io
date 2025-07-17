@@ -6,7 +6,6 @@ import { MaterialModule } from 'src/material.module';
 
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { authStoragePlugin } from 'src/state/state-plugins';
 import { CurrenciesState } from './centy/currencies/state/currencies.state';
 
 import { environment } from 'src/environments/environment';
@@ -44,11 +43,6 @@ import { AuthEffects } from './auth/state/auth.effects';
         NgxsReduxDevtoolsPluginModule.forRoot(),
         DeleteConfirmationDialogModule
     ], providers: [
-        {
-            provide: NGXS_PLUGINS,
-            useValue: authStoragePlugin,
-            multi: true
-        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
