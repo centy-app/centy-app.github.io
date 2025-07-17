@@ -15,7 +15,7 @@ import { MaterialModule } from 'src/material.module';
 import { CategoryTree } from './categories.models';
 import { CategoriesService } from './categories.service';
 import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/delete-confirmation-dialog.component';
-import { getDefaultCurrency } from 'src/app/auth/state/auth.selectors';
+import { selectDefaultCurrency } from 'src/app/auth/state/auth.selectors';
 // If you need selectors, import from 'src/app/auth/state/auth.selectors'
 
 @Component({
@@ -38,7 +38,7 @@ export class CategoriesComponent implements OnInit {
 
   spendingCategories$: Observable<CategoryTree[]> = inject(Store).select(selectSpendingCategories);
   assetsCategories$: Observable<CategoryTree[]> = inject(Store).select(selectAssetsCategories);
-  defaultCurrency$: Observable<string> = inject(Store).select(getDefaultCurrency);
+  defaultCurrency$: Observable<string> = inject(Store).select(selectDefaultCurrency);
   
   private destroyRef = inject(DestroyRef);
 

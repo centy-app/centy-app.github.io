@@ -16,4 +16,4 @@ export class GlobalErrorEffects {
   );
 
   constructor(private actions$: Actions) {}
-} 
+}

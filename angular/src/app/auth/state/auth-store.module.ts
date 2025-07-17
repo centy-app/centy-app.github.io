@@ -10,4 +10,4 @@ import { AuthEffects } from './auth.effects';
     EffectsModule.forFeature([AuthEffects])
   ]
 })
-export class AuthStoreModule {} 
+export class AuthStoreModule {}

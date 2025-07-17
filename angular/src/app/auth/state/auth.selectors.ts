@@ -3,12 +3,12 @@ import { AuthStateModel } from './auth.state';
 
 export const selectAuthState = createFeatureSelector<AuthStateModel>('authState');
 
-export const getAuth = createSelector(
+export const selectAuth = createSelector(
   selectAuthState,
   (state) => state
 );
 
-export const getDefaultCurrency = createSelector(
+export const selectDefaultCurrency = createSelector(
   selectAuthState,
   (state) => state.baseCurrencyCode
-); 
+);

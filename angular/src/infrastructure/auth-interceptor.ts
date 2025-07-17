@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { getAuth } from 'src/app/auth/state/auth.selectors';
+import { selectAuth } from 'src/app/auth/state/auth.selectors';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return from(
-      firstValueFrom(this.store.select(getAuth)).then(auth => {
+      firstValueFrom(this.store.select(selectAuth)).then(auth => {
         const token = auth?.token;
         if (token) {
           const authReq = req.clone({

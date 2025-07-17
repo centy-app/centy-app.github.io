@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 
 import { logOut } from '../auth/state/auth.actions';
 import { AuthStateModel } from '../auth/state/auth.state';
-import { getAuth } from '../auth/state/auth.selectors';
+import { selectAuth } from '../auth/state/auth.selectors';
 
 @Component({
   selector: 'app-centy',
@@ -22,7 +22,7 @@ export class CentyComponent implements OnInit, OnDestroy {
   private isMobileWidthListener: () => void;
   private authSubscription: Subscription;
 
-  authState$: Observable<AuthStateModel> = inject(Store).select(getAuth);
+  authState$: Observable<AuthStateModel> = inject(Store).select(selectAuth);
 
   constructor(
     private readonly router: Router,
