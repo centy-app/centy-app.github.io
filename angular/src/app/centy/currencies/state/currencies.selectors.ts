@@ -11,4 +11,4 @@ export const getCurrencies = createSelector(
 export const getIsLoading = createSelector(
   selectCurrenciesState,
   (state) => state.isLoading
-); 
+);

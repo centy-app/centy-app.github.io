@@ -5,20 +5,20 @@ export const selectCategoriesState = createFeatureSelector<CategoriesStateModel>
 
 export const getCategories = createSelector(
   selectCategoriesState,
-  (state) => state.categories
+  (state) => state?.categories ?? []
 );
 
 export const getSpendingCategories = createSelector(
   selectCategoriesState,
-  (state) => state.spendingCategories
+  (state) => state?.spendingCategories ?? []
 );
 
 export const getAssetsCategories = createSelector(
   selectCategoriesState,
-  (state) => state.assetsCategories
+  (state) => state?.assetsCategories ?? []
 );
 
 export const isLoading = createSelector(
   selectCategoriesState,
-  (state) => state.isLoading
+  (state) => state?.isLoading ?? false
 ); 
